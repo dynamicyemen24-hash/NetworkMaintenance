@@ -642,6 +642,7 @@ function Show-Menu {
     Write-Host "  [12] Performance Optimize" -ForegroundColor White
     Write-Host "  [13] Process & Service Health" -ForegroundColor White
     Write-Host "  [14] FULL DIAGNOSTIC (All Modules)" -ForegroundColor Green
+    Write-Host "  [20] Expert Advisor (Guided Triage + Next Actions)" -ForegroundColor Cyan
     Write-Host "  ----" -ForegroundColor Gray
     Write-Host "  [15] View Diagnostic History" -ForegroundColor Cyan
     Write-Host "  [16] View System Trend" -ForegroundColor Cyan
@@ -776,6 +777,7 @@ if ($Silent) {
             "12" { Invoke-PerformanceOptimize }
             "13" { Invoke-ProcessDiag }
             "14" { Start-FullDiagnostic }
+            "20" { & "C:\NetworkMaintenance\Scripts\Expert-Advisor.ps1" -Mode Session }
             "15" {
                 $days = Read-Host "  Days to view (default 7)"
                 if (-not $days) { $days = 7 }

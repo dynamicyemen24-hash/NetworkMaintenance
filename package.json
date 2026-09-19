@@ -19,7 +19,12 @@
     "effectiveness": "powershell -ExecutionPolicy Bypass -File .\\Modules\\EffectivenessModule.ps1 -Action full",
     "standardization": "powershell -ExecutionPolicy Bypass -File .\\Modules\\StandardizationModule.ps1 -Action full",
     "publish": "powershell -ExecutionPolicy Bypass -File .\\publish.ps1 -Version 5.0.0",
-    "watchdog": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Network-Reliability-Watchdog.ps1"
+    "watchdog": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Network-Reliability-Watchdog.ps1",
+    "reports": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Generate-BusinessReports.ps1 -Days 30",
+    "reports:rpt": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\RPT-Engine.ps1",
+    "expert": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Expert-Advisor.ps1 -Mode Triage",
+    "expert:tickets": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Expert-Advisor.ps1 -Mode Tickets",
+    "expert:guide": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Expert-Advisor.ps1 -Mode Guide"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",

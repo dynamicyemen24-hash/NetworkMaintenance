@@ -172,13 +172,23 @@ foreach ($n in $criticalSvcs) {
 Heal "critical services verified" 'DarkGray'
 
 # ============================================================================
-# [5] DNS failure -> flush cache
+# [5] DNS failure -> flush cache (probe the standard's PRIMARY DNS, not a
+# hardcoded server: this operator filters 1.1.1.1, standard prefers 8.8.8.8)
 # ============================================================================
+$dnsProbe = '8.8.8.8'
 try {
-    $dn = Resolve-DnsName -Name 'one.one.one.one' -Server '1.1.1.1' -QuickTimeout -ErrorAction Stop
-    $checks += "DNS resolve OK"
-} catch {
-    $checks += "DNS resolve FAILED"
+    $stdIfc = @($S.interfaces.PSObject.Properties.Name)[0]
+    $stdDns = $S.interfaces.($stdIfc).dns
+    if ($stdDns -and $stdDns.Count -gt 0) { $dnsProbe = $stdDns[0] }
+} catch {}
+$dnsOk = $false
+for ($di = 0; $di -lt 2 -and -not $dnsOk; $di++) {
+    try { Resolve-DnsName -Name 'one.one.one.one' -Server $dnsProbe -QuickTimeout -ErrorAction Stop | Out-Null; $dnsOk = $true } catch {}
+}
+if ($dnsOk) {
+    $checks += "DNS resolve OK via $dnsProbe"
+} else {
+    $checks += "DNS resolve FAILED (2/2 attempts)"
     if ($Enforce -and (Test-Cooldown 'dns-flush' 15)) {
         Clear-DnsClientCache -ErrorAction SilentlyContinue
         cmd /c "ipconfig /flushdns" | Out-Null

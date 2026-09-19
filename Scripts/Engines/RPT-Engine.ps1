@@ -1,4 +1,4 @@
-# ====================================================================
+﻿# ====================================================================
 # NetworkMaintenance-Pro v3.1 - RPT Engine (Comprehensive Reporting Engine)
 # ====================================================================
 # Formats: HTML5, PDF, JSON, CSV, Markdown, Excel, PowerBI, Grafana
@@ -33,7 +33,10 @@ class ReportTemplateEngine {
     
     ReportTemplateEngine([string]$Path) {
         $this.TemplatePath = $Path
-        if (-not (Test-Path $Path)) {
+        # (re)create defaults when dir is missing OR empty (stale empty dir
+        # from a failed run must not leave the engine template-less)
+        $existing = @(Get-ChildItem -Path $Path -Filter "*.html" -ErrorAction SilentlyContinue)
+        if ((-not (Test-Path $Path)) -or ($existing.Count -eq 0)) {
             New-Item -ItemType Directory -Path $Path -Force | Out-Null
             $this.CreateDefaultTemplates()
         }
@@ -116,7 +119,7 @@ class ReportTemplateEngine {
     </script>
 </body>
 </html>
-"@ | Set-Content "$this.TemplatePath\executive.html" -Force
+"@ | Set-Content "$($this.TemplatePath)\executive.html" -Force
         
         # Technical Detail Template
         @"
@@ -145,15 +148,17 @@ class ReportTemplateEngine {
     </div>
 </body>
 </html>
-"@ | Set-Content "$this.TemplatePath\technical.html" -Force
+"@ | Set-Content "$($this.TemplatePath)\technical.html" -Force
     }
     
     [void] LoadTemplates() {
         $files = Get-ChildItem -Path $this.TemplatePath -Filter "*.html"
+        $loaded = $this.Templates
         foreach ($file in $files) {
-            $name = $file.BaseName
-            $this.Templates[$name] = Get-Content $file.FullName -Raw
+            $tplName = $file.BaseName
+            $loaded[$tplName] = Get-Content $file.FullName -Raw
         }
+        $this.Templates = $loaded
     }
     
     [string] Render([string]$TemplateName, [hashtable]$Data) {
@@ -184,7 +189,7 @@ class ChartGenerator {
     [string] GenerateLatencyChart([object[]]$Data) {
         $labels = $Data | ForEach-Object { $_.timestamp }
         $values = $Data | ForEach-Object { $_.latency_avg_ms }
-        $baseline = $Data | ForEach-Object { $_.baseline ?? 50 }
+        $baseline = $Data | ForEach-Object { if ($_.baseline -ne $null) { $_.baseline } else { 50 } }
         
         return @"
 const ctx = document.getElementById('latencyChart').getContext('2d');
@@ -293,20 +298,22 @@ class ReportBuilder {
     [hashtable]$DataSources = @{}
     
     ReportBuilder([string]$TemplatePath) {
-        $this.TemplateEngine = New-Object ReportTemplateEngine($TemplatePath)
-        $this.ChartGenerator = New-Object ChartGenerator
+        $this.TemplateEngine = New-Object -TypeName ReportTemplateEngine -ArgumentList $TemplatePath
+        $this.ChartGenerator = New-Object -TypeName ChartGenerator
     }
     
     [void] LoadDataSources([string]$DataPath) {
         $files = Get-ChildItem -Path $DataPath -Filter "*_results.json"
+        $sources = $this.DataSources
         foreach ($file in $files) {
-            $name = $file.BaseName.Replace("_results", "")
+            $srcName = $file.BaseName.Replace("_results", "")
             try {
-                $this.DataSources[$name] = Get-Content $file.FullName | ConvertFrom-Json
+                $sources[$srcName] = Get-Content $file.FullName | ConvertFrom-Json
             } catch {
                 Write-Warning "[RPT] Failed to load $($file.Name): $($_.Exception.Message)"
             }
         }
+        $this.DataSources = $sources
     }
     
     [hashtable] BuildExecutiveReport() {
@@ -321,8 +328,8 @@ class ReportBuilder {
         
         # Executive Summary
         $healthScore = 0
-        if ($this.DataSources.ContainsKey("dax")) {
-            $healthScore = $this.DataSources.dax.confidence ?? 0
+        if ($this.DataSources.ContainsKey("dax") -and $this.DataSources.dax.confidence -ne $null) {
+            $healthScore = $this.DataSources.dax.confidence
         }
         
         $summary = @"
@@ -359,7 +366,7 @@ class ReportBuilder {
 </div>
 <div class='card'>
     <h3>Asset Value</h3>
-    <div class='metric info'>\$$([math]::Round($ast.summary.total_value/1000,1))K</div>
+    <div class='metric info'>`$$([math]::Round($ast.summary.total_value/1000,1))K</div>
     <div style='text-align:center;color:#888'>Total Inventory</div>
 </div>
 <div class='card'>
@@ -441,7 +448,14 @@ $this.ChartGenerator.GeneratePieChart('assetPie', @{
         <tbody>
 "@
             foreach ($item in $this.DataSources.ast.summary.by_type) {
-                $tables += "<tr><td>$($item.type)</td><td>$($item.count)</td><td>\$$([math]::Round(($results.assets | Where-Object { $_.device_type -eq $item.type } | Measure-Object -Property estimated_value -Sum).Sum / 1000, 1))K</td><td><span class='badge badge-success'>$($results.compliance.summary.compliance_rate)%</span></td></tr>"
+                $valueK = "n/a"; $compRate = "n/a"
+                try {
+                    $astData = $this.DataSources.ast
+                    $typeSum = ($astData.assets | Where-Object { $_.device_type -eq $item.type } | Measure-Object -Property estimated_value -Sum).Sum
+                    $valueK = ([math]::Round($typeSum / 1000, 1)).ToString() + "K"
+                    $compRate = "$($astData.summary.compliance_rate)"
+                } catch {}
+                $tables += "<tr><td>$($item.type)</td><td>$($item.count)</td><td>`$$valueK</td><td><span class='badge badge-success'>$compRate%</span></td></tr>"
             }
             $tables += "</tbody></table></div>"
         }
@@ -469,14 +483,16 @@ $this.ChartGenerator.GeneratePieChart('assetPie', @{
         $template = if ($Type -eq "Technical") { "technical" } else { "executive" }
         $html = $this.TemplateEngine.Render($template, $reportData)
         
+        $result = $html
         switch ($Format) {
-            "HTML" { return $html }
-            "JSON" { return $reportData | ConvertTo-Json -Depth 10 }
-            "Markdown" { return $this.ConvertToMarkdown($reportData) }
-            "CSV" { return $this.ConvertToCSV($reportData) }
-            "PDF" { return $this.GeneratePDF($html) }
-            default { return $html }
+            "HTML" { $result = $html }
+            "JSON" { $result = $reportData | ConvertTo-Json -Depth 10 }
+            "Markdown" { $result = $this.ConvertToMarkdown($reportData) }
+            "CSV" { $reportData.datasources = $this.DataSources; $result = $this.ConvertToCSV($reportData) }
+            "PDF" { $result = $this.GeneratePDF($html) }
+            default { $result = $html }
         }
+        return $result
     }
     
     [string] ConvertToMarkdown([hashtable]$Data) {
@@ -493,9 +509,9 @@ $this.ChartGenerator.GeneratePieChart('assetPie', @{
     }
     
     [string] ConvertToCSV([hashtable]$Data) {
-        if ($Data.DataSources.ContainsKey("ast")) {
-            $assets = $Data.DataSources.ast.assets
-            return $assets | ConvertTo-Csv -NoTypeInformation
+        if ($Data.ContainsKey("datasources") -and $Data.datasources.ContainsKey("ast")) {
+            $assets = $Data.datasources.ast.assets
+            if ($assets) { return ($assets | ConvertTo-Csv -NoTypeInformation) }
         }
         return "No CSV data available"
     }
@@ -506,7 +522,7 @@ PDF Generation requires external tool (wkhtmltopdf, Puppeteer, or Playwright).
 HTML content length: $($Html.Length) characters.
 To generate PDF, install wkhtmltopdf and run:
 wkhtmltopdf --enable-local-file-access input.html output.pdf
-"
+"@
     }
 }
 
@@ -524,7 +540,7 @@ class ReportScheduler {
             type = $Type
             formats = $Formats
             recipients = $Recipients
-            created = $Timestamp
+            created = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss.fffZ")
             next_run = $this.CalculateNextRun($CronExpression)
             enabled = $true
         }
@@ -552,7 +568,7 @@ function Invoke-RPTEngine {
     
     Write-Host "[RPT v3.1] Reporting Engine Starting..." -ForegroundColor Cyan
     
-    $builder = New-Object ReportBuilder($TemplatePath)
+    $builder = New-Object -TypeName ReportBuilder -ArgumentList $TemplatePath
     $builder.LoadDataSources($DataPath)
     $scheduler = New-Object ReportScheduler
     
@@ -570,11 +586,10 @@ function Invoke-RPTEngine {
             
             $output = $builder.GenerateReport($type, $format)
             
-            $fileName = "$OutputPath\${type}_Report_$(Get-Date -Format 'yyyyMMdd_HHmmss').$($format.ToLower())"
-            if ($format -eq "HTML") { $fileName += ".html" }
-            elseif ($format -eq "JSON") { $fileName += ".json" }
-            elseif ($format -eq "Markdown") { $fileName += ".md" }
-            elseif ($format -eq "CSV") { $fileName += ".csv" }
+            $extMap = @{ HTML = ".html"; JSON = ".json"; Markdown = ".md"; CSV = ".csv"; PDF = ".pdf.txt" }
+            $ext = if ($extMap.ContainsKey($Format)) { $extMap[$Format] } else { ".txt" }
+            if ($Format -eq "PDF") { Write-Host "[RPT] PDF needs wkhtmltopdf - saved instructions as .pdf.txt" -ForegroundColor Yellow }
+            $fileName = "$OutputPath\${type}_Report_$(Get-Date -Format 'yyyyMMdd_HHmmss')$ext"
             
             $output | Set-Content $fileName -Force -Encoding UTF8
             

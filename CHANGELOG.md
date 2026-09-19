@@ -1,5 +1,16 @@
 # Elias Pro — Changelog
 
+## v5.2.0-Expert (2026-09-20) — Unified Expert Layer for End-User Journeys
+- **Expert-Advisor (new)**: one engine serving menu + shop + dashboard — fast triage with severity×impact/effort ranking, bilingual causes/fixes, ticket SLA queue with next-step routing, dashboard `expert-guide.json`, guided Session mode (safe one-key apply).
+- Elias Pro menu: new option [20] Expert Advisor; npm scripts `expert`, `expert:tickets`, `expert:guide`.
+- Dashboard wired: actions view renders `expert-guide.json` + system status (new renderExpert), OS-healer task card, stable `BusinessReport-latest.*` deep-links (generator now keeps -latest copies).
+
+## v5.1.1-Reports (2026-09-20) — Financial/Service/Regulatory Reporting
+- **Generate-BusinessReports (new)**: bilingual AR/EN RTL reports from REAL data only (zero-states, never fabricated) — financial (sales/collected/outstanding/collection-rate/overdue/methods), service (tickets/SLA breaches/open-age + self-heal ops history), regulatory (NM-NET-STD-001 evidence + SHA256 integrity) → HTML/JSON/CSV.
+- **RPT-Engine repaired**: 80+ blocking defects fixed — unterminated here-string, `New-Object` constructor binding, `$this` string-expansion, `$name`/property collisions, script-scope vars, switch returns, `??` (PS7-only), `$results` ghosts, CSV/Markdown/PDF filename bugs; verified live on WinPS 5.1 (6 reports generated).
+- `OS-Health-Healer` DNS probe now uses the standard's primary DNS (8.8.8.8) instead of operator-filtered 1.1.1.1; `Fix-Network-Deep` verification aligned.
+- npm scripts: `reports`, `reports:rpt`.
+
 ## v5.1.0-Autonomous (2026-09-19) — Autonomous Self-Healing Release
 - **OS-Health-Healer (new)**: autonomous Windows healing — CPU deprioritize, RAM trim, disk temp clean, dead-service restart, DNS flush, AC power plan; check-only by default, `-Enforce` for scheduled runs; max 6 actions/run with per-action cooldowns; never kills, never reboots.
 - **Register-AutonomousSelfHeal (new)**: one-shot registrar for the 4-task SYSTEM fabric (network watchdog + OS healer every 30min + event responders for Tcpip 4199 / WLAN 4003) with baseline enforcement.

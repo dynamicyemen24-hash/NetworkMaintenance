@@ -328,11 +328,24 @@
               <div class="td">استجابة فورية لأحداث تعارض IP (Tcpip 4199) قبل أن تؤثر على الوكيل.</div></div>
             <div class="task-card"><div class="tt">NMS-NetLinkRecovery-Response</div>
               <div class="td">استجابة لأحداث WLAN 4003؛ إعادة تأكيد الرابط بعد الاستئناف.</div></div>
+            <div class="task-card"><div class="tt">NMS-OSHealth-Healer</div>
+              <div class="td">معالج النظام كل 30 دقيقة: معالج/رام/قرص/خدمات/DNS/طاقة — بحد 6 إجراءات وتبريد زمني، بلا قتل عمليات ولا إعادة تشغيل.</div></div>
             <div class="task-card"><div class="tt">تلقائي وذاتي الشفاء</div>
               <div class="td">إعادة تشغيل البطاقة فقط عند كسر الرابط المحلي (كوول-داون 10 دقايق) وبدون لمس رابط WAN الخارجي.</div></div>
           </div>
           <div class="card-sub small" style="margin-top:12px">
             الاستعلام اليدوي عن المهمّات يتطلب صلاحيات إدارية؛ ظهور «Access is denied» للمستخدم العادي متوقَّع وآمن.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">دليل الخبير — الخطوات التالية</div>
+            <span class="card-sub small">يُولَّد آلياً من الفرز والأولويات (Expert-Advisor)</span></div>
+          <div id="expertBox"><div class="empty">جارٍ التحميل…</div></div>
+          <div class="link-row" style="margin-top:12px">
+            <a class="btn btn-ghost btn-sm" href="../Reports/BusinessReport-latest.html">📊 التقرير المالي/الخدمي/الرقابي</a>
+            <a class="btn btn-ghost btn-sm" href="../Reports/expert-guide.json">📄 دليل الخبير JSON</a>
+            <a class="btn btn-ghost btn-sm" href="../Scripts/Expert-Advisor.ps1">⛏️ سكربت الخبير</a>
           </div>
         </div>
 
@@ -371,7 +384,7 @@
   const $ = (s) => E.$(s);
 
   /* ---------- الحالة ---------- */
-  const S = { net: null, comp: null, wan: null, hard: null, api: null, logLines: [], filter: 'all' };
+  const S = { net: null, comp: null, wan: null, hard: null, api: null, logLines: [], filter: 'all', guide: null, sys: null };
 
   const hist = {
     load(k) { try { return JSON.parse(localStorage.getItem(k) || '[]').map(Number).filter(Number.isFinite); } catch (e) { return []; } },
@@ -421,6 +434,12 @@
       ]);
       S.wan = wan; S.hard = hard;
 
+      const [guide, sys] = await Promise.all([
+        E.loadReport('expert-guide.json'),
+        E.loadReport('system-health-last.json')
+      ]);
+      S.guide = guide; S.sys = sys;
+
       E.fetchJson('/api/v1/health', { timeout: 2500, retries: 0 })
         .then(j => { S.api = j; renderApi(); }).catch(() => { S.api = null; renderApi(); });
 
@@ -453,6 +472,7 @@
     renderCompliance();
     renderActivity();
     renderGuard();
+    renderExpert();
     renderBadges();
   }
 
@@ -661,6 +681,28 @@
     dot.style.background = ok ? 'var(--success)' : S.net.status === 'LINK_DEGRADED' ? '#e5a400' : 'var(--danger)';
   }
 
+  function renderExpert() {
+    const box = $('#expertBox');
+    if (!box) return;
+    const g = S.guide;
+    if (!g || !g.steps || !g.steps.length) {
+      box.innerHTML = '<div class="empty">لا يوجد دليل خبير بعد — شغّل <span class="mono">Expert-Advisor -Mode Guide</span> من المسار التشغيلي.</div>';
+      return;
+    }
+    const lvl = (l) => l === 'critical' ? 'danger' : l === 'warn' ? 'warn' : 'ok';
+    const ic = (l) => l === 'critical' ? '⛔' : l === 'warn' ? '⚠️' : '✅';
+    const head = '<div class="muted small" style="margin-bottom:8px">' +
+      (S.sys && S.sys.overall ? 'الحالة العامة: ' + E.esc(String(S.sys.overall)) + ' • ' : '') +
+      E.esc('أُنشئ: ' + String((g.generated || '—'))) + '</div>';
+    box.innerHTML = head + g.steps.slice(0, 8).map(s =>
+      '<div class="alert ' + lvl(s.level) + '"><span class="ic">' + ic(s.level) + '</span><div class="body">' +
+      '<div class="title">' + E.esc(s.step + '. ' + (s.title_ar || s.title_en || '')) + '</div>' +
+      '<div class="detail">' + E.esc(s.metric || '') + (s.fix_ar ? ' — ' + E.esc(s.fix_ar) : '') + '</div>' +
+      (s.run ? '<div class="detail mono small" dir="ltr" style="text-align:left">' + E.esc(s.run) + '</div>' : '') +
+      '</div></div>'
+    ).join('');
+  }
+
   function renderBadges() {
     const n = (S.wan && S.wan.count ? S.wan.count : 0) + (S.hard && S.hard.count ? S.hard.count : 0)
       + (S.net && S.net.sla ? S.net.sla.length : 0);
@@ -704,7 +746,9 @@
         'Reports/NetworkStandard-Compliance.json',
         'Reports/NetworkHealth.log',
         'Reports/NETWORK_WAN_ALERT.txt',
-        'Reports/NETWORK_ALERT.txt'
+        'Reports/NETWORK_ALERT.txt',
+        'Reports/expert-guide.json',
+        'Reports/system-health-last.json'
       ]
     }, null, 2);
   }

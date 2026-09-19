@@ -159,7 +159,7 @@ Write-Host "   New IP      : $((Get-NetIPAddress -InterfaceAlias 'Wi-Fi' -Addres
 Write-Host "   Gateway ping: $(Test-Connection -ComputerName $gw -Count 2 -ErrorAction SilentlyContinue | Measure-Object -Property Latency -Average | ForEach-Object { "$([math]::Round($_.Average))ms" })"
 cmd /c "ping -n 2 8.8.8.8" | Select-String -Pattern 'packets|loss'
 $sw=[System.Diagnostics.Stopwatch]::StartNew()
-Resolve-DnsName -Name 'one.one.one.one' -Server '1.1.1.1' -QuickTimeout -ErrorAction SilentlyContinue | Out-Null
+Resolve-DnsName -Name 'one.one.one.one' -Server '8.8.8.8' -QuickTimeout -ErrorAction SilentlyContinue | Out-Null
 $sw.Stop()
 Write-Host "   DNS resolve one.one.one.one: $($sw.ElapsedMilliseconds) ms"
 
