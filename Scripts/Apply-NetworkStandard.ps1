@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 #  Apply-NetworkStandard.ps1
 #  Enforces Config\network-standard.json (NM-NET-STD-001) idempotently.
 #  Safe to run repeatedly; only touches drifted items. Requires elevation.

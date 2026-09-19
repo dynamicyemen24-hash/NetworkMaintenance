@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 #  Network-Reliability-Watchdog.ps1
 #  Self-healing watchdog enforcing Config\network-standard.json (NM-NET-STD-001).
 #  Registered as SYSTEM scheduled tasks (every 5 min + logon + event-triggered).

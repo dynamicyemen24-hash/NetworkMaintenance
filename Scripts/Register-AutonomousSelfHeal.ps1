@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 #  Register-AutonomousSelfHeal.ps1  (requires elevation - self-elevates once)
 #  Installs the FULL autonomous self-healing fabric (no human needed after):
 #    NMS-NetHealth-Watchdog        : logon + every 30 min (SYSTEM) - network

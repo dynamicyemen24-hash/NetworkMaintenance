@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 #  OS-Health-Healer.ps1 — Autonomous Windows self-healing (no human needed)
 #  Complements Scripts\Network-Reliability-Watchdog.ps1 (network side).
 #  Check-only by default; pass -Enforce to APPLY fixes (scheduled tasks do).

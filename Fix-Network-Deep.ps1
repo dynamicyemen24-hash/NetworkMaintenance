@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 #  Fix-Network-Deep.ps1  -  Deep Network & Performance Fix (requires Admin)
 #  Fixes: IP address conflicts (Tcpip 4199 churn), WLAN recovery loop,
 #         internet stalls, memory waste, background internet hogs.
