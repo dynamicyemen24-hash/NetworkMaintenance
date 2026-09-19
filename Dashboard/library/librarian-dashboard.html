@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة أمين المكتبة - مكتبة الحسيني</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
+    <style>
+        :root{--primary:#1a365d;--accent:#3182ce;--bg:#f1f5f9}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);direction:rtl}
+        .sidebar{width:250px;background:var(--primary);color:#fff;position:fixed;height:100vh;overflow-y:auto;z-index:100}
+        .sidebar-brand{padding:1.25rem;font-size:1.2rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:.5rem}
+        .sidebar .nav-link{color:rgba(255,255,255,0.7);padding:.7rem 1.2rem;display:flex;align-items:center;gap:.6rem;text-decoration:none;transition:all .2s}
+        .sidebar .nav-link:hover,.sidebar .nav-link.active{background:rgba(255,255,255,0.1);color:#fff;border-radius:8px;margin:2px 8px}
+        .main-content{margin-right:250px;padding:1.5rem}
+        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+        .page-title{font-size:1.5rem;font-weight:700;color:var(--primary)}
+        .stat-card{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.05);transition:transform .2s}
+        .stat-card:hover{transform:translateY(-2px)}
+        .stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+        .stat-value{font-size:1.75rem;font-weight:700;color:var(--primary)}
+        .stat-label{color:#6c757d;font-size:.85rem}
+        .card-box{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+        .user-panel{position:absolute;bottom:0;width:100%;padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:.7rem}
+        .avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:.85rem}
+        .btn{padding:.5rem 1rem;border-radius:8px;border:none;cursor:pointer;font-size:.9rem;display:inline-flex;align-items:center;gap:.4rem}
+        .btn-primary{background:var(--accent);color:#fff}
+        .btn-success{background:#22c55e;color:#fff}
+        .btn-outline{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+        .text-muted{color:#6c757d;font-size:.85rem}
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:.75rem;text-align:right;border-bottom:1px solid #f0f0f0}
+        th{font-weight:600;color:var(--primary);font-size:.85rem}
+        td{font-size:.9rem}
+        .badge{padding:.25rem .6rem;border-radius:6px;font-size:.75rem;font-weight:600}
+        .badge-green{background:#dcfce7;color:#166534}
+        .badge-yellow{background:#fef3c7;color:#92400e}
+        .badge-red{background:#fde8e8;color:#991b1b}
+        .tab-nav{display:flex;gap:.5rem;margin-bottom:1rem}
+        .tab-btn{padding:.5rem 1rem;border-radius:8px;border:none;cursor:pointer;background:#e2e8f0;font-size:.9rem}
+        .tab-btn.active{background:var(--accent);color:#fff}
+        .form-group{margin-bottom:1rem}
+        .form-group label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.85rem;color:#374151}
+        .form-control{width:100%;padding:.6rem .8rem;border:1px solid #d1d5db;border-radius:8px;font-size:.9rem;font-family:inherit}
+        .form-control:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(49,130,206,0.15)}
+        .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+        .search-box{display:flex;gap:.5rem;margin-bottom:1rem}
+        .search-box input{flex:1;padding:.6rem .8rem;border:1px solid #d1d5db;border-radius:8px;font-size:.9rem}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center}
+        .modal-overlay.active{display:flex}
+        .modal{background:#fff;border-radius:12px;padding:1.5rem;width:90%;max-width:500px}
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand"><i class="ti ti-book-2"></i> مكتبة الحسيني</div>
+        <nav style="padding:.75rem 0">
+            <a class="nav-link" href="admin-dashboard.html"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+            <a class="nav-link active" href="librarian-dashboard.html"><i class="ti ti-book"></i> إدارة الكتب</a>
+            <a class="nav-link" href="member-dashboard.html"><i class="ti ti-users"></i> الأعضاء</a>
+            <a class="nav-link" href="#"><i class="ti ti-arrows-right-left"></i> الإعارات</a>
+            <a class="nav-link" href="#"><i class="ti ti-chart-bar"></i> التقارير</a>
+        </nav>
+        <div class="user-panel">
+            <div class="avatar" id="userAvatar">أ</div>
+            <div style="flex:1">
+                <div id="userName" style="font-weight:600;font-size:.9rem">أمين المكتبة</div>
+                <div id="userRole" style="font-size:.7rem;opacity:.7">أمين مكتبة</div>
+            </div>
+            <a href="#" onclick="logout()" style="color:#fff;font-size:1.1rem" title="تسجيل الخروج"><i class="ti ti-logout"></i></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <div class="page-title">إدارة المكتبة</div>
+                <div class="text-muted">إدارة الكتب والأعضاء والإعارات</div>
+            </div>
+        </div>
+
+        <div class="grid-4">
+            <div class="stat-card"><div style="display:flex;align-items:center;gap:1rem"><div class="stat-icon" style="background:#e8f4fd;color:#3182ce"><i class="ti ti-book-2"></i></div><div><div class="stat-value">12,458</div><div class="stat-label">إجمالي الكتب</div></div></div></div>
+            <div class="stat-card"><div style="display:flex;align-items:center;gap:1rem"><div class="stat-icon" style="background:#e8fdf4;color:#22c55e"><i class="ti ti-bookmark"></i></div><div><div class="stat-value">11,890</div><div class="stat-label">متاح</div></div></div></div>
+            <div class="stat-card"><div style="display:flex;align-items:center;gap:1rem"><div class="stat-icon" style="background:#fef3c7;color:#f59e0b"><i class="ti ti-arrows-right-left"></i></div><div><div class="stat-value">342</div><div class="stat-label">معار حالياً</div></div></div></div>
+            <div class="stat-card"><div style="display:flex;align-items:center;gap:1rem"><div class="stat-icon" style="background:#fde8e8;color:#ef4444"><i class="ti ti-clock"></i></div><div><div class="stat-value">28</div><div class="stat-label">متأخرات</div></div></div></div>
+        </div>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('books')">إدارة الكتب</button>
+            <button class="tab-btn" onclick="showTab('members')">إدارة الأعضاء</button>
+            <button class="tab-btn" onclick="showTab('borrows')">إعارة / إرجاع</button>
+        </div>
+
+        <div id="tab-books" class="tab-content active">
+            <div class="card-box">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                    <h5 style="color:var(--primary);font-weight:600">قائمة الكتب</h5>
+                    <button class="btn btn-primary" onclick="document.getElementById('bookModal').classList.add('active')"><i class="ti ti-plus"></i> إضافة كتاب</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" placeholder="بحث عن كتاب..." id="bookSearch" onkeyup="filterTable('booksTable','bookSearch')">
+                    <button class="btn btn-primary"><i class="ti ti-search"></i></button>
+                </div>
+                <div style="overflow-x:auto">
+                <table id="booksTable">
+                    <thead><tr><th>الكود</th><th>العنوان</th><th>المؤلف</th><th>التصنيف</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+                    <tbody>
+                        <tr><td>B001</td><td>البحث عن وطن</td><td>خالد حسيني</td><td>رواية</td><td><span class="badge badge-green">متاح</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>B002</td><td>ألف ليلة وليلة</td><td>جبران خليل جبران</td><td>أدب</td><td><span class="badge badge-yellow">معار</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>B003</td><td>اللص والكلاب</td><td>نجيب محفوظ</td><td>رواية</td><td><span class="badge badge-green">متاح</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>B004</td><td>الثلاثية</td><td>غازي القصيبي</td><td>تاريخ</td><td><span class="badge badge-red">غير متاح</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>B005</td><td>الحي بن يقظان</td><td>ابن طفيل</td><td>فلسفة</td><td><span class="badge badge-green">متاح</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>B006</td><td>المعلمة</td><td>مها الأسد</td><td>تعليم</td><td><span class="badge badge-green">متاح</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-members" class="tab-content">
+            <div class="card-box">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                    <h5 style="color:var(--primary);font-weight:600">قائمة الأعضاء</h5>
+                    <button class="btn btn-primary" onclick="document.getElementById('memberModal').classList.add('active')"><i class="ti ti-user-plus"></i> إضافة عضو</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" placeholder="بحث عن عضو..." id="memberSearch" onkeyup="filterTable('membersTable','memberSearch')">
+                    <button class="btn btn-primary"><i class="ti ti-search"></i></button>
+                </div>
+                <table id="membersTable">
+                    <thead><tr><th>الرقم</th><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>العضوية</th><th>إجراءات</th></tr></thead>
+                    <tbody>
+                        <tr><td>M001</td><td>أحمد محمد</td><td>ahmed@email.com</td><td>0501234567</td><td><span class="badge badge-green">نشط</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>M002</td><td>فاطمة علي</td><td>fatima@email.com</td><td>0507654321</td><td><span class="badge badge-green">نشط</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>M003</td><td>عمر خالد</td><td>omar@email.com</td><td>0509876543</td><td><span class="badge badge-yellow">منتهي</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                        <tr><td>M004</td><td>سارة أحمد</td><td>sara@email.com</td><td>0505554444</td><td><span class="badge badge-green">نشط</span></td><td><button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.8rem"><i class="ti ti-edit"></i></button></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-borrows" class="tab-content">
+            <div class="grid-2">
+                <div class="card-box">
+                    <h5 style="color:var(--primary);font-weight:600;margin-bottom:1rem"><i class="ti ti-arrow-left"></i> إعارة كتاب</h5>
+                    <div class="form-group"><label>العضو</label><select class="form-control"><option>اختر العضو...</option><option>أحمد محمد</option><option>فاطمة علي</option><option>عمر خالد</option><option>سارة أحمد</option></select></div>
+                    <div class="form-group"><label>الكتاب</label><select class="form-control"><option>اختر الكتاب...</option><option>البحث عن وطن - B001</option><option>اللص والكلاب - B003</option><option>الحي بن يقظان - B005</option><option>المعلمة - B006</option></select></div>
+                    <div class="form-group"><label>تاريخ الاستعارة</label><input type="date" class="form-control"></div>
+                    <div class="form-group"><label>تاريخ الإرجاع المتوقع</label><input type="date" class="form-control"></div>
+                    <button class="btn btn-primary" style="width:100%"><i class="ti ti-check"></i> تأكيد الإعارة</button>
+                </div>
+                <div class="card-box">
+                    <h5 style="color:var(--primary);font-weight:600;margin-bottom:1rem"><i class="ti ti-arrow-right"></i> إرجاع كتاب</h5>
+                    <div class="form-group"><label>رقم الإعارة</label><input type="text" class="form-control" placeholder="أدخل رقم الإعارة"></div>
+                    <div class="form-group"><label>الكتاب</label><select class="form-control"><option>اختر الكتاب المعار...</option><option>ألف ليلة وليلة - B002</option><option>الثلاثية - B004</option></select></div>
+                    <div class="form-group"><label>تاريخ الإرجاع الفعلي</label><input type="date" class="form-control"></div>
+                    <div class="form-group"><label>ملاحظات</label><textarea class="form-control" rows="3" placeholder="ملاحظات اختيارية..."></textarea></div>
+                    <button class="btn btn-success" style="width:100%"><i class="ti ti-check"></i> تأكيد الإرجاع</button>
+                </div>
+            </div>
+            <div class="card-box" style="margin-top:1rem">
+                <h5 style="color:var(--primary);font-weight:600;margin-bottom:1rem">الإعارات النشطة</h5>
+                <div style="overflow-x:auto">
+                <table>
+                    <thead><tr><th>رقم الإعارة</th><th>العضو</th><th>الكتاب</th><th>تاريخ الإعارة</th><th>الإرجاع المتوقع</th><th>الحالة</th></tr></thead>
+                    <tbody>
+                        <tr><td>L001</td><td>أحمد محمد</td><td>ألف ليلة وليلة</td><td>2026/09/10</td><td>2026/09/24</td><td><span class="badge badge-green">أعادي</span></td></tr>
+                        <tr><td>L002</td><td>فاطمة علي</td><td>الثلاثية</td><td>2026/09/01</td><td>2026/09/15</td><td><span class="badge badge-red">متأخر</span></td></tr>
+                        <tr><td>L003</td><td>سارة أحمد</td><td>ألف ليلة وليلة</td><td>2026/09/15</td><td>2026/09/29</td><td><span class="badge badge-green">أعادي</span></td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="bookModal" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+        <div class="modal">
+            <h5 style="color:var(--primary);font-weight:600;margin-bottom:1rem">إضافة كتاب جديد</h5>
+            <div class="form-group"><label>العنوان</label><input type="text" class="form-control" placeholder="عنوان الكتاب"></div>
+            <div class="grid-2">
+                <div class="form-group"><label>المؤلف</label><input type="text" class="form-control" placeholder="اسم المؤلف"></div>
+                <div class="form-group"><label>التصنيف</label><select class="form-control"><option>رواية</option><option>أدب</option><option>تاريخ</option><option>فلسفة</option><option>تعليم</option></select></div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>الرقم الدولي</label><input type="text" class="form-control" placeholder="ISBN"></div>
+                <div class="form-group"><label>النسخ</label><input type="number" class="form-control" value="1"></div>
+            </div>
+            <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem">
+                <button class="btn btn-outline" onclick="document.getElementById('bookModal').classList.remove('active')">إلغاء</button>
+                <button class="btn btn-primary" onclick="document.getElementById('bookModal').classList.remove('active')">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="memberModal" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+        <div class="modal">
+            <h5 style="color:var(--primary);font-weight:600;margin-bottom:1rem">إضافة عضو جديد</h5>
+            <div class="form-group"><label>الاسم الكامل</label><input type="text" class="form-control" placeholder="اسم العضو"></div>
+            <div class="grid-2">
+                <div class="form-group"><label>البريد الإلكتروني</label><input type="email" class="form-control" placeholder="email@example.com"></div>
+                <div class="form-group"><label>الهاتف</label><input type="tel" class="form-control" placeholder="05XXXXXXXX"></div>
+            </div>
+            <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem">
+                <button class="btn btn-outline" onclick="document.getElementById('memberModal').classList.remove('active')">إلغاء</button>
+                <button class="btn btn-primary" onclick="document.getElementById('memberModal').classList.remove('active')">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkAuth() {
+            var token = localStorage.getItem('library_token');
+            if (!token) { window.location.href = 'login.html'; return; }
+            var user = JSON.parse(localStorage.getItem('library_user') || '{}');
+            if (user.name) document.getElementById('userName').textContent = user.name;
+            if (user.role) document.getElementById('userRole').textContent = user.role;
+            if (user.name) document.getElementById('userAvatar').textContent = user.name.charAt(0);
+        }
+        function logout() {
+            localStorage.removeItem('library_token');
+            localStorage.removeItem('library_user');
+            window.location.href = 'login.html';
+        }
+        function showTab(name) {
+            document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+            document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+            document.getElementById('tab-' + name).classList.add('active');
+            event.target.classList.add('active');
+        }
+        function filterTable(tableId, inputId) {
+            var filter = document.getElementById(inputId).value.toLowerCase();
+            var rows = document.getElementById(tableId).querySelectorAll('tbody tr');
+            rows.forEach(function(row) {
+                row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
+            });
+        }
+        checkAuth();
+    </script>
+</body>
+</html>

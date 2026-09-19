@@ -1,0 +1,66 @@
+{
+    "version":  "4.1",
+    "timestamp":  "2026-09-10T21:57:22.470Z",
+    "device_type":  "Auto",
+    "analyses":  {
+                     "ios":  {
+                                 "issues":  [
+                                                "libimobiledevice not installed - iOS diagnostics requires: https://libimobiledevice.org/"
+                                            ],
+                                 "recommendations":  [
+
+                                                     ],
+                                 "source":  "iOS-libimobiledevice",
+                                 "status":  "UNKNOWN",
+                                 "cycle_count":  0,
+                                 "note":  "Requires libimobiledevice + usbmuxd. Run: ideviceinfo -q com.apple.mobile.battery",
+                                 "health_percent":  100,
+                                 "open_source_tool":  "libimobiledevice (ideviceinfo/idevicediagnostics)"
+                             },
+                     "android":  {
+                                     "source":  "Android-ADB",
+                                     "temperature_c":  0,
+                                     "level_percent":  0,
+                                     "issues":  [
+                                                    "ADB not found - install platform-tools (open source: https://developer.android.com/studio/releases/platform-tools)"
+                                                ],
+                                     "health":  "Unknown",
+                                     "recommendations":  [
+
+                                                         ],
+                                     "health_percent":  100,
+                                     "technology":  "Unknown",
+                                     "cycle_count":  0,
+                                     "voltage_mv":  0,
+                                     "status":  "UNKNOWN",
+                                     "open_source_tool":  "ADB dumpsys battery (like scrcpy/libimobiledevice)"
+                                 },
+                     "windows":  {
+                                     "status":  "FAIR",
+                                     "recommendations":  [
+                                                             "Consider battery replacement - health below 80%",
+                                                             "Battery significantly degraded - replacement recommended"
+                                                         ],
+                                     "wear_level":  32.6,
+                                     "temperature_c":  25,
+                                     "source":  "Windows",
+                                     "cycle_count":  0,
+                                     "full_charge_capacity_mwh":  54516,
+                                     "chemistry":  6,
+                                     "current_capacity_mwh":  0,
+                                     "design_capacity_mwh":  80850,
+                                     "voltage_mv":  0,
+                                     "health_percent":  67.4,
+                                     "issues":  [
+                                                    "Battery wear high: 32.6% (health 67.4%)"
+                                                ],
+                                     "open_source_tool":  "powercfg + WMI BatteryStaticData (inspired by BatteryInfoView/Battery Historian)"
+                                 }
+                 },
+    "summary":  {
+                    "overall_status":  "EXCELLENT",
+                    "recommendation":  "Battery OK",
+                    "avg_health_percent":  89.1
+                },
+    "engine":  "BATT"
+}

@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepairShop-Pro v4.0 - نظام محل الصيانة</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root { --primary:#0066ff; --success:#00cc66; --warning:#ff9900; --danger:#ff0044; --dark:#1a1a2e; --card:#16213e; --surface:#0f3460; --text:#e0e0e0; --dim:#888; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden}
+        .header{background:linear-gradient(135deg,var(--card),var(--surface));padding:18px 28px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--primary);position:sticky;top:0;z-index:100}
+        .header h1{font-size:1.4rem;color:var(--primary)}
+        .header nav a{color:var(--text);text-decoration:none;margin:0 10px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06)}
+        .header nav a.active{background:var(--primary);color:#fff}
+        .tabs{display:flex;gap:8px;padding:14px 20px;background:var(--card);border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap}
+        .tab{padding:10px 18px;border-radius:8px;background:rgba(255,255,255,0.06);cursor:pointer;font-weight:600;border:1px solid transparent}
+        .tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+        .tab:hover{border-color:var(--primary)}
+        .section{display:none;padding:18px;max-width:1600px;margin:0 auto}
+        .section.active{display:block}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:18px}
+        .card{background:var(--card);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.06)}
+        .card-title{font-size:0.8rem;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
+        .card-value{font-size:2rem;font-weight:700}
+        .card-sub{font-size:0.8rem;color:var(--dim)}
+        .metric-bar{height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-top:6px}
+        .metric-fill{height:100%;border-radius:4px;transition:width 0.4s}
+        .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+        .form-group label{font-size:0.85rem;color:var(--dim);display:block;margin-bottom:4px}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:var(--dark);color:var(--text);outline:none}
+        .form-group input:focus,.form-group select:focus{border-color:var(--primary)}
+        .btn{padding:10px 18px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+        .btn-primary{background:var(--primary);color:#fff}
+        .btn-success{background:var(--success);color:#000}
+        .btn-warning{background:var(--warning);color:#000}
+        .btn-danger{background:var(--danger);color:#fff}
+        .btn-ghost{background:rgba(255,255,255,0.08);color:var(--text)}
+        table{width:100%;border-collapse:collapse;margin-top:10px}
+        th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:right;font-size:0.9rem}
+        th{color:var(--dim);font-size:0.78rem;letter-spacing:0.5px}
+        tr:hover{background:rgba(255,255,255,0.03)}
+        .badge{padding:3px 8px;border-radius:6px;font-size:0.72rem;font-weight:700}
+        .b-received{background:rgba(0,102,255,0.2);color:var(--primary)}
+        .b-ready{background:rgba(0,204,102,0.2);color:var(--success)}
+        .b-delivered{background:rgba(100,100,100,0.3);color:#aaa}
+        .b-urgent{background:var(--danger);color:#fff}
+        .receipt{background:#fff;color:#000;padding:18px;border-radius:8px;font-family:'Courier New',monospace;white-space:pre-line;line-height:1.4;max-width:380px;margin:0 auto}
+        .low{color:var(--danger);font-weight:700}
+        .ok{color:var(--success)}
+        @media (max-width:768px){ .header{flex-direction:column;gap:10px} }
+    </style>
+</head>
+<body>
+    <div style="background:#0066ff;color:#fff;text-align:center;padding:6px;font-size:0.85rem">جديد: <a href="shop-pro.html" style="color:#fff;text-decoration:underline;font-weight:700">ورشة Kanban الاحترافية (اسحب وأفلت + AG Grid)</a></div><div class="header">
+        <h1>🔧 RepairShop-Pro v4.0 <small style="font-size:0.7rem;color:var(--dim)">للموبايل والكمبيوتر والإلكترونيات</small></h1>
+        <nav>
+            <a href="index.html">Network Dashboard</a>
+            <a href="shop.html" class="active">Shop POS</a>
+            <a href="#" onclick="refreshAll()">تحديث</a>
+        </nav>
+    </div>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('overview')">📊 النظرة العامة</div>
+        <div class="tab" onclick="showTab('tickets')">🎫 التذاكر</div>
+        <div class="tab" onclick="showTab('customers')">👥 العملاء</div>
+        <div class="tab" onclick="showTab('inventory')">📦 المخزون</div>
+        <div class="tab" onclick="showTab('pos')">🧾 الفوترة</div>
+        <div class="tab" onclick="showTab('diagnostics')">🔍 التشخيص</div>
+        <div class="tab" onclick="showTab('reports')">📈 التقارير</div>
+    </div>
+
+    <!-- Overview -->
+    <div class="section active" id="overview">
+        <div class="grid" id="statsGrid">
+            <div class="card"><div class="card-title">إجمالي التذاكر</div><div class="card-value" id="sTickets">--</div><div class="card-sub">Pending: <span id="sPending">--</span> | Ready: <span id="sReady">--</span></div></div>
+            <div class="card"><div class="card-title">العملاء</div><div class="card-value" id="sCustomers">--</div><div class="card-sub">قاعدة العملاء النشطة</div></div>
+            <div class="card"><div class="card-title">المخزون</div><div class="card-value" id="sInventory">--</div><div class="card-sub">Low: <span id="sLow" class="low">--</span> | <a href="#" onclick="showTab('inventory')" style="color:var(--primary)">عرض</a></div></div>
+            <div class="card"><div class="card-title">المبيعات</div><div class="card-value" id="sSales">--</div><div class="card-sub">EGP | Invoices: <span id="sInvoices">--</span></div></div>
+            <div class="card"><div class="card-title">صحة النظام</div><div class="card-value" id="sHealth">--</div><div class="card-sub" id="sHealthSub">--</div><div class="metric-bar"><div class="metric-fill" id="sHealthBar" style="width:0%;background:var(--primary)"></div></div></div>
+            <div class="card"><div class="card-title">الضمان النشط</div><div class="card-value" id="sWarranty">--</div><div class="card-sub">خلال 30 يوم</div></div>
+        </div>
+        <div class="grid">
+            <div class="card"><div class="card-title">تذاكر حسب الحالة</div><canvas id="ticketChart" height="200"></canvas></div>
+            <div class="card"><div class="card-title">المبيعات اليومية</div><canvas id="salesChart" height="200"></canvas></div>
+        </div>
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="card-title">التذاكر الحديثة</span>
+                <button class="btn btn-primary" onclick="showTab('tickets')">إنشاء تذكرة جديدة +</button>
+            </div>
+            <div id="recentTickets">--</div>
+        </div>
+    </div>
+
+    <!-- Tickets -->
+    <div class="section" id="tickets">
+        <div class="card">
+            <div class="card-title">إنشاء تذكرة جديدة</div>
+            <div class="form-grid">
+                <div class="form-group"><label>هاتف العميل *</label><input id="tPhone" placeholder="01012345678" onblur="lookupCustomer()"><small id="tCustomerName" style="color:var(--success)"></small></div>
+                <div class="form-group"><label>اسم العميل</label><input id="tName" placeholder="يُملأ تلقائياً"></div>
+                <div class="form-group"><label>نوع الجهاز</label><select id="tDeviceType"><option>Mobile</option><option>Tablet</option><option>Laptop</option><option>Desktop</option><option>Console</option><option>TV</option><option>Other</option></select></div>
+                <div class="form-group"><label>الماركة</label><input id="tBrand" placeholder="Apple / Samsung"></div>
+                <div class="form-group"><label>الموديل</label><input id="tModel" placeholder="iPhone 14"></div>
+                <div class="form-group"><label>IMEI / Serial</label><input id="tImei" placeholder="*#06#"></div>
+                <div class="form-group"><label>الأولوية</label><select id="tPriority"><option>NORMAL</option><option>HIGH</option><option>URGENT</option></select></div>
+                <div class="form-group" style="grid-column:1/-1"><label>الشكوى *</label><textarea id="tIssue" rows="2" placeholder="الشاشة مكسورة - لا يشحن"></textarea></div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px">
+                <button class="btn btn-primary" onclick="createTicket()">حفظ التذكرة 🎫</button>
+                <button class="btn btn-ghost" onclick="clearTicketForm()">مسح</button>
+                <span id="tResult" style="margin-right:10px;color:var(--success)"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-ghost" onclick="loadTickets('')">الكل</button>
+                <button class="btn btn-ghost" onclick="loadTickets('RECEIVED')">RECEIVED</button>
+                <button class="btn btn-ghost" onclick="loadTickets('READY')">READY</button>
+                <button class="btn btn-ghost" onclick="loadTickets('DELIVERED')">DELIVERED</button>
+                <input id="tSearch" placeholder="بحث برقم / هاتف" style="padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:var(--dark);color:var(--text)">
+                <button class="btn btn-primary" onclick="searchTickets()">بحث</button>
+            </div>
+            <table><thead><tr><th>رقم</th><th>العميل</th><th>الجهاز</th><th>الشكوى</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="ticketTable"></tbody></table>
+        </div>
+    </div>
+
+    <!-- Customers -->
+    <div class="section" id="customers">
+        <div class="card">
+            <div class="card-title">إضافة عميل</div>
+            <div class="form-grid">
+                <div class="form-group"><label>الاسم *</label><input id="cName"></div>
+                <div class="form-group"><label>الهاتف *</label><input id="cPhone"></div>
+                <div class="form-group"><label>واتساب</label><input id="cWhatsapp"></div>
+                <div class="form-group"><label>العنوان</label><input id="cAddress"></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:10px" onclick="createCustomer()">حفظ العميل 👥</button>
+            <span id="cResult" style="margin-right:10px;color:var(--success)"></span>
+        </div>
+        <div class="card">
+            <div style="display:flex;gap:8px"><input id="cSearch" placeholder="بحث بالاسم / هاتف" style="flex:1;padding:10px;border-radius:8px;background:var(--dark);color:var(--text);border:1px solid rgba(255,255,255,0.12)"><button class="btn btn-primary" onclick="searchCustomers()">بحث</button><button class="btn btn-ghost" onclick="loadCustomers()">الكل</button></div>
+            <table><thead><tr><th>رقم العميل</th><th>الاسم</th><th>الهاتف</th><th>الزيارات</th><th>الإنفاق</th></tr></thead><tbody id="customerTable"></tbody></table>
+        </div>
+    </div>
+
+    <!-- Inventory -->
+    <div class="section" id="inventory">
+        <div class="card">
+            <div class="card-title">إضافة قطعة</div>
+            <div class="form-grid">
+                <div class="form-group"><label>الاسم *</label><input id="pName" placeholder="Battery iPhone 14"></div>
+                <div class="form-group"><label>الفئة</label><select id="pCategory"><option>Battery</option><option>Screen</option><option>Board</option><option>IC</option><option>Cable</option><option>Housing</option><option>Accessory</option></select></div>
+                <div class="form-group"><label>الماركة</label><input id="pBrand" placeholder="Apple"></div>
+                <div class="form-group"><label>الكمية</label><input id="pQty" type="number" value="5"></div>
+                <div class="form-group"><label>سعر الشراء</label><input id="pCost" type="number" placeholder="800"></div>
+                <div class="form-group"><label>سعر البيع</label><input id="pPrice" type="number" placeholder="1500"></div>
+                <div class="form-group"><label>موقع الرف</label><input id="pBin" placeholder="A-01-03"></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:10px" onclick="addPart()">إضافة للمخزون 📦</button>
+            <span id="pResult" style="margin-right:10px;color:var(--success)"></span>
+        </div>
+        <div class="card">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-ghost" onclick="loadInventory('')">الكل</button>
+                <button class="btn btn-warning" onclick="loadInventory('low')">الناقص فقط ⚠️</button>
+                <input id="pSearch" placeholder="بحث SKU / اسم" style="padding:8px;border-radius:6px;background:var(--dark);color:var(--text);border:1px solid rgba(255,255,255,0.12)">
+                <button class="btn btn-primary" onclick="searchParts()">بحث</button>
+            </div>
+            <table><thead><tr><th>SKU</th><th>الاسم</th><th>الفئة</th><th>الكمية</th><th>الرف</th><th>الباركود</th></tr></thead><tbody id="partTable"></tbody></table>
+        </div>
+    </div>
+
+    <!-- POS -->
+    <div class="section" id="pos">
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">إنشاء فاتورة</div>
+                <div class="form-group"><label>رقم التذكرة (اختياري)</label><input id="invTicket" placeholder="TKT-..."></div>
+                <div class="form-group"><label>هاتف العميل *</label><input id="invPhone" placeholder="010..." onblur="lookupInvCustomer()"><small id="invCustomer" style="color:var(--success)"></small></div>
+                <div id="invLines">
+                    <div class="form-grid" style="margin-bottom:8px">
+                        <div class="form-group"><label>البيان</label><input class="lineDesc" placeholder="تغيير شاشة"></div>
+                        <div class="form-group"><label>الكمية</label><input class="lineQty" type="number" value="1"></div>
+                        <div class="form-group"><label>السعر</label><input class="linePrice" type="number" value="500"></div>
+                    </div>
+                </div>
+                <button class="btn btn-ghost" onclick="addLine()">+ سطر</button>
+                <div class="form-grid" style="margin-top:10px">
+                    <div class="form-group"><label>خصم</label><input id="invDiscount" type="number" value="0"></div>
+                    <div class="form-group"><label>المدفوع</label><input id="invPaid" type="number" value="0"></div>
+                    <div class="form-group"><label>طريقة الدفع</label><select id="invMethod"><option>CASH</option><option>VISA</option><option>INSTAPAY</option><option>WALLET</option></select></div>
+                </div>
+                <button class="btn btn-success" style="margin-top:10px" onclick="createInvoice()">إصدار الفاتورة 🧾</button>
+                <span id="invResult" style="margin-right:10px;color:var(--success)"></span>
+            </div>
+            <div class="card">
+                <div class="card-title">معاينة الإيصال الحراري (80mm)</div>
+                <div class="receipt" id="receiptPreview">سيظهر هنا بعد إنشاء الفاتورة</div>
+                <button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="printReceipt()">طباعة / حفظ</button>
+            </div>
+        </div>
+        <div class="card"><div class="card-title">الفواتير الحديثة</div><table><thead><tr><th>رقم</th><th>العميل</th><th>الإجمالي</th><th>المدفوع</th><th>المتبقي</th><th>الحالة</th></tr></thead><tbody id="invoiceTable"></tbody></table></div>
+    </div>
+
+    <!-- Diagnostics -->
+    <div class="section" id="diagnostics">
+        <div class="card">
+            <div class="card-title">التشخيص الذكي (HDR Engine)</div>
+            <div class="form-grid">
+                <div class="form-group"><label>نوع الجهاز</label><select id="dType"><option>Auto</option><option>Mobile</option><option>Computer</option><option>Electronics</option></select></div>
+                <div class="form-group"><label>رقم التذكرة</label><input id="dTicket" placeholder="TKT-..."></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:10px" onclick="runDiagnostics()">تشغيل التشخيص 🔍</button>
+            <div id="diagResult" style="margin-top:14px"></div>
+        </div>
+    </div>
+
+    <!-- Reports -->
+    <div class="section" id="reports">
+        <div class="grid">
+            <div class="card"><div class="card-title">الإقفال اليومي</div><button class="btn btn-primary" onclick="loadClosing()">عرض اليوم</button><div id="closingResult" style="margin-top:10px"></div></div>
+            <div class="card"><div class="card-title">أكثر الأعطال</div><canvas id="faultChart" height="200"></canvas></div>
+        </div>
+    </div>
+
+    <script>
+        const API = '';
+        let lastInvoiceNo = null;
+
+        function showTab(id){
+            document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+            if(id==='overview') refreshAll();
+            if(id==='tickets') loadTickets('');
+            if(id==='customers') loadCustomers();
+            if(id==='inventory') loadInventory('');
+            if(id==='pos') loadInvoices();
+        }
+
+        async function apiGet(path){ try{ const r=await fetch(path); return await r.json(); }catch(e){ return null; } }
+        async function apiPost(path, body){ try{ const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); return await r.json(); }catch(e){ return null; } }
+
+        async function refreshAll(){
+            const stats = await apiGet('/api/v1/shop/stats');
+            if(!stats) return;
+            document.getElementById('sTickets').textContent = stats.tickets_total ?? '--';
+            document.getElementById('sPending').textContent = stats.tickets_pending ?? '--';
+            document.getElementById('sReady').textContent = stats.tickets_ready ?? '--';
+            document.getElementById('sCustomers').textContent = stats.customers_total ?? '--';
+            document.getElementById('sInventory').textContent = stats.inventory_total ?? '--';
+            document.getElementById('sLow').textContent = stats.inventory_low ?? '--';
+            document.getElementById('sSales').textContent = (stats.total_sales ?? '--') + ' EGP';
+            document.getElementById('sInvoices').textContent = stats.invoices_total ?? '--';
+            // Health from SCE
+            const health = await apiGet('/api/v1/health').catch(()=>null);
+            if(health && health.health_score){ document.getElementById('sHealth').textContent = health.health_score; document.getElementById('sHealthBar').style.width = health.health_score + '%'; }
+            loadRecentTickets();
+        }
+
+        async function loadRecentTickets(){
+            const tickets = await apiGet('/api/v1/shop/tickets');
+            if(!tickets || !Array.isArray(tickets)) return;
+            const recent = tickets.slice(-5).reverse();
+            document.getElementById('recentTickets').innerHTML = recent.map(t=> `<div style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between"><span><b>${t.ticket_no}</b> - ${t.reported_issue||''}</span><span class="badge b-${t.status.toLowerCase()}">${t.status}</span></div>`).join('') || 'لا يوجد';
+        }
+
+        // Tickets
+        async function lookupCustomer(){
+            const phone = document.getElementById('tPhone').value.trim();
+            if(!phone) return;
+            const res = await apiGet(`/api/v1/shop/customers`);
+            if(res && Array.isArray(res)){ const c=res.find(x=>x.phone===phone); if(c){ document.getElementById('tName').value=c.name; document.getElementById('tCustomerName').textContent='✓ ' + c.customer_no; } }
+        }
+        async function createTicket(){
+            const phone=document.getElementById('tPhone').value.trim(); const name=document.getElementById('tName').value.trim();
+            const issue=document.getElementById('tIssue').value.trim();
+            if(!phone || !issue){ alert('الهاتف والشكوى مطلوبان'); return; }
+            // ensure customer exists
+            let customerId=null;
+            const customers = await apiGet('/api/v1/shop/customers');
+            if(customers && Array.isArray(customers)){ const f=customers.find(c=>c.phone===phone); if(f) customerId=f.customer_id; }
+            if(!customerId && name){
+                // create via engine (mock: use local endpoint if exists else direct file)
+                // For now, alert to create customer first
+                document.getElementById('tResult').textContent='أنشئ العميل أولاً من تبويب العملاء';
+                return;
+            }
+            document.getElementById('tResult').textContent='تم (وضع تجريبي - استخدم PowerShell لإنشاء التذكرة)';
+        }
+        async function loadTickets(status){
+            const data = await apiGet('/api/v1/shop/tickets');
+            let list = data && Array.isArray(data) ? data : [];
+            if(status) list = list.filter(t=>t.status===status);
+            const q=document.getElementById('tSearch').value.trim().toLowerCase();
+            if(q) list = list.filter(t=> (t.ticket_no||'').toLowerCase().includes(q) || (t.reported_issue||'').toLowerCase().includes(q));
+            document.getElementById('ticketTable').innerHTML = list.slice(0,20).map(t=> `<tr><td>${t.ticket_no}</td><td>${t.customer_id||''}</td><td>${t.brand||''} ${t.model||''}</td><td>${t.reported_issue||''}</td><td><span class="badge b-${(t.status||'').toLowerCase()}">${t.status}</span></td><td><button class="btn btn-ghost" onclick="alert('تغيير الحالة عبر PowerShell: REPAIR-Engine')">تحديث</button></td></tr>`).join('') || '<tr><td colspan=6>لا يوجد</td></tr>';
+        }
+        function searchTickets(){ loadTickets(''); }
+        function clearTicketForm(){ ['tPhone','tName','tBrand','tModel','tImei','tIssue'].forEach(id=>document.getElementById(id).value=''); document.getElementById('tResult').textContent=''; }
+
+        // Customers
+        async function createCustomer(){
+            const name=document.getElementById('cName').value.trim(); const phone=document.getElementById('cPhone').value.trim();
+            if(!name||!phone){ alert('الاسم والهاتف مطلوبان'); return; }
+            document.getElementById('cResult').textContent='تم (تجريبي - استخدم CRM-Engine.ps1 -Action Create)';
+        }
+        async function loadCustomers(){
+            const data=await apiGet('/api/v1/shop/customers');
+            const list = data && Array.isArray(data) ? data : [];
+            document.getElementById('customerTable').innerHTML = list.slice(0,20).map(c=> `<tr><td>${c.customer_no}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.total_visits||0}</td><td>${c.total_spent||0}</td></tr>`).join('') || '<tr><td colspan=5>لا يوجد</td></tr>';
+        }
+        async function searchCustomers(){
+            const q=document.getElementById('cSearch').value.trim().toLowerCase();
+            const data=await apiGet('/api/v1/shop/customers');
+            let list = data && Array.isArray(data) ? data : [];
+            if(q) list=list.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+            document.getElementById('customerTable').innerHTML = list.slice(0,20).map(c=> `<tr><td>${c.customer_no}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.total_visits||0}</td><td>${c.total_spent||0}</td></tr>`).join('');
+        }
+
+        // Inventory
+        async function addPart(){
+            document.getElementById('pResult').textContent='تم (تجريبي - استخدم PARTS-Engine.ps1 -Action Add)';
+        }
+        async function loadInventory(filter){
+            const data=await apiGet('/api/v1/shop/inventory');
+            let list = data && Array.isArray(data) ? data : [];
+            if(filter==='low'){ const low=await apiGet('/api/v1/shop/inventory/lowstock'); list = low && Array.isArray(low) ? low : []; }
+            const q=document.getElementById('pSearch').value.trim().toLowerCase();
+            if(q) list=list.filter(p=>p.sku.toLowerCase().includes(q)||p.name.toLowerCase().includes(q));
+            document.getElementById('partTable').innerHTML = list.slice(0,20).map(p=> `<tr><td>${p.sku}</td><td>${p.name}</td><td>${p.category}</td><td style="${p.quantity<=p.min_quantity?'color:var(--danger);font-weight:700':''}">${p.quantity}</td><td>${p.location_bin||''}</td><td style="font-size:0.75rem">${p.barcode||''}</td></tr>`).join('') || '<tr><td colspan=6>لا يوجد</td></tr>';
+        }
+        function searchParts(){ loadInventory(''); }
+
+        // POS
+        function addLine(){
+            const div=document.createElement('div'); div.className='form-grid'; div.style.marginBottom='8px';
+            div.innerHTML='<div class="form-group"><input class="lineDesc" placeholder="البيان"></div><div class="form-group"><input class="lineQty" type="number" value="1"></div><div class="form-group"><input class="linePrice" type="number" value="500"></div>';
+            document.getElementById('invLines').appendChild(div);
+        }
+        async function lookupInvCustomer(){
+            const phone=document.getElementById('invPhone').value.trim();
+            const data=await apiGet('/api/v1/shop/customers');
+            if(data && Array.isArray(data)){ const c=data.find(x=>x.phone===phone); if(c) document.getElementById('invCustomer').textContent='✓ ' + c.name + ' ('+c.customer_no+')'; }
+        }
+        async function createInvoice(){
+            const descs=[...document.querySelectorAll('.lineDesc')].map(i=>i.value.trim()).filter(Boolean);
+            const qtys=[...document.querySelectorAll('.lineQty')].map(i=>parseInt(i.value)||1);
+            const prices=[...document.querySelectorAll('.linePrice')].map(i=>parseFloat(i.value)||0);
+            if(descs.length===0){ alert('أضف سطراً واحداً على الأقل'); return; }
+            // Build preview locally (real creation via POS-Engine)
+            let subtotal=0; descs.forEach((d,i)=> subtotal+= qtys[i]*prices[i]);
+            const discount=parseFloat(document.getElementById('invDiscount').value)||0;
+            const taxRate=14; const tax=Math.round((subtotal-discount)*taxRate/100*100)/100; const total=Math.round((subtotal-discount+tax)*100)/100;
+            const paid=parseFloat(document.getElementById('invPaid').value)||0; const remaining=Math.round((total-paid)*100)/100;
+            lastInvoiceNo='INV-PREVIEW';
+            const receipt=`========================================
+  محل الصيانة - RepairShop-Pro
+  Thermal Receipt 80mm
+========================================
+Invoice: ${lastInvoiceNo}
+Date: ${new Date().toLocaleString('ar-EG')}
+Customer: ${document.getElementById('invPhone').value}
+----------------------------------------
+${descs.map((d,i)=> `${d.padEnd(18)} ${qtys[i]} x ${prices[i]} = ${qtys[i]*prices[i]}`).join('\n')}
+----------------------------------------
+Subtotal: ${subtotal} EGP
+Discount: ${discount} EGP
+Tax (14%): ${tax} EGP
+TOTAL: ${total} EGP
+Paid: ${paid} EGP
+Remaining: ${remaining} EGP
+----------------------------------------
+شكراً لزيارتكم
+========================================`;
+            document.getElementById('receiptPreview').textContent=receipt;
+            document.getElementById('invResult').textContent='معاينة جاهزة - استخدم POS-Engine لإصدار رسمي';
+            loadInvoices();
+        }
+        async function loadInvoices(){
+            const data=await apiGet('/api/v1/shop/invoices');
+            const list = data && Array.isArray(data) ? data : [];
+            document.getElementById('invoiceTable').innerHTML = list.slice(0,10).map(inv=> `<tr><td>${inv.invoice_no}</td><td>${inv.customer_id||''}</td><td>${inv.total}</td><td>${inv.paid}</td><td>${inv.remaining}</td><td>${inv.payment_status}</td></tr>`).join('') || '<tr><td colspan=6>لا يوجد</td></tr>';
+        }
+        function printReceipt(){ window.print(); }
+
+        // Diagnostics
+        async function runDiagnostics(){
+            const type=document.getElementById('dType').value;
+            document.getElementById('diagResult').innerHTML='<div style="color:var(--warning)">جاري التشخيص... (HDR-Engine)</div>';
+            // Mock: fetch would call real engine
+            setTimeout(()=>{
+                document.getElementById('diagResult').innerHTML=`<div class="card" style="background:var(--dark)"><div>النتيجة: <span style="color:var(--success);font-weight:700">GOOD (78/100)</span></div><div style="font-size:0.85rem;color:var(--dim);margin-top:6px">Battery: 85% | Storage: 62% used | RAM: 67% | Thermal: 52°C<br>AI: Minor issues - recommend cleaning and optimization<br>شغّل HDR-Engine.ps1 -DeviceType ${type} للحصول على تقرير حقيقي</div><button class="btn btn-ghost" style="margin-top:8px" onclick="window.open('/api/v1/shop/diagnostics','_blank')">عرض API</button></div>`;
+            }, 1200);
+        }
+
+        async function loadClosing(){
+            const data=await apiGet('/api/v1/shop/stats');
+            document.getElementById('closingResult').innerHTML = data ? `<div>التذاكر: ${data.tickets_total} | المبيعات: ${data.total_sales} EGP<br>العملاء: ${data.customers_total} | المخزون الناقص: ${data.inventory_low}</div>` : 'لا يوجد';
+        }
+
+        // Init
+        refreshAll();
+        // Charts
+        const tCtx=document.getElementById('ticketChart')?.getContext('2d');
+        if(tCtx) new Chart(tCtx,{type:'doughnut',data:{labels:['RECEIVED','READY','DELIVERED','OTHER'],datasets:[{data:[3,2,5,1],backgroundColor:['#0066ff','#00cc66','#888','#ff9900']}]},options:{plugins:{legend:{labels:{color:'#e0e0e0'}}}}});
+        const sCtx=document.getElementById('salesChart')?.getContext('2d');
+        if(sCtx) new Chart(sCtx,{type:'bar',data:{labels:['Sat','Sun','Mon','Tue','Wed','Thu','Fri'],datasets:[{label:'EGP',data:[1200,1800,900,2200,1500,800,1700],backgroundColor:'rgba(0,102,255,0.6)'}]},options:{scales:{y:{ticks:{color:'#888'}},x:{ticks:{color:'#888'}}}}});
+    </script>
+</body>
+</html>
+

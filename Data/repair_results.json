@@ -1,0 +1,16 @@
+{
+    "timestamp":  "2026-09-10T21:15:47.913Z",
+    "engine":  "REPAIR",
+    "version":  "4.0",
+    "action":  "Stats",
+    "result":  {
+                   "pending":  1,
+                   "by_status":  {
+                                     "count":  1,
+                                     "status":  "RECEIVED"
+                                 },
+                   "delivered":  0,
+                   "total":  1,
+                   "ready":  0
+               }
+}

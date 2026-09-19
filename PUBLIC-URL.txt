@@ -1,0 +1,18 @@
+ELIAS PRO v5.0.0 — FINAL RELEASE
+========================================
+PUBLIC / PRODUCTION URL (شاركه مع أي عميل أينما كان):
+  https://elias-pro.vercel.app
+
+التشخيص العميق + استكشاف الجهاز الذاتي:
+  https://elias-pro.vercel.app/deep.html
+
+غرفة تحكم الصيانة (تشغيل الجهة المحلية نفسها):
+  https://elias-pro.vercel.app/app.html
+
+نمط المشاركة المحلي (LAN — سلوك Illuminate نفس الخادم محليًا):
+  powershell -ExecutionPolicy Bypass -File C:\NetworkMaintenance\Share\Publish-Dashboard.ps1
+  ثم شارك: http://<your-lan-ip>:8081/Dashboard/deep.html
+
+ملف التوزيع المحلي:
+  Dist/Elias-Pro-v5.0.0.zip  (SHA256 في Dist/SHA256SUMS-500)
+Released: 2026-09-19

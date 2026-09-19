@@ -1,0 +1,27 @@
+=== IMMEDIATE LIST ===
+
+TaskPath TaskName                     State
+-------- --------                     -----
+\        NMS-NetConflict-Response     Ready
+\        NMS-NetHealth-Watchdog       Ready
+\        NMS-NetLinkRecovery-Response Ready
+
+
+
+=== schtasks exit code: 0 ===
+"\NMS-NetConflict-Response","N/A","Ready"
+"\NMS-NetHealth-Watchdog","9/18/2026 9:35:08 PM","Ready"
+"\NMS-NetHealth-Watchdog","9/18/2026 9:35:08 PM","Ready"
+"\NMS-NetLinkRecovery-Response","N/A","Ready"
+=== AFTER 20s ===
+
+TaskPath TaskName                     State
+-------- --------                     -----
+\        NMS-NetConflict-Response     Ready
+\        NMS-NetHealth-Watchdog       Ready
+\        NMS-NetLinkRecovery-Response Ready
+
+
+
+=== TaskScheduler events mentioning NMS ===
+

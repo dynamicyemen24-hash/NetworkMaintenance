@@ -1,0 +1,164 @@
+[
+    {
+        "Tool":  "adb",
+        "Name":  "Android Platform-Tools (ADB)",
+        "Category":  "Mobile",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://developer.android.com/studio/releases/platform-tools",
+        "Install":  "choco install adb -y"
+    },
+    {
+        "Tool":  "BleachBit",
+        "Name":  "BleachBit",
+        "Category":  "Cleaning",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://www.bleachbit.org/",
+        "Install":  "choco install bleachbit -y"
+    },
+    {
+        "Tool":  "CrystalDiskInfo",
+        "Name":  "CrystalDiskInfo",
+        "Category":  "Storage",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://crystalmark.info/",
+        "Install":  "choco install crystaldiskinfo -y"
+    },
+    {
+        "Tool":  "fastboot",
+        "Name":  "Android fastboot",
+        "Category":  "Mobile",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://developer.android.com/studio/releases/platform-tools",
+        "Install":  "choco install adb -y"
+    },
+    {
+        "Tool":  "HDDScan",
+        "Name":  "HDDScan",
+        "Category":  "Storage",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "http://hddscan.com/",
+        "Install":  "Download from hddscan.com"
+    },
+    {
+        "Tool":  "hwinfo",
+        "Name":  "OpenHardwareMonitor/HWiNFO",
+        "Category":  "Hardware",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://openhardwaremonitor.org/ + https://www.hwinfo.com/",
+        "Install":  "Download from openhardwaremonitor.org"
+    },
+    {
+        "Tool":  "ideviceinfo",
+        "Name":  "libimobiledevice",
+        "Category":  "Mobile",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://libimobiledevice.org/",
+        "Install":  "choco install libimobiledevice -y (or compile)"
+    },
+    {
+        "Tool":  "iperf3",
+        "Name":  "iperf3",
+        "Category":  "Network",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://iperf.fr/",
+        "Install":  "choco install iperf3 -y"
+    },
+    {
+        "Tool":  "memtest",
+        "Name":  "memtest86+",
+        "Category":  "Hardware",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://www.memtest.org/",
+        "Install":  "Bootable USB - https://www.memtest86.com/"
+    },
+    {
+        "Tool":  "nmap",
+        "Name":  "nmap",
+        "Category":  "Network",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://nmap.org/",
+        "Install":  "choco install nmap -y"
+    },
+    {
+        "Tool":  "prime95",
+        "Name":  "Prime95",
+        "Category":  "Stress",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://www.mersenne.org/download/",
+        "Install":  "Download from mersenne.org"
+    },
+    {
+        "Tool":  "scrcpy",
+        "Name":  "Genymobile/scrcpy",
+        "Category":  "Mobile",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://github.com/Genymobile/scrcpy",
+        "Install":  "choco install scrcpy -y"
+    },
+    {
+        "Tool":  "smartctl",
+        "Name":  "smartmontools/smartctl",
+        "Category":  "Storage",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://www.smartmontools.org/",
+        "Install":  "choco install smartmontools -y  OR  winget install smartmontools"
+    },
+    {
+        "Tool":  "speedtest",
+        "Name":  "speedtest-cli",
+        "Category":  "Network",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://github.com/sivel/speedtest-cli",
+        "Install":  "pip install speedtest-cli"
+    },
+    {
+        "Tool":  "stress-ng",
+        "Name":  "stress-ng",
+        "Category":  "Stress",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://github.com/ColinIanKing/stress-ng",
+        "Install":  "wsl: apt install stress-ng"
+    },
+    {
+        "Tool":  "TestDisk",
+        "Name":  "TestDisk/PhotoRec",
+        "Category":  "Recovery",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://www.cgsecurity.org/wiki/TestDisk",
+        "Install":  "choco install testdisk -y"
+    },
+    {
+        "Tool":  "WinMTR",
+        "Name":  "WinMTR",
+        "Category":  "Network",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://github.com/White-Tiger/WinMTR",
+        "Install":  "choco install winmtr -y"
+    },
+    {
+        "Tool":  "wireshark",
+        "Name":  "Wireshark",
+        "Category":  "Network",
+        "Installed":  false,
+        "Version":  "",
+        "URL":  "https://www.wireshark.org/",
+        "Install":  "choco install wireshark -y"
+    }
+]

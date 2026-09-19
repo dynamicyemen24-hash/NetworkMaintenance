@@ -1,0 +1,130 @@
+{
+    "timestamp":  "20260919_154304",
+    "version":  "6.0.0",
+    "overall":  {
+                    "penalty":  0,
+                    "rating":  "EXCELLENT",
+                    "score":  100,
+                    "grade":  "A"
+                },
+    "cpu":  {
+                "load":  3,
+                "rating":  "EXCELLENT",
+                "score":  100,
+                "temp":  "N/A",
+                "issues":  [
+
+                           ]
+            },
+    "ram":  {
+                "rating":  "EXCELLENT",
+                "score":  100,
+                "issues":  [
+
+                           ],
+                "used_pct":  22.7,
+                "total_gb":  31.7
+            },
+    "disks":  [
+                  {
+                      "score":  100,
+                      "issues":  [
+
+                                 ],
+                      "free_gb":  62.3,
+                      "used_pct":  76.9,
+                      "total_gb":  269.1,
+                      "letter":  "C:"
+                  },
+                  {
+                      "score":  100,
+                      "issues":  [
+
+                                 ],
+                      "free_gb":  31.8,
+                      "used_pct":  68.2,
+                      "total_gb":  100,
+                      "letter":  "D:"
+                  },
+                  {
+                      "score":  100,
+                      "issues":  [
+
+                                 ],
+                      "free_gb":  0,
+                      "used_pct":  0,
+                      "total_gb":  0,
+                      "letter":  "E:"
+                  },
+                  {
+                      "score":  100,
+                      "issues":  [
+
+                                 ],
+                      "free_gb":  0,
+                      "used_pct":  0,
+                      "total_gb":  0,
+                      "letter":  "F:"
+                  },
+                  {
+                      "score":  100,
+                      "issues":  [
+
+                                 ],
+                      "free_gb":  13,
+                      "used_pct":  85.7,
+                      "total_gb":  91.2,
+                      "letter":  "G:"
+                  }
+              ],
+    "battery":  {
+                    "status":  "AC Connected",
+                    "score":  100,
+                    "detected":  true,
+                    "issues":  [
+
+                               ],
+                    "health":  97
+                },
+    "network":  {
+                    "rating":  "EXCELLENT",
+                    "score":  100,
+                    "issues":  [
+
+                               ]
+                },
+    "updates":  {
+                    "hotfixes":  3,
+                    "pending":  1,
+                    "issues":  [
+                                   "1 pending Windows Updates"
+                               ],
+                    "wu_reboot":  false,
+                    "cbs_reboot":  false
+                },
+    "security":  {
+                     "vuln_count":  0,
+                     "vulns":  [
+
+                               ]
+                 },
+    "gaps":  {
+                 "gap_count":  0,
+                 "gaps":  [
+
+                          ]
+             },
+    "processes":  {
+                      "heavy_processes":  3,
+                      "issues":  [
+                                     "Service edgeupdate not running (Automatic)",
+                                     "Service GoogleUpdaterInternalService152.0.7933.0 not running (Automatic)",
+                                     "Service GoogleUpdaterService152.0.7933.0 not running (Automatic)",
+                                     "Service Intel(R) TPM Provisioning Service not running (Automatic)",
+                                     "Service WbioSrvc not running (Automatic)",
+                                     "Important service WSearch: Stopped",
+                                     "Important service BITS: Stopped"
+                                 ],
+                      "failed_services":  5
+                  }
+}

@@ -1,0 +1,19 @@
+# بيانات داخلية محلية — لا تُنشر للعموم
+Reports/
+Data/
+Logs/
+Backup/
+Temp/
+Dist/
+wasm/
+frontend/
+Modules/
+tests/
+node_modules/
+.vercel/
+.git/
+*.zip
+*.ps1
+*.bat
+Temp_*
+NetworkStandard-*

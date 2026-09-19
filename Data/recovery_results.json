@@ -1,0 +1,24 @@
+{
+    "action":  "Scan",
+    "version":  "4.1",
+    "timestamp":  "2026-09-10T21:15:47.341Z",
+    "report":  {
+                   "issues":  [
+                                  "Recycle Bin has 22 items - recoverable"
+                              ],
+                   "drive":  "C:",
+                   "tool":  "WMI + TestDisk concept (install smartctl for deeper scan)",
+                   "recycle_bin_items":  22,
+                   "free_gb":  48.63,
+                   "smart_status":  "OK",
+                   "deleted_files":  0,
+                   "status":  "SCAN_COMPLETE",
+                   "recoverable_files":  0,
+                   "file_system":  "NTFS",
+                   "shadow_copies":  0,
+                   "partition_status":  "OK",
+                   "total_gb":  269.13
+               },
+    "ticket_no":  "",
+    "engine":  "RECOVERY"
+}

@@ -1,0 +1,13 @@
+{
+    "timestamp":  "2026-09-10T20:58:40.477Z",
+    "engine":  "POS",
+    "version":  "4.0",
+    "action":  "Stats",
+    "result":  {
+                   "total_invoices":  1,
+                   "total_collected":  500,
+                   "total_sales":  1824,
+                   "collection_rate":  27.4,
+                   "unpaid_invoices":  null
+               }
+}

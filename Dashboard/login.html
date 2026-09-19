@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elias Pro — تسجيل الدخول</title>
+<link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css" rel="stylesheet">
+</head>
+<body class="d-flex flex-column">
+<div class="page page-center">
+<div class="container container-tight py-4">
+<div class="text-center mb-4">
+<img src="../Branding/icon-64.png" width="64" height="64" class="mb-3">
+<h1>Elias Pro <small class="text-muted">v5.0</small></h1>
+<div class="text-muted">الياس برو — Universal Maintenance Suite</div>
+</div>
+<div class="card card-md">
+<div class="card-body">
+<h2 class="h2 text-center mb-4">تسجيل الدخول</h2>
+<div class="mb-3">
+<label class="form-label">اسم المستخدم</label>
+<input id="username" type="text" class="form-control" placeholder="admin" autocomplete="username">
+</div>
+<div class="mb-2">
+<label class="form-label">كلمة المرور <span class="form-label-description"><a href="#">نسيت؟</a></span></label>
+<input id="password" type="password" class="form-control" placeholder="••••••••" autocomplete="current-password">
+</div>
+<div class="mb-2">
+<label class="form-check"><input type="checkbox" class="form-check-input" checked><span class="form-check-label">تذكرني</span></label>
+</div>
+<div class="form-footer">
+<button class="btn btn-primary w-100" onclick="doLogin()"><i class="ti ti-login me-1"></i> دخول</button>
+</div>
+<div class="text-center text-muted mt-3">
+الأدوار: Admin / Technician / Viewer — JWT + RBAC
+</div>
+<div id="loginResult" class="mt-3"></div>
+</div>
+</div>
+<div class="text-center text-muted mt-3">
+جرب: <code>admin / admin123</code> — يُنشئ JWT ويحفظ في localStorage
+</div>
+</div>
+</div>
+<script>
+// Cloned from Tabler Auth (MIT) + JWT logic (PodeAuth)
+async function doLogin(){
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+  const result = document.getElementById('loginResult');
+  result.innerHTML = '<div class="alert alert-info">جاري...</div>';
+  // Try real API if Pode is running
+  try {
+    const res = await fetch('/api/v1/auth/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:u, password:p})});
+    if(res.ok){
+      const j = await res.json();
+      localStorage.setItem('elias_token', j.token);
+      localStorage.setItem('elias_user', JSON.stringify(j.user));
+      result.innerHTML = '<div class="alert alert-success">تم — JWT محفوظ. جاري التوجيه...</div>';
+      setTimeout(()=> location.href='tech/index-pro.html', 800);
+      return;
+    }
+  } catch {}
+  // Fallback mock JWT (for demo without Pode)
+  if(u==='admin' && p==='admin123'){
+    const mockToken = btoa(JSON.stringify({user:u, role:'Admin', exp: Date.now()+3600000}));
+    localStorage.setItem('elias_token', mockToken);
+    localStorage.setItem('elias_user', JSON.stringify({username:u, role:'Admin'}));
+    result.innerHTML = '<div class="alert alert-success">Mock JWT — تم (بدون خادم)</div>';
+    setTimeout(()=> location.href='tech/index-pro.html', 800);
+  } else {
+    result.innerHTML = '<div class="alert alert-danger">بيانات خاطئة — جرب admin/admin123</div>';
+  }
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+// If already logged in, redirect
+if(localStorage.getItem('elias_token')){ /* keep on login for demo */ }
+</script>
+</body>
+</html>

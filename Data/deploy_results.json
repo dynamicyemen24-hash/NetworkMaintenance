@@ -1,0 +1,50 @@
+{
+    "action":  "deploy",
+    "version":  "4.2",
+    "timestamp":  "2026-09-10T22:08:46.736Z",
+    "strategy":  "BlueGreen",
+    "result":  {
+                   "to":  "green",
+                   "strategy":  "BlueGreen",
+                   "from":  "blue",
+                   "new_version":  "4.2.0",
+                   "dry_run":  true,
+                   "status":  "ROLLED_BACK",
+                   "steps":  [
+                                 {
+                                     "step":  1,
+                                     "status":  "DRYRUN",
+                                     "action":  "Deploy 4.2.0 to green (inactive)"
+                                 },
+                                 {
+                                     "step":  2,
+                                     "health":  {
+                                                    "checks":  [
+                                                                   {
+                                                                       "status":  "FAIL",
+                                                                       "error":  "Unable to connect to the remote server",
+                                                                       "name":  "API Health"
+                                                                   },
+                                                                   {
+                                                                       "status":  "PASS",
+                                                                       "recent_errors":  1,
+                                                                       "name":  "Error Rate"
+                                                                   }
+                                                               ],
+                                                    "version":  "4.2.0",
+                                                    "latency_ms":  0,
+                                                    "healthy":  false,
+                                                    "error_rate":  1
+                                                },
+                                     "status":  "FAILED",
+                                     "action":  "Health check green"
+                                 },
+                                 {
+                                     "step":  3,
+                                     "status":  "SUCCESS",
+                                     "action":  "Rollback -- keep blue"
+                                 }
+                             ]
+               },
+    "engine":  "DEPLOY"
+}

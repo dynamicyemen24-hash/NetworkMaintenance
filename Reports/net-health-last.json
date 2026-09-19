@@ -1,0 +1,18 @@
+﻿{
+    "timestamp":  "2026-09-19T17:05:57",
+    "ssid":  "DyGs",
+    "ipv4":  "192.168.0.150",
+    "gatewayLossPct":  0,
+    "wanLossPct":  0,
+    "dnsMs":  276,
+    "conflicts24h":  0,
+    "wlanBounce24h":  10,
+    "drift":  [
+
+              ],
+    "slaFailures":  [
+                        "WAN TCP 1.1.1.1:443 unreachable",
+                        "10 WLAN bounces in 24h"
+                    ],
+    "status":  "LINK_DEGRADED"
+}

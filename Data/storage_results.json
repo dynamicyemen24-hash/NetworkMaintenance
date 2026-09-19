@@ -1,0 +1,111 @@
+{
+    "summary":  {
+                    "health_score":  100,
+                    "status":  "EXCELLENT"
+                },
+    "version":  "4.1",
+    "engine":  "STORAGE",
+    "ticket_no":  "",
+    "android":  null,
+    "timestamp":  "2026-09-10T21:12:34.597Z",
+    "logical":  {
+                    "summary":  {
+                                    "critical":  0,
+                                    "total_volumes":  5
+                                },
+                    "volumes":  [
+                                    {
+                                        "total_gb":  269.13,
+                                        "volume_name":  "",
+                                        "free_gb":  48.65,
+                                        "used_gb":  220.48,
+                                        "issues":  [
+
+                                                   ],
+                                        "drive":  "C:",
+                                        "file_system":  "NTFS",
+                                        "status":  "WARNING",
+                                        "used_percent":  81.9
+                                    },
+                                    {
+                                        "total_gb":  100,
+                                        "volume_name":  "",
+                                        "free_gb":  37.78,
+                                        "used_gb":  62.22,
+                                        "issues":  [
+
+                                                   ],
+                                        "drive":  "D:",
+                                        "file_system":  "NTFS",
+                                        "status":  "OK",
+                                        "used_percent":  62.2
+                                    },
+                                    {
+                                        "total_gb":  0,
+                                        "volume_name":  null,
+                                        "free_gb":  0,
+                                        "used_gb":  0,
+                                        "issues":  [
+
+                                                   ],
+                                        "drive":  "E:",
+                                        "file_system":  null,
+                                        "status":  "OK",
+                                        "used_percent":  0
+                                    },
+                                    {
+                                        "total_gb":  0,
+                                        "volume_name":  null,
+                                        "free_gb":  0,
+                                        "used_gb":  0,
+                                        "issues":  [
+
+                                                   ],
+                                        "drive":  "F:",
+                                        "file_system":  null,
+                                        "status":  "OK",
+                                        "used_percent":  0
+                                    },
+                                    {
+                                        "total_gb":  91.16,
+                                        "volume_name":  "New Volume",
+                                        "free_gb":  13.14,
+                                        "used_gb":  78.02,
+                                        "issues":  [
+
+                                                   ],
+                                        "drive":  "G:",
+                                        "file_system":  "NTFS",
+                                        "status":  "WARNING",
+                                        "used_percent":  85.6
+                                    }
+                                ]
+                },
+    "benchmark":  null,
+    "physical":  {
+                     "summary":  {
+                                     "healthy":  1,
+                                     "failing":  0,
+                                     "warning":  0,
+                                     "total":  1
+                                 },
+                     "open_source_tool":  "Get-PhysicalDisk + smartctl",
+                     "disks":  [
+                                   {
+                                       "wear_level":  0,
+                                       "temperature_c":  0,
+                                       "device_id":  "0",
+                                       "bus_type":  "NVMe",
+                                       "operational_status":  "OK",
+                                       "media_type":  "SSD",
+                                       "smart_status":  "UNKNOWN",
+                                       "health_status":  "Healthy",
+                                       "friendly_name":  "PC601A NVMe SK hynix 1TB",
+                                       "size_gb":  953.87,
+                                       "issues":  [
+
+                                                  ]
+                                   }
+                               ]
+                 }
+}

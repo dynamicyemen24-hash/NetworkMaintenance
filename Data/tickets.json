@@ -1,0 +1,15 @@
+{
+    "ticket_id":  "9bc4a35e-6614-45ff-a144-803243b2824f",
+    "model":  "iPhone 14",
+    "received_at":  "2026-09-10T20:58:19.5349504+03:00",
+    "priority":  "HIGH",
+    "brand":  "Apple",
+    "ticket_no":  "TKT-2026-09-1236",
+    "device_type":  "Mobile",
+    "status":  "RECEIVED",
+    "imei":  null,
+    "customer_id":  "3acbcd7b-bf15-4a85-b84a-3bc8487be1ee",
+    "estimated_cost":  0,
+    "serial_number":  null,
+    "reported_issue":  "???????? ?? ????"
+}

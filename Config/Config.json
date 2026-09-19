@@ -1,0 +1,78 @@
+{
+  "SystemName": "NetworkMaintenance-Pro",
+  "Version": "2.0.0",
+  "LastRun": "",
+  "NextRun": "",
+  "LogLevel": "INFO",
+  "LogPath": "C:\\NetworkMaintenance\\Logs",
+  "ReportPath": "C:\\NetworkMaintenance\\Reports",
+  "ScriptsPath": "C:\\NetworkMaintenance\\Scripts",
+  "MaxLogDays": 7,
+  "MaxReportDays": 14,
+  
+  "Diagnostic": {
+    "PingTarget": "8.8.8.8",
+    "PingCount": 4,
+    "DNS_Servers": ["1.1.1.1", "8.8.8.8"],
+    "TestDomains": ["cloudflare.com"],
+    "TcpTarget": "8.8.8.8"
+  },
+  
+  "Network": {
+    "PrimaryInterface": "Wi-Fi",
+    "ExpectedLatencyMs": 50,
+    "WarningLatencyMs": 100,
+    "CriticalLatencyMs": 300,
+    "ExpectedMtu": 1450,
+    "ExpectedTcpWindow": 8192
+  },
+  
+  "Optimization": {
+    "EnableTcpAutoTuning": true,
+    "TcpAutoTuningLevel": "experimental",
+    "EnableEcn": true,
+    "EnablePacing": true,
+    "PacingProfile": "delay-based",
+    "InitialRto": 500,
+    "MaxSynRetransmissions": 6,
+    "RcvWnd": 16384,
+    "CongestionProvider": "ctcp",
+    "Mtu": 1450,
+    "EnableChimneyOffload": true
+  },
+  
+  "Dns": {
+    "PrimaryDns": "1.1.1.1",
+    "SecondaryDns": "8.8.8.8",
+    "TertiaryDns": "9.9.9.9",
+    "EnableDnsOverHttps": true,
+    "DnsCacheTtl": 300
+  },
+  
+  "VirtualAdapters": {
+    "DisableHyperV": true,
+    "DisableDocker": true,
+    "DisableBluetooth": true,
+    "DisableWiFiDirect": true,
+    "HyperVMetric": 9000,
+    "PrimaryInterfaceMetric": 50
+  },
+  
+  "Maintenance": {
+    "ScheduleType": "Daily",
+    "ScheduleTime": "06:00",
+    "EnableAutoHealing": true,
+    "EnableEmailAlerts": false,
+    "AlertThreshold": "CRITICAL",
+    "KeepHistoricalReports": 30
+  },
+  
+  "Monitoring": {
+    "EnableRealTime": false,
+    "CheckIntervalSeconds": 300,
+    "AlertOnPacketLoss": true,
+    "PacketLossThreshold": 1,
+    "AlertOnHighLatency": true,
+    "AlertOnDnsFailure": true
+  }
+}

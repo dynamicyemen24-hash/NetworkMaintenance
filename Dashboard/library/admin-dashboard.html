@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المدير - مكتبة الحسيني</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        :root{--primary:#1a365d;--accent:#3182ce;--bg:#f1f5f9}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);direction:rtl}
+        .sidebar{width:250px;background:var(--primary);color:#fff;position:fixed;height:100vh;overflow-y:auto;z-index:100}
+        .sidebar-brand{padding:1.25rem;font-size:1.2rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:.5rem}
+        .sidebar .nav-link{color:rgba(255,255,255,0.7);padding:.7rem 1.2rem;display:flex;align-items:center;gap:.6rem;text-decoration:none;transition:all .2s}
+        .sidebar .nav-link:hover,.sidebar .nav-link.active{background:rgba(255,255,255,0.1);color:#fff;border-radius:8px;margin:2px 8px}
+        .main-content{margin-right:250px;padding:1.5rem}
+        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+        .page-title{font-size:1.5rem;font-weight:700;color:var(--primary)}
+        .stat-card{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.05);transition:transform .2s}
+        .stat-card:hover{transform:translateY(-2px)}
+        .stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+        .stat-value{font-size:1.75rem;font-weight:700;color:var(--primary)}
+        .stat-label{color:#6c757d;font-size:.85rem}
+        .card-box{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+        .activity-item{padding:.65rem 0;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;gap:.75rem}
+        .activity-item:last-child{border-bottom:none}
+        .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+        .quick-btn{padding:1rem;border-radius:10px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s;background:#fff;text-decoration:none;color:inherit;display:block}
+        .quick-btn:hover{border-color:var(--accent);transform:translateY(-2px)}
+        .user-panel{position:absolute;bottom:0;width:100%;padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:.7rem}
+        .avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:.85rem}
+        #borrowChart{width:100%;height:300px}
+        .btn{padding:.5rem 1rem;border-radius:8px;border:none;cursor:pointer;font-size:.9rem;display:inline-flex;align-items:center;gap:.4rem}
+        .btn-primary{background:var(--accent);color:#fff}
+        .btn-outline{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+        .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+        .grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-bottom:1.5rem}
+        .grid-4-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+        .text-muted{color:#6c757d;font-size:.85rem}
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand"><i class="ti ti-book-2"></i> مكتبة الحسيني</div>
+        <nav style="padding:.75rem 0">
+            <a class="nav-link active" href="admin-dashboard.html"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+            <a class="nav-link" href="librarian-dashboard.html"><i class="ti ti-book"></i> إدارة الكتب</a>
+            <a class="nav-link" href="member-dashboard.html"><i class="ti ti-users"></i> إدارة الأعضاء</a>
+            <a class="nav-link" href="#"><i class="ti ti-arrows-right-left"></i> الإعارات</a>
+            <a class="nav-link" href="#"><i class="ti ti-chart-bar"></i> التقارير</a>
+            <a class="nav-link" href="#"><i class="ti ti-settings"></i> الإعدادات</a>
+        </nav>
+        <div class="user-panel">
+            <div class="avatar" id="userAvatar">م</div>
+            <div style="flex:1">
+                <div id="userName" style="font-weight:600;font-size:.9rem">المدير</div>
+                <div id="userRole" style="font-size:.7rem;opacity:.7">مدير النظام</div>
+            </div>
+            <a href="#" onclick="logout()" style="color:#fff;font-size:1.1rem" title="تسجيل الخروج"><i class="ti ti-logout"></i></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <div class="page-title">لوحة تحكم المدير</div>
+                <div class="text-muted">مرحباً بعودتك</div>
+            </div>
+            <div style="display:flex;gap:.5rem">
+                <button class="btn btn-primary"><i class="ti ti-plus"></i> كتاب جديد</button>
+                <button class="btn btn-outline"><i class="ti ti-download"></i> تصدير</button>
+            </div>
+        </div>
+
+        <div class="grid-4">
+            <div class="stat-card">
+                <div style="display:flex;align-items:center;gap:1rem">
+                    <div class="stat-icon" style="background:#e8f4fd;color:#3182ce"><i class="ti ti-book-2"></i></div>
+                    <div><div class="stat-value">12,458</div><div class="stat-label">إجمالي الكتب</div></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div style="display:flex;align-items:center;gap:1rem">
+                    <div class="stat-icon" style="background:#e8fdf4;color:#22c55e"><i class="ti ti-users"></i></div>
+                    <div><div class="stat-value">1,234</div><div class="stat-label">الأعضاء</div></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div style="display:flex;align-items:center;gap:1rem">
+                    <div class="stat-icon" style="background:#fef3c7;color:#f59e0b"><i class="ti ti-arrows-right-left"></i></div>
+                    <div><div class="stat-value">342</div><div class="stat-label">الإعارات النشطة</div></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div style="display:flex;align-items:center;gap:1rem">
+                    <div class="stat-icon" style="background:#fde8e8;color:#ef4444"><i class="ti ti-alert-triangle"></i></div>
+                    <div><div class="stat-value">28</div><div class="stat-label">متأخرات</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-1">
+            <div class="card-box">
+                <h5 style="color:var(--primary);margin-bottom:1rem;font-weight:600">اتجاهات الإعارات</h5>
+                <div id="borrowChart"></div>
+            </div>
+            <div class="card-box">
+                <h5 style="color:var(--primary);margin-bottom:1rem;font-weight:600">النشاط الأخير</h5>
+                <div class="activity-item"><div class="dot" style="background:#22c55e"></div><div><strong>أحمد محمد</strong> أعار كتاباً<br><small class="text-muted">منذ 5 دقائق</small></div></div>
+                <div class="activity-item"><div class="dot" style="background:#3182ce"></div><div><strong>فاطمة علي</strong> أعادت كتاباً<br><small class="text-muted">منذ 15 دقيقة</small></div></div>
+                <div class="activity-item"><div class="dot" style="background:#f59e0b"></div><div><strong>عمر خالد</strong> سجّل عضوية جديدة<br><small class="text-muted">منذ 30 دقيقة</small></div></div>
+                <div class="activity-item"><div class="dot" style="background:#ef4444"></div><div><strong>تنبيه:</strong> تأخر سعيد حسن في إرجاع كتاب<br><small class="text-muted">منذ ساعة</small></div></div>
+                <div class="activity-item"><div class="dot" style="background:#8b5cf6"></div><div><strong>المكتبة</strong> أضافت 15 كتاباً جديداً<br><small class="text-muted">منذ ساعتين</small></div></div>
+            </div>
+        </div>
+
+        <div class="card-box" style="margin-bottom:1.5rem">
+            <h5 style="color:var(--primary);margin-bottom:1rem;font-weight:600">إجراءات سريعة</h5>
+            <div class="grid-4-quick">
+                <a href="librarian-dashboard.html" class="quick-btn"><i class="ti ti-plus-circle" style="font-size:2rem;color:var(--accent)"></i><br>إضافة كتاب</a>
+                <a href="member-dashboard.html" class="quick-btn"><i class="ti ti-user-plus" style="font-size:2rem;color:#22c55e"></i><br>تسجيل عضو</a>
+                <a href="#" class="quick-btn"><i class="ti ti-arrow-left-right" style="font-size:2rem;color:#f59e0b"></i><br>إعارة جديدة</a>
+                <a href="#" class="quick-btn"><i class="ti ti-receipt" style="font-size:2rem;color:#8b5cf6"></i><br>تقرير يومي</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function checkAuth() {
+            var token = localStorage.getItem('library_token');
+            if (!token) { window.location.href = 'login.html'; return; }
+            var user = JSON.parse(localStorage.getItem('library_user') || '{}');
+            if (user.name) document.getElementById('userName').textContent = user.name;
+            if (user.role) document.getElementById('userRole').textContent = user.role;
+            if (user.name) document.getElementById('userAvatar').textContent = user.name.charAt(0);
+        }
+        function logout() {
+            localStorage.removeItem('library_token');
+            localStorage.removeItem('library_user');
+            window.location.href = 'login.html';
+        }
+        function initChart() {
+            var chart = echarts.init(document.getElementById('borrowChart'));
+            chart.setOption({
+                tooltip: {trigger: 'axis'},
+                legend: {data: ['إعارات', 'مرتجعات'], textStyle: {fontFamily: 'Segoe UI'}},
+                grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+                xAxis: {type: 'category', data: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو']},
+                yAxis: {type: 'value'},
+                series: [
+                    {name: 'إعارات', type: 'line', smooth: true, data: [120, 132, 101, 134, 90, 230, 210], areaStyle: {opacity: 0.15}, itemStyle: {color: '#3182ce'}},
+                    {name: 'مرتجعات', type: 'line', smooth: true, data: [110, 120, 95, 128, 85, 210, 195], areaStyle: {opacity: 0.15}, itemStyle: {color: '#22c55e'}}
+                ]
+            });
+            window.addEventListener('resize', function() { chart.resize(); });
+        }
+        checkAuth();
+        initChart();
+    </script>
+</body>
+</html>

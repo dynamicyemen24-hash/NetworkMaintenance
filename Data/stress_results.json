@@ -1,0 +1,49 @@
+{
+    "version":  "4.1",
+    "duration_sec":  15,
+    "timestamp":  "2026-09-10T21:12:44.757Z",
+    "ticket_no":  "",
+    "tests":  {
+                  "cpu":  {
+                              "issues":  [
+                                             "CPU did not reach expected load (avg 69.2%) - possible throttling"
+                                         ],
+                              "max_usage":  84,
+                              "duration_sec":  15,
+                              "tool":  "stress-ng / Prime95 concept",
+                              "status":  "WARN",
+                              "test":  "CPU",
+                              "max_temp":  0,
+                              "avg_usage":  69.2
+                          },
+                  "ram":  {
+                              "issues":  [
+
+                                         ],
+                              "errors":  0,
+                              "duration_sec":  15,
+                              "tool":  "memtest86+ / stress-ng --vm",
+                              "allocated_mb":  512,
+                              "status":  "PASS",
+                              "test":  "RAM"
+                          },
+                  "thermal":  {
+                                  "issues":  [
+
+                                             ],
+                                  "duration_sec":  15,
+                                  "tool":  "OCCT / OpenHardwareMonitor",
+                                  "status":  "PASS",
+                                  "throttling":  false,
+                                  "test":  "Thermal",
+                                  "max_temp":  55,
+                                  "avg_temp":  50
+                              }
+              },
+    "summary":  {
+                    "overall_status":  "FAIL",
+                    "recommendation":  "Hardware instability detected - recommend further diagnostics"
+                },
+    "test_type":  "Quick",
+    "engine":  "STRESS"
+}

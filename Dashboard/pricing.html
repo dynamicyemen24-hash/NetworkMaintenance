@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الاشتراكات — Elias Pro</title>
+<link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css" rel="stylesheet">
+<style>
+.pricing-card{border:2px solid transparent;transition:all 0.2s}
+.pricing-card.featured{border-color:#0066ff;transform:scale(1.03);box-shadow:0 12px 32px rgba(0,102,255,0.15)}
+.price{font-size:2.2rem;font-weight:900}
+</style>
+</head>
+<body class="bg-light">
+<div class="page">
+<header class="navbar navbar-expand-md">
+<div class="container-xl">
+<h1 class="navbar-brand"><img src="../Branding/icon-32.png" width="32" height="32" class="me-2"> Elias Pro <span class="badge bg-primary-lt">الاشتراكات</span></h1>
+<a href="tech/index-pro.html" class="btn btn-ghost ms-auto">الرئيسية</a>
+<a href="login.html" class="btn btn-primary ms-2">تسجيل دخول</a>
+</div>
+</header>
+<div class="page-wrapper">
+<div class="container-xl py-4">
+<div class="text-center mb-4">
+<h1>اختر باقتك — يعمل على أي جهاز</h1>
+<p class="text-muted">PWA + Vercel Edge + PowerShell Backend — اشتراك واحد لكل أجهزتك</p>
+<div class="mt-2"><span class="badge bg-green-lt">Vercel</span> <span class="badge bg-blue-lt">PWA</span> <span class="badge bg-yellow-lt">أي جهاز</span></div>
+</div>
+
+<div class="row row-cards">
+<!-- Free -->
+<div class="col-md-4">
+<div class="card pricing-card">
+<div class="card-body text-center">
+<h3>Free</h3>
+<div class="price">0 <small class="text-muted">EGP/شهر</small></div>
+<p class="text-muted small">للتجربة</p>
+<ul class="list-unstyled text-start small mt-3">
+<li><i class="ti ti-check text-green me-1"></i> تشخيص HDR أساسي</li>
+<li><i class="ti ti-check text-green me-1"></i> جهاز واحد</li>
+<li><i class="ti ti-check text-green me-1"></i> Dashboard أساسي</li>
+<li><i class="ti ti-x text-red me-1"></i> بدون BATT/STORAGE/STRESS</li>
+</ul>
+<button class="btn btn-outline-primary w-100 mt-3" onclick="checkout('free')">ابدأ مجاناً</button>
+</div>
+</div>
+</div>
+<!-- Pro -->
+<div class="col-md-4">
+<div class="card pricing-card featured">
+<div class="card-status-top bg-primary"></div>
+<div class="card-body text-center">
+<div class="badge bg-primary mb-2">الأكثر طلباً</div>
+<h3>Pro</h3>
+<div class="price">299 <small class="text-muted">EGP/شهر</small></div>
+<p class="text-muted small">للمحلات والفنيين</p>
+<ul class="list-unstyled text-start small mt-3">
+<li><i class="ti ti-check text-green me-1"></i> كل التشخيصات (HDR+BATT+STORAGE+STRESS+NETDIAG)</li>
+<li><i class="ti ti-check text-green me-1"></i> 5 أجهزة</li>
+<li><i class="ti ti-check text-green me-1"></i> تقارير PDF + Kanban + AG Grid</li>
+<li><i class="ti ti-check text-green me-1"></i> PWA + Offline</li>
+<li><i class="ti ti-check text-green me-1"></i> دعم فني</li>
+</ul>
+<button class="btn btn-primary w-100 mt-3" onclick="checkout('pro')">اشترك Pro — 299 EGP</button>
+<small class="text-muted d-block mt-2">Stripe Checkout — آمن</small>
+</div>
+</div>
+</div>
+<!-- Enterprise -->
+<div class="col-md-4">
+<div class="card pricing-card">
+<div class="card-body text-center">
+<h3>Enterprise</h3>
+<div class="price">999 <small class="text-muted">EGP/شهر</small></div>
+<p class="text-muted small">للشركات والسلاسل</p>
+<ul class="list-unstyled text-start small mt-3">
+<li><i class="ti ti-check text-green me-1"></i> كل المحركات (29)</li>
+<li><i class="ti ti-check text-green me-1"></i> 20 جهاز</li>
+<li><i class="ti ti-check text-green me-1"></i> White-label + API كامل</li>
+<li><i class="ti ti-check text-green me-1"></i> Vercel + Docker + PWA</li>
+<li><i class="ti ti-check text-green me-1"></i> Zero-Trust + SSO</li>
+</ul>
+<button class="btn btn-outline-primary w-100 mt-3" onclick="checkout('enterprise')">Enterprise — 999 EGP</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card mt-4">
+<div class="card-header"><h3 class="card-title">كيف يعمل على أي جهاز؟</h3></div>
+<div class="card-body">
+<div class="row text-center">
+<div class="col-md-4"><i class="ti ti-brand-vercel" style="font-size:2rem;color:#000"></i><div class="mt-2"><b>Vercel Edge</b><br><small class="text-muted">الواجهة + api/index.py (Python) — CDN عالمي</small></div></div>
+<div class="col-md-4"><i class="ti ti-brand-docker" style="font-size:2rem;color:#2496ed"></i><div class="mt-2"><b>Docker</b><br><small class="text-muted">الخلفية PowerShell — أي سيرفر (Railway/Render/VPS)</small></div></div>
+<div class="col-md-4"><i class="ti ti-device-mobile" style="font-size:2rem;color:#00cc66"></i><div class="mt-2"><b>PWA</b><br><small class="text-muted">تثبيت على موبايل/كمبيوتر — يعمل Offline</small></div></div>
+</div>
+<div class="alert alert-info mt-3">
+<b>الواجهة</b> على Vercel (HTML/JS) → <b>api/index.py</b> على Vercel (Python) → <b>PowerShell Backend</b> على Docker (Railway) → <b>SQLite/Postgres</b><br>
+أو: كل شيء على Docker واحد — <code>docker-compose up</code> — يعمل على أي جهاز (Windows/Linux/macOS)
+</div>
+</div>
+</div>
+
+<div class="card mt-3">
+<div class="card-body">
+<h3>التكامل مع Stripe</h3>
+<p class="text-muted small">انسخ هذا الكود في <code>api/index.py</code> — webhook يحدث الاشتراك تلقائياً:</p>
+<pre style="background:#0a0f1e;color:#aeb9d4;padding:12px;border-radius:8px;overflow:auto;font-size:0.8rem">import stripe
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+# POST /api/v1/subscription/checkout → stripe.checkout.Session.create(...)
+# POST /api/v1/subscription/webhook → stripe.Webhook.construct_event(...)</pre>
+<p class="small">راجع: <a href="https://stripe.com/docs/checkout/quickstart" target="_blank">stripe.com/docs/checkout</a></p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+async function checkout(plan){
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'جاري...';
+  try {
+    const res = await fetch('/api/v1/subscription/checkout', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({plan})
+    });
+    const data = await res.json();
+    if(data.checkout_url && data.checkout_url.startsWith('http')){
+      location.href = data.checkout_url;
+    } else {
+      // Fallback mock
+      alert(`تم اختيار ${plan} — في الإنتاج سيتم التوجيه إلى Stripe Checkout\nالسعر: ${data.price} EGP`);
+      // Simulate success
+      localStorage.setItem('elias_plan', plan);
+      location.href = 'tech/index-pro.html';
+    }
+  } catch(e){
+    alert('Stripe غير مُعد — راجع api/index.py — سيتم حفظ محلياً');
+    localStorage.setItem('elias_plan', plan);
+  }
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>

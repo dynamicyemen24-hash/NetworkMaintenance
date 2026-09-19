@@ -1,0 +1,27 @@
+{
+  "name": "elias-pro",
+  "version": "5.0.0",
+  "description": "Elias Pro v5.0 — Universal Maintenance Suite — Production Monitoring + E2E + Zero-Downtime",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test --project=chromium",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "dev": "powershell -ExecutionPolicy Bypass -File .\\API\\Server-Pode.ps1 -Port 8080 -EnableSwagger",
+    "api": "powershell -ExecutionPolicy Bypass -File .\\API\\Server-Pode.ps1",
+    "health": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\ERROR-Engine.ps1 -Action health",
+    "deploy:check": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action health",
+    "deploy:canary": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action deploy -Strategy Canary -DryRun",
+    "deploy:bluegreen": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action deploy -Strategy BlueGreen -NewVersion 5.0.0 -DryRun"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "playwright": "^1.44.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "FixMaster Technology — Elias Pro",
+  "license": "Proprietary"
+}

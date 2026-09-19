@@ -1,0 +1,2 @@
+count=2
+alert=WAN/OPERATOR instability (host config OK): WAN TCP 1.1.1.1:443 unreachable;10 WLAN bounces in 24h at 2026-09-19T17:05:57

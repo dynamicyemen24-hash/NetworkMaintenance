@@ -1,0 +1,158 @@
+{
+    "processes":  [
+                      {
+                          "cpu_pct":  0.3,
+                          "pid":  9904,
+                          "name":  "Taskmgr",
+                          "mem_mb":  186
+                      },
+                      {
+                          "cpu_pct":  0.2,
+                          "pid":  6040,
+                          "name":  "msedge",
+                          "mem_mb":  334
+                      },
+                      {
+                          "cpu_pct":  0.2,
+                          "pid":  18620,
+                          "name":  "OpenCode",
+                          "mem_mb":  205
+                      },
+                      {
+                          "cpu_pct":  0.2,
+                          "pid":  9636,
+                          "name":  "Code",
+                          "mem_mb":  296
+                      },
+                      {
+                          "cpu_pct":  0,
+                          "pid":  13072,
+                          "name":  "wlanext",
+                          "mem_mb":  15
+                      },
+                      {
+                          "cpu_pct":  0,
+                          "pid":  7464,
+                          "name":  "nvWmi64",
+                          "mem_mb":  22
+                      },
+                      {
+                          "cpu_pct":  0,
+                          "pid":  11344,
+                          "name":  "Code",
+                          "mem_mb":  207
+                      },
+                      {
+                          "cpu_pct":  0,
+                          "pid":  17400,
+                          "name":  "svchost",
+                          "mem_mb":  18
+                      },
+                      {
+                          "cpu_pct":  0,
+                          "pid":  13048,
+                          "name":  "Code",
+                          "mem_mb":  546
+                      },
+                      {
+                          "cpu_pct":  0,
+                          "pid":  8764,
+                          "name":  "PresentationFontCache",
+                          "mem_mb":  27
+                      }
+                  ],
+    "battery":  {
+                    "full_mwh":  54516,
+                    "present":  true,
+                    "ac_status":  2,
+                    "health_pct":  67,
+                    "level_pct":  91,
+                    "temp_c":  null,
+                    "cycles":  null,
+                    "design_mwh":  80850,
+                    "charging":  true
+                },
+    "timestamp":  "2026-09-18T22:37:09.3037962+03:00",
+    "device":  {
+                   "bios":  "1.42.0",
+                   "cpu":  "Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz",
+                   "version":  "10.0.26200",
+                   "cpu_load":  1.6,
+                   "os":  "Microsoft Windows 11 Pro",
+                   "last_boot":  "2026-09-18T21:05:19.5000000+03:00",
+                   "gpu":  "Intel(R) UHD Graphics 630",
+                   "cores":  8,
+                   "used_ram_pct":  37,
+                   "uptime_sec":  5510,
+                   "build":  "26200",
+                   "system_serial":  "4CV62R2",
+                   "free_ram_gb":  20,
+                   "total_ram_gb":  31.7,
+                   "adapters":  [
+
+                                ],
+                   "motherboard":  "Dell Inc. 05K717",
+                   "threads":  16,
+                   "manufacturer":  "Dell Inc.",
+                   "used_ram_gb":  11.7,
+                   "model":  "Precision 5540",
+                   "arch":  "64-bit"
+               },
+    "thermal":  {
+                    "summary":  null,
+                    "zones":  [
+
+                              ],
+                    "source":  "not-exposed"
+                },
+    "summary":  {
+                    "ram_pct":  37,
+                    "network_status":  "LINK_DEGRADED",
+                    "devices_count":  0,
+                    "cpu_temp":  null,
+                    "adb_available":  false,
+                    "cpu_load":  1.6,
+                    "max_disk_wear":  null,
+                    "battery_health_pct":  67,
+                    "battery_level_pct":  91,
+                    "disk_healthy":  true,
+                    "dns_ms":  15
+                },
+    "storage":  {
+                    "health":  "Healthy",
+                    "type":  "SSD",
+                    "bus":  "NVMe",
+                    "read_errors":  null,
+                    "wear_pct":  null,
+                    "write_errors":  null,
+                    "index":  "0",
+                    "model":  "PC601A NVMe SK hynix 1TB",
+                    "temp_c":  null,
+                    "size_gb":  953.9,
+                    "serial":  "ACE4_2E00_955C_1390_2EE4_AC00_0000_0001."
+                },
+    "adb":  {
+                "adb_available":  false,
+                "error":  "adb غير مثبت — ثبّت platform-tools عبر OpenSourceToolkit أو أدرجه في Dist\\platform-tools",
+                "adb_path":  null,
+                "devices":  [
+
+                            ]
+            },
+    "network":  {
+                    "conflicts":  0,
+                    "ipv4":  "192.168.0.150",
+                    "present":  true,
+                    "wan_loss":  50,
+                    "sla":  [
+                                "WAN(8.8.8.8) loss 50% \u003e 15%",
+                                "WAN TCP 1.1.1.1:443 unreachable",
+                                "8 WLAN bounces in 24h"
+                            ],
+                    "ssid":  "DyGs",
+                    "bounces":  8,
+                    "dns_ms":  15,
+                    "status":  "LINK_DEGRADED",
+                    "gw_loss":  0
+                }
+}

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0066ff">
+<title>التشخيص العميق — الياس برو</title>
+<meta name="description" content="تشخيص عميق ذكي للكمبيوتر والموبايل: صحة العتاد، البطارية، التخزين، العمليات، أجهزة Android عبر ADB، مع تنبؤ بالسجل الزمني.">
+<link rel="icon" href="../Branding/icon-32.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/css/elias-core.css">
+<script src="assets/js/elias-core.js" defer></script>
+<script src="assets/js/elias-cog.js" defer></script>
+<script src="assets/js/elias-probe.js" defer></script>
+<script src="assets/vendor/chart.umd.min.js" defer></script>
+<style>
+  .page-hero{background:linear-gradient(135deg,var(--brand) 0%,var(--accent) 100%)}
+  .mini-list{font-size:13px;display:grid;gap:8px}
+  .mini-list .li{display:flex;gap:9px;align-items:flex-start}
+  .mini-list .li .k{color:var(--text-3);min-width:118px;font-size:12px}
+  .sub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;margin-top:14px}
+  .sub{position:relative;border:1px solid var(--border);border-radius:var(--r-md);padding:12px;background:var(--surface-2)}
+  .sub .hd{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--text-2);margin-bottom:8px}
+  .sub .sc{font-size:22px;font-weight:800}
+  .sub .sc .of{font-size:12px;color:var(--text-3);font-weight:600}
+  .sub .mini{position:absolute;inset-inline-end:56px;inset-block-start:auto;bottom:10px;font-size:10.5px;color:var(--text-3)}
+  .find-item{border:1px solid var(--border);border-radius:var(--r-md);padding:10px 13px;background:var(--surface-1);margin-bottom:8px}
+  .find-item .fd{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px}
+  .find-item .tx{color:var(--text-2);font-size:12px;margin-top:4px;padding-inline-start:3px}
+  .find-item .act{border-top:1px dashed var(--border);margin-top:7px;padding-top:6px;font-size:12px;color:var(--text-3)}
+  .find-item .act::before{content:"إجراء: "}
+  .ch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:14px}
+  .chart-holder{position:relative;height:220px;direction:ltr}
+  .chart-holder canvas{width:100%!important;height:100%!important}
+  .tbl-wrap{max-height:420px;overflow:auto}
+  .hist-row{font-size:12.5px}
+  .tone-lg{width:10px;height:10px;border-radius:99px;display:inline-block;margin-inline-end:6px}
+  .guide{margin-top:10px;display:grid;gap:8px;font-size:13px;color:var(--text-2)}
+  .guide b{color:var(--text)}
+  .empty-big{text-align:center;padding:34px 12px;color:var(--text-3);font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar" aria-label="قائمة التشخيص العميق">
+    <div class="brand-card">
+      <img src="../Branding/icon-64.png" alt="" onerror="this.style.display='none'">
+      <div>
+        <div class="brand-name">الياس برو</div>
+        <div class="brand-tag">التشخيص العميق</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-section">أدوات التشخيص</div>
+      <a class="nav-item active" data-view="scan" href="#scan"><span class="nav-icon">🩺</span> الفحص الشامل</a>
+      <a class="nav-item" data-view="pc" href="#pc"><span class="nav-icon">💻</span> عتاد الكمبيوتر</a>
+      <a class="nav-item" data-view="mobile" href="#mobile"><span class="nav-icon">📱</span> موبايل Android</a>
+      <a class="nav-item" data-view="self" href="#self"><span class="nav-icon">🔍</span> جهازك الآن</a>
+      <a class="nav-item" data-view="trends" href="#trends"><span class="nav-icon">📈</span> التطور والتنبؤ</a>
+
+      <div class="nav-section">الواجهات</div>
+      <a class="nav-item" href="app.html"><span class="nav-icon">🎛️</span> غرفة التحكم</a>
+      <a class="nav-item" href="index.html"><span class="nav-icon">🏪</span> صفحة العميل</a>
+      <a class="nav-item" href="tech/shop.html"><span class="nav-icon">🔧</span> ورشة الصيانة</a>
+    </nav>
+    <div class="sidebar-foot">
+      <span class="dot" id="sourceDot"></span> مصدر البيانات: <span id="sourceStatus">انتظار</span><br>
+      <span id="footVersion" class="small">NM-NET-STD-001</span>
+    </div>
+  </aside>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="فتح القائمة">☰</button>
+      <div class="page-crumb" id="crumb">الفحص الشامل</div>
+      <div class="top-actions">
+        <label class="badge info soft nowrap" title="جلب تلقائي كل 20 ثانية" style="display:inline-flex;align-items:center;gap:6px">
+          <input type="checkbox" id="autoChk" style="accent-color:var(--accent)"> تلقائي
+        </label>
+        <span class="badge info soft nowrap" id="apiPill"><span class="dot"></span> ملف محلي</span>
+        <span class="badge info soft mono nowrap" id="liveClock">--:--:--</span>
+        <button class="icon-btn" id="themeBtn" title="تبديل الوضع الليلي/النهاري" aria-label="تبديل الوضع">🌙</button>
+        <button class="btn btn-ghost btn-sm hidden" id="installBtn" title="تثبيت كتطبيق">📲 تثبيت</button>
+        <button class="btn btn-accent btn-sm" id="refreshBtn">↻ تحديث</button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ============ الفحص الشامل ============ -->
+      <section class="view active" id="view-scan" aria-label="الفحص الشامل">
+        <div class="card">
+          <div class="ring-wrap">
+            <div class="ring-holder" id="ovRing" style="--arc:var(--accent)">
+              <div class="ring-svg" id="ovRingSvg"></div>
+              <div class="ring-center">
+                <div class="ring-score" id="ovRingScore">—</div>
+                <div class="ring-status ok" id="ovRingStatus">انتظار</div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:240px">
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <h1 style="font-size:20px;font-weight:800">الفحص الشامل — تحليل الياس الذكي</h1>
+                <span class="badge info soft" id="snapBadge">—</span>
+              </div>
+              <p class="muted small" id="snapMeta">جاري التحقق من آخر لقطة تشخيص…</p>
+              <div class="alert info" style="margin-top:12px">
+                <span class="ic">💡</span>
+                <div class="body"><div class="title">كيف يعمل عمق التشخيص؟</div>
+                  <div class="detail">يقرأ مباشرة لقطة <b>Reports/device-snapshot.json</b> الناتجة عن <b>Scripts\Device-DeepDiagnostics.ps1</b> — عتاد حقيقي عبر WMI، وتفاصيل البطارية عبر تقرير powercfg، والتخزين SMART، وأجهزة Android عبر adb. عند توفر خادم Pode تُقرأ النسخة الحية من واجهة /api/v1/device/snapshot.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-grid" id="subGrid"><!-- بطاقات الأنظمة الفرعية تُبنى هنا --></div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="card-head">
+            <div class="card-title">🧠 نتائج التحليل الذكي</div>
+            <div class="card-sub" id="findCount">0 نتيجة</div>
+          </div>
+          <div id="findingsList"></div>
+          <div class="empty-big hidden" id="findEmpty">لا توجد ملاحظات — الأنظمة ضمن الحدود المقبولة ✓</div>
+        </div>
+
+        <div class="kpis" style="margin-top:14px">
+          <div class="kpi"><span class="kpi-icon">📡</span><div class="kpi-label">الشبكة (اللقطة)</div><div class="kpi-value" id="snapNet">—</div><div class="kpi-extra" id="snapNetSub">—</div></div>
+          <div class="kpi"><span class="kpi-icon">⚡</span><div class="kpi-label">زمن DNS</div><div class="kpi-value" id="snapDns">—</div><div class="kpi-extra">مليمتر/ثانية</div></div>
+          <div class="kpi"><span class="kpi-icon">🔋</span><div class="kpi-label">صحة البطارية</div><div class="kpi-value" id="snapBat">—</div><div class="kpi-extra" id="snapBatSub">—</div></div>
+          <div class="kpi"><span class="kpi-icon">💾</span><div class="kpi-label">التخزين</div><div class="kpi-value" id="snapDisk">—</div><div class="kpi-extra" id="snapDiskSub">—</div></div>
+        </div>
+      </section>
+
+      <!-- ============ عتاد الكمبيوتر ============ -->
+      <section class="view" id="view-pc" aria-label="عتاد الكمبيوتر">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">💻 حقائق النظام</div>
+            <div class="card-sub">قراءة حية عبر WMI</div>
+          </div>
+          <div class="mini-list" id="pcFacts"></div>
+        </div>
+
+        <div class="kpis" style="margin-top:14px">
+          <div class="kpi"><span class="kpi-icon">🖥️</span><div class="kpi-label">حمل المعالج</div><div class="kpi-value" id="pcCpu">—</div><div class="kpi-extra" id="pcCpuSub">—</div></div>
+          <div class="kpi"><span class="kpi-icon">🧠</span><div class="kpi-label">استهلاك الذاكرة</div><div class="kpi-value" id="pcRam">—</div><div class="kpi-extra" id="pcRamSub">—</div></div>
+          <div class="kpi"><span class="kpi-icon">🌡️</span><div class="kpi-label">حرارة المعالج</div><div class="kpi-value" id="pcTemp">—</div><div class="kpi-extra">عبر ACPI</div></div>
+          <div class="kpi"><span class="kpi-icon">⏱️</span><div class="kpi-label">مدة التشغيل</div><div class="kpi-value" id="pcUptime">—</div><div class="kpi-extra" id="pcBoot">—</div></div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <div class="card-head"><div class="card-title">🔋 البطارية</div><div class="card-sub" id="batMeta">—</div></div>
+            <div class="mini-list" id="batList"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title">🗄️ التخزين SMART</div><div class="card-sub" id="diskMeta">—</div></div>
+            <div class="tbl-wrap" id="diskTable"></div>
+            <div class="empty-big hidden" id="diskEmpty">لا تتوفر بيانات أقراص</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="card-head"><div class="card-title">🤖 أهم العمليات (قياس حقيقي بعيّنتين زمنيتين)</div><div class="card-sub" id="procMeta">—</div></div>
+          <div class="tbl-wrap" id="procTable"></div>
+        </div>
+      </section>
+
+      <!-- ============ موبايل Android ============ -->
+      <section class="view" id="view-mobile" aria-label="موبايل Android">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📱 تشخيص أجهزة Android عبر adb</div>
+            <div class="card-sub" id="mobileMeta">—</div>
+          </div>
+          <div id="mobileBody"></div>
+        </div>
+      </section>
+
+      <!-- ============ استكشاف جهازك الحالي ============ -->
+      <section class="view" id="view-self" aria-label="استكشاف جهازك">
+        <div class="card">
+          <div class="ring-wrap">
+            <div class="ring-holder" id="prRing" style="--arc:var(--accent)">
+              <div class="ring-svg" id="prRingSvg"></div>
+              <div class="ring-center">
+                <div class="ring-score" id="prRingScore">—</div>
+                <div class="ring-status ok" id="prRingStatus">فحص…</div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:240px">
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <h1 style="font-size:20px;font-weight:800">استكشاف الجهاز الذي تشغّله الآن</h1>
+                <span class="badge success soft" id="prBadge">فوري</span>
+              </div>
+              <p class="muted small" id="prProfile">جاري الكشف المنهجي…</p>
+              <div class="alert info" style="margin-top:12px">
+                <span class="ic">🛰️</span>
+                <div class="body"><div class="title">منهجية معيارية عالمية (ELIAS-P-2026)</div>
+                  <div class="detail">يستكشف المتصفح الجهاز/الموبايل مباشرة — شكل الجهاز، الشاشة والـ HDR، العتاد (GPU بدقة عبر WebGL، الذاكرة، الأنوية)، الطاقة الفعلية، الشبكة الحقيقية، المستشعرات، والتخزين — ويصدر ملفًا جنائيًا بدرجة تغطية وبصمة مستقرة. كل ذلك محلي بالكامل دون إرسال أي بيانات.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpis" style="margin-top:14px">
+          <div class="kpi"><span class="kpi-icon">🎛️</span><div class="kpi-label">درجة الاستكشاف</div><div class="kpi-value" id="prScore">—</div><div class="kpi-extra" id="prLevel">—</div></div>
+          <div class="kpi"><span class="kpi-icon">🗺️</span><div class="kpi-label">تغطية الكشف</div><div class="kpi-value" id="prCoverage">—</div><div class="kpi-extra">8 فئات منهجية</div></div>
+          <div class="kpi"><span class="kpi-icon">🔑</span><div class="kpi-label">البصمة</div><div class="kpi-value mono" id="prFinger" style="font-size:17px">—</div><div class="kpi-extra">معرّف مستقر للجهاز</div></div>
+          <div class="kpi"><span class="kpi-icon">📤</span><div class="kpi-label">رابط المشاركة</div><div class="kpi-value" id="prShare" style="font-size:15px">—</div><div class="kpi-extra">للعميل على شبكتك</div></div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="card-head"><div class="card-title">🗃️ مصفوفة الكشف المنهجية</div><div class="card-sub">نسبة فحص كل فئة</div></div>
+          <div id="covGrid" class="sub-grid" style="margin-top:6px"></div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="card-head"><div class="card-title">🧠 نتائج الفحص العملي</div><div class="card-sub" id="prFindCount">—</div></div>
+          <div id="prFindings"></div>
+          <div class="empty-big hidden" id="prFindEmpty">الجهاز ضمن الحدود الملحوظة ✓</div>
+        </div>
+
+        <div class="row-wrap" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+          <button class="btn btn-accent btn-sm" id="btnReProbe">↻ إعادة الفحص</button>
+          <button class="btn btn-ghost btn-sm" id="btnCopyLink">🔗 نسخ رابط التشخيص</button>
+          <button class="btn btn-ghost btn-sm" id="btnExportProbe">⤓ تقرير JSON</button>
+          <button class="btn btn-ghost btn-sm" id="btnPrint">🖨️ نسخة للطباعة</button>
+        </div>
+      </section>
+
+      <!-- ============ التطور والتنبؤ ============ -->
+      <section class="view" id="view-trends" aria-label="التطور والتنبؤ">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📈 التطور الزمني والتنبؤ (انحدار خطي + كشف شذوذ)</div>
+            <div class="card-sub" id="trendMeta">—</div>
+          </div>
+          <div class="ch-grid" id="chartGrid"></div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="card-head">
+            <div class="card-title">🕒 سجل النقاط الزمنية</div>
+            <div class="card-sub" id="histMeta">—</div>
+          </div>
+          <div class="row-wrap" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+            <button class="btn btn-ghost btn-sm" id="btnSnap">⤓ لقطة JSON</button>
+            <button class="btn btn-ghost btn-sm" id="btnTrends">⤓ بيانات التطور</button>
+            <button class="btn btn-ghost btn-sm" id="btnCopySum">📋 نسخ الملخص</button>
+          </div>
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>الوقت</th><th>CPU%</th><th>RAM%</th><th>بطارية%</th><th>DNS ms</th><th>WAN%</th><th>الحالة</th></tr></thead>
+            <tbody id="histBody"><tr><td colspan="7" class="muted">لا توجد نقاط بعد…</td></tr></tbody>
+          </table></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ==================== منطق صفحة التشخيص العميق ==================== */
+(function () {
+  'use strict';
+
+  const E = window.Elias;
+  const $ = E.$;
+  const REPORT_BASES = ['../Reports', 'Reports', '/Reports'];
+  const DATA = { snap: null, hist: null, api: false };
+  const charts = {};
+
+  /* ---------- الساعة ---------- */
+  function tickClock() {
+    const el = $('#liveClock');
+    if (el) el.textContent = new Date().toLocaleTimeString('ar-EG', { hour12: false });
+  }
+  setInterval(tickClock, 1000);
+
+  /* ---------- تبديل الوضع ---------- */
+  const themeBtn = $('#themeBtn');
+  if (themeBtn) themeBtn.addEventListener('click', () => {
+    const t = E.theme.toggle();
+    themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+  });
+
+  /* ---------- إعادة الاستخدام: قراءة عبر واجهة أو ملف ---------- */
+  async function readLocal(paths) {
+    for (const p of paths) {
+      try {
+        const r = await E.fetchJson(p);
+        if (r) return r;
+      } catch (e) { /* جرّب التالي */ }
+    }
+    return null;
+  }
+
+  async function loadData(quiet) {
+    const snapBefore = DATA.snap;
+    let viaApi = false;
+    /* 1) النسخة الحية عبر الخادم إن وُجد (وتسجل نقطة تاريخية) */
+    try {
+      const s = await E.fetchJson('/api/v1/device/snapshot', { timeout: 2500 });
+      if (s && s.device) { DATA.snap = s; viaApi = true; }
+      try { DATA.hist = await E.fetchJson('/api/v1/history', { timeout: 2500 }); } catch (e) {}
+    } catch (e) { viaApi = false; }
+
+    if (!viaApi) {
+      const s = await readLocal(REPORT_BASES.map(b => b + '/device-snapshot.json'));
+      if (s && s.device) DATA.snap = s;
+      DATA.hist = await readLocal(['../Data/device-history.json', 'Data/device-history.json', '/Data/device-history.json']);
+      try {
+        const c = localStorage.getItem('elias_deep_snap');
+        if (!DATA.snap && c) DATA.snap = JSON.parse(c);
+      } catch (e) {}
+    }
+    DATA.api = viaApi;
+
+    if (DATA.snap) {
+      try {
+        const snapKey = 'elias_deep_snap';
+        localStorage.setItem(snapKey, JSON.stringify(DATA.snap));
+        localStorage.setItem('elias_deep_snap_at', String(Date.now()));
+        if (Array.isArray(DATA.hist) && DATA.hist.length) localStorage.setItem('elias_deep_hist', JSON.stringify(DATA.hist));
+      } catch (e) {}
+    }
+
+    renderAll(quiet);
+    const changed = !quiet || snapBefore !== DATA.snap;
+    if (!snapBefore && DATA.snap && !quiet) E.toast('عمق التشخيص: تم تحديث البيانات', 'info');
+  }
+
+  /* ---------- الرسم العام ---------- */
+  function tone(score) { return score === null ? 'warn' : (score >= 80 ? 'ok' : score >= 60 ? 'warn' : 'danger'); }
+
+  function renderAll(quiet) {
+    const s = DATA.snap;
+    if (!s) return renderMissing();
+    setSource();
+    renderScan();
+    renderPc();
+    renderMobile();
+    renderTrends();
+  }
+
+  function setSource() {
+    const dot = $('#sourceDot'), st = $('#sourceStatus'), pill = $('#apiPill');
+    const src = DATA.api ? 'خادم Pode' : 'ملف محلي';
+    if (dot) { dot.style.background = 'var(--success)'; dot.style.boxShadow = '0 0 0 3px rgba(0,0,0,.06)'; }
+    if (st) st.textContent = src;
+    if (pill) {
+      pill.className = 'badge ' + (DATA.api ? 'success' : 'info') + ' soft nowrap';
+      pill.innerHTML = '<span class="dot"></span> ' + src;
+    }
+  }
+
+  function fmtTime(ts) {
+    if (!ts) return '—';
+    const d = new Date(ts);
+    if (isNaN(d)) return ts;
+    return d.toLocaleString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+
+  /* ---------- عرض غياب البيانات ---------- */
+  function renderMissing() {
+    $('#snapBadge').textContent = 'لا توجد لقطة';
+    $('#snapMeta').textContent = 'لم يُعثر على Reports/device-snapshot.json ولا على خادم API.';
+    $('#ovRingScore').textContent = '—';
+    $('#ovRingStatus').textContent = 'بلا بيانات';
+    $('#findCount').textContent = '—';
+    $('#findingsList').innerHTML =
+      '<div class="alert danger"><span class="ic">⚠️</span><div class="body"><div class="title">أنشئ اللقطة الأولى الآن</div>' +
+      '<div class="detail">شغّل في PowerShell:<br><b>powershell -ExecutionPolicy Bypass -File C:\\NetworkMaintenance\\Scripts\\Device-DeepDiagnostics.ps1</b>' +
+      '<br>ثم عدّ واضغط «↻ تحديث». لإجراء فحص دوري: أضف <b>-Schedule</b> لجدولة لقطة كل 30 دقيقة بصلاحية النظام.</div></div></div>';
+    ['snapNet','snapDns','snapBat','snapDisk','pcCpu','pcRam','pcTemp','pcUptime'].forEach(id => { const el = $('#' + id); if (el) el.textContent = '—'; });
+  }
+
+  /* ---------- الفحص الشامل ---------- */
+  function renderScan() {
+    const s = DATA.snap;
+    const ev = EliasCog.evaluate(s);
+
+    const at = s.timestamp;
+    $('#snapBadge').textContent = dataAge(at);
+    $('#snapMeta').innerHTML = buildMetaLines(s);
+
+    const score = ev.overall;
+    const toneClass = tone(score);
+    E.ring($('#ovRingSvg'), score, { stroke: 16 });
+    const h = $('#ovRing');
+    if (h) h.style.setProperty('--arc', toneColor(toneClass));
+    $('#ovRingScore').textContent = score === null ? '—' : score + '%';
+    $('#ovRingStatus').textContent = score === null ? 'بلا بيانات' : (score >= 80 ? 'ممتاز' : score >= 60 ? 'تحت المراقبة' : 'يتطلب تدخلًا');
+    $('#ovRingStatus').className = 'ring-status ' + toneClass;
+
+    const areas = [
+      ['network','📡','الشبكة'], ['storage','💾','التخزين'], ['battery','🔋','البطارية'],
+      ['cpu','🖥️','المعالج'], ['ram','🧠','الذاكرة']
+    ];
+    let gridHtml = '';
+    for (const [k, ic, label] of areas) {
+      const v = ev.subs[k];
+      gridHtml += '<div class="sub"><div class="hd"><span>' + ic + ' ' + label + '</span><span class="tone-lg" style="background:' +
+        (v === null ? 'var(--text-3)' : v >= 80 ? 'var(--success)' : v >= 60 ? 'var(--warn)' : 'var(--danger)') + '"></span></div>' +
+        '<div class="sc">' + (v === null ? '—' : v) + '<span class="of">/100</span></div></div>';
+    }
+    $('#subGrid').innerHTML = gridHtml;
+
+    const findings = ev.findings || [];
+    $('#findCount').textContent = findings.length + ' نتيجة';
+    $('#findEmpty').classList.toggle('hidden', findings.length > 0);
+    $('#findingsList').innerHTML = findings.length
+      ? findings.map(f =>
+          '<div class="find-item"><div class="fd"><span class="badge ' + (f.sev === 'high' ? 'danger' : f.sev === 'medium' ? 'warn' : 'info') + ' soft">' + EliasCog.SEV[f.sev] + '</span>' +
+          '<b>' + EliasCog.AREAS[f.area] + '</b><span>' + f.text + '</span></div>' +
+          (f.action ? '<div class="act">' + f.action + '</div>' : '') + '</div>'
+        ).join('')
+      : '';
+
+    /* بطاقات سريعة */
+    $('#snapNet').textContent = s.summary.network_status || '—';
+    $('#snapNetSub').textContent = (s.network && s.network.ssid) ? 'عبر ' + s.network.ssid : '—';
+    $('#snapDns').textContent = (s.summary.dns_ms || s.summary.dns_ms === 0) ? s.summary.dns_ms + 'ms' : '—';
+    $('#snapBat').textContent = s.summary.battery_health_pct !== null && s.summary.battery_health_pct !== undefined ? s.summary.battery_health_pct + '%' : '—';
+    $('#snapBatSub').textContent = s.summary.battery_level_pct !== null && s.summary.battery_level_pct !== undefined ? (s.summary.battery_level_pct + '% مشحون') : '—';
+    const w = s.summary.max_disk_wear;
+    $('#snapDisk').textContent = s.summary.disk_healthy ? 'سليم' : 'خطر';
+    $('#snapDiskSub').textContent = (w !== null && w !== undefined) ? ('اهتراء ' + w + '%') : (countDisks(s) + ' قرص');
+  }
+
+  function toneColor(t) {
+    return t === 'ok' ? 'var(--success)' : t === 'danger' ? 'var(--danger)' : 'var(--warn)';
+  }
+
+  function buildMetaLines(s) {
+    const dev = s.device || {};
+    const d = s.summary || {};
+    const lines = [];
+    if (dev.model) lines.push('الجهاز: <b>' + dev.model + '</b> — ' + dev.cpu);
+    else lines.push('الجهاز: <b>' + (dev.cpu || '—') + '</b>');
+    if (DATA.snap.timestamp) lines.push('اللقطة: <b>' + fmtTime(DATA.snap.timestamp) + '</b>');
+    const want = [];
+    if (d.cpu_load !== null && d.cpu_load !== undefined) want.push('CPU ' + d.cpu_load + '%');
+    if (d.ram_pct !== null && d.ram_pct !== undefined) want.push('RAM ' + d.ram_pct + '%');
+    if (want.length) lines.push('الحمل الحالي: <b>' + want.join(' · ') + '</b>');
+    return lines.join(' &nbsp;•&nbsp; ');
+  }
+
+  function dataAge(ts) {
+    if (!ts) return '—';
+    const ms = Date.now() - new Date(ts).getTime();
+    if (isNaN(ms)) return 'قديم';
+    const m = Math.round(ms / 60000);
+    if (m < 1) return 'قبل لحظات';
+    if (m < 60) return 'قبل ' + m + ' دقيقة';
+    return 'قبل ' + Math.round(m / 60) + ' ساعة';
+  }
+
+  /* ---------- عتاد الكمبيوتر ---------- */
+  function renderPc() {
+    const s = DATA.snap, dev = s.device || {}, bat = s.battery || {}, th = s.thermal || {};
+
+    const facts = [
+      ['نظام التشغيل', dev.os + ' (بناء ' + (dev.build || dev.version || '—') + ')'],
+      ['المعالج', dev.cpu || '—'],
+      ['النوى/الخيوط', (dev.cores !== null ? dev.cores : '—') + ' / ' + (dev.threads !== null ? dev.threads : '—')],
+      ['الذاكرة', dev.total_ram_gb + ' GB کل'],
+      ['كارت الشاشة', dev.gpu || '—'],
+      ['اللوحة الأم', dev.motherboard || '—'],
+      ['البايو', dev.bios || '—'],
+      ['الطراز/المُصنّع', ((dev.model || '—') + ' — ' + (dev.manufacturer || '—'))],
+      ['الرقم التسلسلي', dev.system_serial || '—'],
+      ['المعمارية', dev.arch || '—'],
+      ['آخر إقلاع', fmtTime(dev.last_boot)],
+    ];
+    $('#pcFacts').innerHTML = facts.map(f => '<div class="li"><span class="k">' + f[0] + '</span><span>' + f[1] + '</span></div>').join('');
+
+    $('#pcCpu').textContent = (dev.cpu_load !== null && dev.cpu_load !== undefined) ? dev.cpu_load + '%' : '—';
+    $('#pcCpuSub').textContent = dev.cpu ? dev.cpu.split('@')[0].trim() : '—';
+    $('#pcRam').textContent = (dev.used_ram_pct !== null && dev.used_ram_pct !== undefined) ? dev.used_ram_pct + '%' : '—';
+    $('#pcRamSub').textContent = (dev.used_ram_gb + '/' + dev.total_ram_gb + 'GB') || '—';
+    $('#pcTemp').textContent = (th.summary !== null && th.summary !== undefined) ? th.summary + '°C' : 'غير معروض';
+    const up = dev.uptime_sec;
+    $('#pcUptime').textContent = up ? fmtDur(up) : '—';
+    $('#pcBoot').textContent = 'منذ ' + fmtTime(dev.last_boot);
+
+    renderBattery(bat);
+    renderStorage(s.storage);
+    renderProcs(s.processes);
+  }
+
+  function fmtDur(sec) {
+    sec = Math.round(sec);
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
+    return h + ' ساعة ' + m + ' دقيقة';
+  }
+
+  function renderBattery(bat) {
+    if (!bat || bat.present === false) {
+      $('#batMeta').textContent = 'لا توجد بطارية';
+      $('#batList').innerHTML = '<div class="empty-big">هذا الجهاز يعمل بدون بطارية.</div>';
+      return;
+    }
+    $('#batMeta').textContent = (bat.charging ? 'شحن نشط ⚡' : 'يعمل على البطارية') + ' — مستوى ' + (bat.level_pct || 0) + '%';
+    const rows = [
+      ['المستوى الحالي', (bat.level_pct !== null ? bat.level_pct + '%' : '—')],
+      ['حالة التيار الكهربائي', bat.ac_status === 1 ? 'تعمل على الشاحن' : (bat.ac_status === 2 ? 'تعمل دون شحن نشط' : bat.ac_status || '—')],
+      ['السعة التصميمية', bat.design_mwh ? bat.design_mwh + ' mWh' : '—'],
+      ['السعة الكاملة', bat.full_mwh ? bat.full_mwh + ' mWh' : '—'],
+      ['صحة البطارية', (bat.health_pct !== null && bat.health_pct !== undefined) ? bat.health_pct + '%' : '—'],
+      ['دورات الشحن', (bat.cycles !== null && bat.cycles !== undefined) ? bat.cycles : 'غير متاح'],
+      ['درجة الحرارة', (bat.temp_c !== null && bat.temp_c !== undefined) ? bat.temp_c + '°C' : '—'],
+    ];
+    $('#batList').innerHTML = rows.map(r => '<div class="li"><span class="k">' + r[0] + '</span><span>' + r[1] + '</span></div>').join('');
+  }
+
+  function countDisks(s) {
+    const d = s ? s.storage : null;
+    if (!d) return 0;
+    return Array.isArray(d) ? d.length : (d.model ? 1 : 0);
+  }
+
+  function renderStorage(st) {
+    if (!st) {
+      $('#diskEmpty').classList.remove('hidden');
+      $('#diskTable').innerHTML = '';
+      return;
+    }
+    const disks = Array.isArray(st) ? st : [st];
+    $('#diskMeta').textContent = disks.length + ' قرص';
+    $('#diskEmpty').classList.add('hidden');
+    const rows = disks.map(d => {
+      const wear = (d.wear_pct !== null && d.wear_pct !== undefined) ? d.wear_pct + '%' : 'يتطلب إداريًا';
+      const temp = (d.temp_c !== null && d.temp_c !== undefined) ? d.temp_c + '°C' : '—';
+      return '<tr><td class="mono">' + (d.index !== null ? d.index : '—') + '</td><td>' + (d.model || '—') + '</td>' +
+        '<td>' + (d.health || '—') + '</td><td>' + (d.type || '—') + ' · ' + (d.bus || '—') + '</td>' +
+        '<td>' + d.size_gb + ' GB</td><td class="mono">' + wear + '</td><td>' + temp + '</td></tr>';
+    }).join('');
+    $('#diskTable').innerHTML = '<table class="tbl"><thead><tr><th>#</th><th>القرص</th><th>الحالة</th><th>النوع</th><th>السعة</th><th>الاهتراء</th><th>حرارة</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+
+  function renderProcs(procs) {
+    const list = Array.isArray(procs) ? procs : [];
+    $('#procMeta').textContent = list.length ? 'أعلى قيمة استخدام — مقاسًا 600 ملليثانية' : 'لا توجد بيانات';
+    if (!list.length) { $('#procTable').innerHTML = ''; return; }
+    $('#procTable').innerHTML = '<table class="tbl"><thead><tr><th>العملية</th><th>PID</th><th>CPU%</th><th>الذاكرة</th></tr></thead><tbody>' +
+      list.map(p => '<tr><td>' + (p.name || '—') + '</td><td class="mono">' + p.pid + '</td><td class="mono">' + (p.cpu_pct || 0) + '</td><td class="mono">' + p.mem_mb + ' MB</td></tr>').join('') +
+      '</tbody></table>';
+  }
+
+  /* ---------- موبايل Android ---------- */
+  function renderMobile() {
+    const adb = DATA.snap ? DATA.snap.adb : null;
+    const body = $('#mobileBody');
+    if (!adb) {
+      $('#mobileMeta').textContent = 'البيانات غير متاحة في اللقطة';
+      body.innerHTML = '<div class="empty-big">شغّل Scripts\\Device-DeepDiagnostics.ps1 ليتضمن اللقطة أخبار adb.</div>';
+      return;
+    }
+    const devs = Array.isArray(adb.devices) ? adb.devices : [];
+    $('#mobileMeta').textContent = adb.adb_available ? ('adb متوفر — ' + devs.length + ' جهاز متصل') : 'adb غير متوفر';
+
+    if (!adb.adb_available) {
+      body.innerHTML =
+        '<div class="alert warn"><span class="ic">📦</span><div class="body"><div class="title">تثبيت أدوات منصة Android (adb)</div>' +
+        '<div class="detail"><div class="guide">' +
+        '<span><b>1)</b> حمّل «OpenSourceToolkit» أو platform-tools الرسمية من موقع المطورين (developer.android.com/tools/releases/platform-tools).</span>' +
+        '<span><b>2)</b> انسخ الملفات إلى <b>C:\\NetworkMaintenance\\Scripts\\Tools\\platform-tools\\</b> (يستقبلها الياس تلقائيًا).</span>' +
+        '<span><b>3)</b> فعّل «تصحيح USB» من خيارات المطور على هاتفك واقبل شهادة الجهاز.</span>' +
+        '<span><b>4)</b> أعد تشغيل <b>Device-DeepDiagnostics.ps1</b> ثم «↻ تحديث» في هذه الصفحة.</span>' +
+        '</div></div></div></div>';
+      return;
+    }
+
+    if (!devs.length) {
+      body.innerHTML =
+        '<div class="alert info"><span class="ic">📶</span><div class="body"><div class="title">adb جاهز لكن لا توجد أجهزة متصلة</div>' +
+        '<div class="detail"><div class="guide"><span><b>1)</b> وصّل الهاتف عبر USB وفعّل «تصحيح USB» من خيارات المطور.</span>' +
+        '<span><b>2)</b> أعد تشغيل اللقطة ثم «↻ تحديث».</span></div></div></div></div>';
+      return;
+    }
+
+    body.innerHTML = devs.map(d =>
+      '<div class="card" style="margin-bottom:10px"><div class="card-head"><div class="card-title">📱 ' +
+      (d.model || d.id || 'جهاز') + '</div><div class="card-sub">' + (d.brand || '') + ' · Android ' + (d.android || '—') + '</div></div>' +
+      '<div class="mini-list"><div class="li"><span class="k">المعرّف</span><span class="mono">' + d.id + '</span></div>' +
+      '<div class="li"><span class="k">البطارية</span><span>' + (d.battery_level !== null ? d.battery_level + '%' : '—') +
+      (d.battery_health_txt ? ' · ' + d.battery_health_txt : '') + '</span></div>' +
+      '<div class="li"><span class="k">حرارة الحجر</span><span>' + (d.battery_temp_c !== null ? d.battery_temp_c + '°C' : '—') + '</span></div>' +
+      '<div class="li"><span class="k">تخزين /data</span><span>' + (d.storage_total_gb ? ('متبقٍ ' + d.storage_free_gb + ' من ' + d.storage_total_gb + ' GB') : '—') + '</span></div></div></div>'
+    ).join('');
+  }
+
+  /* ---------- استكشاف الجهاز الحالي (self-probe) ---------- */
+  let PROBE = null;
+  let probing = false;
+
+  async function runProbe(force) {
+    if (typeof window.EliasProbe === 'undefined') {
+      $('#prRingStatus').textContent = 'غير مدعوم';
+      $('#prProfile').textContent = 'المستكشف غير محمّل (تحقق من assets/js/elias-probe.js).';
+      return;
+    }
+    if (probing) return;
+    if (PROBE && !force) return renderProbe();
+    probing = true;
+    $('#prRingStatus').textContent = 'فحص…';
+    try {
+      PROBE = await window.EliasProbe.explore();
+      try { localStorage.setItem('elias_deep_probe', JSON.stringify(PROBE)); } catch (e) {}
+    } catch (err) {
+      PROBE = null;
+      $('#prRingStatus').textContent = 'تعذّر الفحص';
+    }
+    probing = false;
+    renderProbe();
+  }
+
+  function renderProbe() {
+    const p = PROBE;
+    const prv = p && EliasCog.probeScore ? EliasCog.probeScore(p) : { score: null, coverage: 0, level: '—', findings: [], profile: '—', fingerprint: null, categories: {} };
+    if (!p) {
+      $('#prRingScore').textContent = '—';
+      $('#prRingStatus').textContent = 'بلا نتيجة';
+      $('#prProfile').textContent = 'لم يُكمل المستكشف الفحص — أعد المحاولة.';
+      return;
+    }
+    const score = prv.score;
+    const t = smallTone(score);
+    E.ring($('#prRingSvg'), score, { stroke: 16 });
+    $('#prRingScore').textContent = score + '';
+    $('#prRingStatus').textContent = 'المستوى: ' + prv.level;
+    $('#prRingStatus').className = 'ring-status ' + t;
+    $('#prBadge').textContent = 'فوري' + (p.hardware && p.hardware.webgl ? '' : ' · WebGL معطّل');
+
+    $('#prProfile').textContent = prv.profile;
+    $('#prScore').textContent = score + '/100';
+    $('#prLevel').textContent = 'مستوى ' + prv.level;
+    $('#prCoverage').textContent = prv.coverage + '%';
+    $('#prFinger').textContent = prv.fingerprint || '—';
+    const shareUrl = location.href.split('#')[0];
+    $('#prShare').textContent = shareUrl;
+    $('#prShare').title = 'انقر للنسخ';
+    $('#prShare').style.cursor = 'pointer';
+
+    /* تغطية الفئات */
+    const catOrder = ['device', 'screen', 'hardware', 'power', 'network', 'performance', 'media', 'storage'];
+    $('#covGrid').innerHTML = catOrder
+      .filter(k => p.coverage && p.coverage[k] !== undefined)
+      .map(k => {
+        const pct = p.coverage[k];
+        const lbl = (p.categories && p.categories[k] && p.categories[k].label) || k;
+        const col = pct >= 80 ? 'var(--success)' : pct >= 50 ? 'var(--warn)' : 'var(--danger)';
+        return '<div class="sub"><div class="hd"><span>' + lbl + '</span><b style="color:' + col + '">' + pct + '%</b></div>' +
+          '<div style="height:7px;border-radius:99px;background:var(--surface-1);overflow:hidden">' +
+          '<div style="height:100%;width:' + pct + '%;background:' + col + ';border-radius:99px"></div></div></div>';
+      }).join('');
+
+    /* النتائج */
+    const findings = prv.findings || [];
+    $('#prFindCount').textContent = findings.length + ' نتيجة';
+    $('#prFindEmpty').classList.toggle('hidden', findings.length > 0);
+    $('#prFindings').innerHTML = findings.length ? findings.map(f =>
+      '<div class="find-item"><div class="fd"><span class="badge ' + (f.sev === 'high' ? 'danger' : f.sev === 'medium' ? 'warn' : 'info') + ' soft">' + EliasCog.SEV[f.sev] + '</span>' +
+      '<b>' + (EliasCog.AREAS[f.area] || f.area) + '</b><span>' + f.text + '</span></div>' +
+      (f.action ? '<div class="act">' + f.action + '</div>' : '') + '</div>'
+    ).join('') : '';
+  }
+
+  function smallTone(score) {
+    return score === null ? 'warn' : score >= 80 ? 'ok' : score >= 60 ? 'ok' : score >= 45 ? 'warn' : 'danger';
+  }
+
+  $('#btnReProbe').addEventListener('click', () => runProbe(true));
+  $('#btnCopyLink').addEventListener('click', async () => {
+    const u = location.href.split('#')[0];
+    try { await navigator.clipboard.writeText(u); E.toast('تم نسخ رابط التشخيص', 'ok'); } catch (e) { E.copyText(u); E.toast('تم نسخ الرابط', 'ok'); }
+  });
+  $('#btnExportProbe').addEventListener('click', () => PROBE && E.download('elias-self-probe.json', JSON.stringify(PROBE, null, 2)));
+  $('#btnPrint').addEventListener('click', () => { try { window.print(); } catch (e) {} });
+  const shareEl = $('#prShare');
+  if (shareEl) shareEl.addEventListener('click', () => {
+    const u = location.href.split('#')[0];
+    try { navigator.clipboard.writeText(u); E.toast('تم نسخ رابط الفحص', 'ok'); } catch (e) {}
+  });
+
+  /* ---------- التطور والتنبؤ ---------- */
+  function renderTrends() {
+    const hist = Array.isArray(DATA.hist) ? DATA.hist.slice() : [];
+    hist.sort((a, b) => new Date(a.at) - new Date(b.at));
+    $('#trendMeta').textContent = hist.length ? (hist.length + ' نقطة زمنية') : 'لا يوجد سجل بعد';
+    $('#histMeta').textContent = hist.length ? 'آخر نقطة: ' + fmtTime(hist[hist.length - 1].at) : (DATA.api ? 'سجّل لقطات دورية عبر /api/v1/device/snapshot' : 'نشأته لقطات Device-DeepDiagnostics المتكررة');
+
+    $('#histBody').innerHTML = hist.length ? hist.slice(-30).reverse().map(p =>
+      '<tr class="hist-row"><td class="mono">' + fmtTime(p.at) + '</td><td class="mono">' + (p.cpu !== null ? p.cpu : '—') + '</td>' +
+      '<td class="mono">' + (p.ram !== null ? p.ram : '—') + '</td><td class="mono">' + (p.battery !== null ? p.battery : '—') + '</td>' +
+      '<td class="mono">' + (p.dns_ms !== null ? p.dns_ms : '—') + '</td><td class="mono">' + (p.wan !== null ? p.wan : '—') + '</td>' +
+      '<td>' + (p.status || '—') + '</td></tr>'
+    ).join('') : '<tr><td colspan="7" class="muted">لا توجد نقاط بعد…</td></tr>';
+
+    const defs = [
+      ['cpu', 'حمل المعالج %', 'ok'],
+      ['ram', 'استهلاك الذاكرة %', 'blue'],
+      ['battery', 'صحة البطارية %', 'green'],
+      ['dns_ms', 'زمن DNS ms', 'warn']
+    ];
+    const gm = ['ok', 'blue', 'green', 'warn'];
+
+    defs.forEach((d, i) => {
+      const key = d[0];
+      const series = hist.map(p => (p[key] !== null && p[key] !== undefined ? +p[key] : NaN)).filter(v => !isNaN(v));
+      const t = EliasCog.trend(series, 8);
+      const html = '<div class="card"><div class="card-head"><div class="card-title">' + d[1] + '</div>' +
+        '<div class="card-sub">' + (t.enough ? ('ميل ' + (t.slope > 0 ? '▲' : '▼') + ' · r² ' + t.r2) : 'بيانات غير كافية') + '</div></div>' +
+        '<div class="chart-holder" id="ch-' + key + '"></div>' +
+        (t.enough ? '<div class="muted small" style="margin-top:8px">متوسط ' + t.mean + ' · انحراف معياري ' + t.std +
+        (t.anomalies.length ? ' · شذوذ: ' + t.anomalies.length : '') + ' — التوقع لنهاية الأفق: ' + t.forecast.join(', ') + '</div>' : '') +
+        '</div>';
+      $('#chartGrid').innerHTML += html;
+      drawChart(key, series, t, gm[i], hist);
+    });
+  }
+
+  function rebuildCharts() { $('#chartGrid').innerHTML = ''; Object.keys(charts).forEach(k => { if (charts[k]) { charts[k].destroy(); delete charts[k]; } }); renderTrends(); }
+
+  function drawChart(key, series, t, color, hist) {
+    const holder = $('#ch-' + key);
+    if (!holder) return;
+    if (!window.Chart) {
+      E.spark(holder, series);
+      return;
+    }
+    const labels = series.map((v, i) => '#' + (i + 1));
+    const datasets = [{
+      label: 'قياسات', data: series, borderColor: colorOf(color), backgroundColor: fillOf(color),
+      fill: true, tension: 0.32, pointRadius: 0, borderWidth: 2
+    }];
+    if (t.enough) {
+      /* خط التوقع - نقاط فرضية بعد آخر قياس */
+      const fLabels = labels.concat(Array.from({ length: 8 }, (v, i) => 'ت' + (i + 1)));
+      datasets.push({
+        label: 'توقع', data: labels.length ? labels.map(() => null).concat(t.forecast) : [],
+        borderColor: 'rgba(147,112,219,0.9)', borderDash: [6, 4], pointRadius: 2, tension: 0.25, fill: false, borderWidth: 1.6
+      });
+      if (t.anomalies.length) {
+        datasets.push({
+          label: 'شذوذ', data: labels.map((ll, i) => t.anomalies.find(a => a.i === i) ? t.anomalies.find(a => a.i === i).value : null),
+          backgroundColor: '#ff4646', pointRadius: 5, pointStyle: 'triangle', showLine: false
+        });
+      }
+      holder.dataset.fLabels = fLabels;
+    }
+    charts[key] = new Chart(holder, {
+      type: 'line',
+      data: { labels: (t.enough ? (holder.dataset.fLabels || labels) : labels), datasets: datasets.filter(ds => ds.data.length) },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { display: false },
+          y: { beginAtZero: (key === 'battery') ? false : true, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  }
+
+  function colorOf(k) { return { ok: '#1ec06c', blue: '#3b82f6', green: '#14b8a6', warn: '#e5a400', danger: '#ef4444' }[k] || '#0066ff'; }
+  function fillOf(k) { return { ok: 'rgba(30,192,108,.10)', blue: 'rgba(59,130,246,.10)', green: 'rgba(20,184,166,.10)', warn: 'rgba(229,164,0,.12)', danger: 'rgba(239,68,68,.12)' }[k] || 'rgba(0,102,255,.10)'; }
+
+  /* ---------- تصدير ---------- */
+  function exportJson(name, obj) { E.download(name, JSON.stringify(obj, null, 2)); }
+  $('#btnSnap').addEventListener('click', () => DATA.snap && exportJson('device-snapshot.json', DATA.snap));
+  $('#btnTrends').addEventListener('click', () => DATA.hist && exportJson('device-history.json', DATA.hist));
+
+  $('#btnCopySum').addEventListener('click', () => {
+    const s = DATA.snap;
+    if (!s) return E.toast('لا توجد بيانات', 'warn');
+    const ev = EliasCog.evaluate(s);
+    const lines = [
+      'ملخص التشخيص العميق — ' + fmtTime(s.timestamp),
+      'الجهاز: ' + (s.device.model || s.device.cpu),
+      'التقييم الكلي: ' + (ev.overall === null ? '—' : ev.overall + '/100'),
+      'CPU ' + (s.summary.cpu_load || 0) + '% · RAM ' + (s.summary.ram_pct || 0) + '% · بطارية ' + s.summary.battery_health_pct + '% · DNS ' + s.summary.dns_ms + 'ms',
+      'الشبكة: ' + (s.summary.network_status || '—')
+    ];
+    (ev.findings || []).slice(0, 5).forEach(f => lines.push('- [' + EliasCog.SEV[f.sev] + '] ' + f.text));
+    E.copyText(lines.join('\n'));
+    E.toast('تم نسخ الملخص', 'ok');
+  });
+
+  /* ---------- التنقل والاهتزازات ---------- */
+  const views = ['scan', 'pc', 'mobile', 'self', 'trends'];
+  const crumbs = { scan: 'الفحص الشامل', pc: 'عتاد الكمبيوتر', mobile: 'موبايل Android', self: 'جهازك الآن', trends: 'التطور والتنبؤ' };
+  function goto(view) {
+    if (!views.includes(view)) view = 'scan';
+    views.forEach(v => {
+      const sec = $('#view-' + v);
+      if (sec) sec.classList.toggle('active', v === view);
+      const nav = document.querySelector('.nav-item[data-view="' + v + '"]');
+      if (nav) { nav.classList.toggle('active', v === view); if (v === view) nav.setAttribute('aria-current', 'true'); else nav.removeAttribute('aria-current'); }
+    });
+    const crumb = $('#crumb');
+    if (crumb) crumb.textContent = crumbs[view];
+    if (view === 'trends') rebuildCharts();
+    if (view === 'self') runProbe();
+    if (view !== 'scan') { const closeBtns = document.querySelectorAll('.drawer-backdrop'); closeBtns.forEach(b => b.classList.remove('open')); }
+  }
+  function route() { goto((location.hash || '#scan').replace('#', '')); }
+
+  document.querySelectorAll('.nav-item[data-view]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    const v = a.getAttribute('data-view');
+    try { history.replaceState(null, '', '#' + v); } catch (err) {}
+    goto(v);
+  }));
+  window.addEventListener('hashchange', route);
+
+  $('#menuBtn').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
+  $('#drawerBackdrop').addEventListener('click', () => $('#sidebar').classList.remove('open'));
+
+  /* ---------- التحديث ---------- */
+  $('#refreshBtn').addEventListener('click', () => loadData(false));
+  setInterval(() => { if ($('#autoChk').checked) loadData(true); }, 20000);
+
+  /* ---------- PWA ---------- */
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    $('#installBtn').classList.remove('hidden');
+  });
+  $('#installBtn').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    $('#installBtn').classList.add('hidden');
+  });
+  window.addEventListener('appinstalled', () => { $('#installBtn').classList.add('hidden'); });
+  try { if (navigator.serviceWorker) navigator.serviceWorker.register('service-worker.js'); } catch (e) {}
+
+  E.theme.init();
+
+  /* ---------- الإقلاع ---------- */
+  document.addEventListener('DOMContentLoaded', () => { route(); tickClock(); loadData(false); });
+})();
+</script>
+</body>
+</html>

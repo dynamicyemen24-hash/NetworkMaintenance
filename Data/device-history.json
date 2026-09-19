@@ -1,0 +1,45 @@
+[
+    {
+        "disk_wear":  [
+                          null,
+                          null
+                      ],
+        "cpu":  [
+                    1.9,
+                    0.3
+                ],
+        "ram":  [
+                    36,
+                    36
+                ],
+        "at":  "2026-09-18 22:26:21 2026-09-18 22:29:24",
+        "status":  "LINK_DEGRADED LINK_DEGRADED",
+        "cpu_temp":  [
+                         null,
+                         null
+                     ],
+        "dns_ms":  [
+                       18,
+                       18
+                   ],
+        "battery":  [
+                        67,
+                        67
+                    ],
+        "wan":  [
+                    100,
+                    100
+                ]
+    },
+    {
+        "disk_wear":  null,
+        "cpu":  1.6,
+        "ram":  37,
+        "at":  "2026-09-18 22:37:18",
+        "status":  "LINK_DEGRADED",
+        "cpu_temp":  null,
+        "dns_ms":  15,
+        "battery":  67,
+        "wan":  50
+    }
+]

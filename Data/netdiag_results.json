@@ -1,0 +1,88 @@
+{
+    "summary":  {
+                    "status":  "GOOD",
+                    "recommendation":  "Network OK",
+                    "health_score":  70
+                },
+    "ports":  {
+                  "tool":  "nmap concept",
+                  "closed_ports":  [
+                                       80,
+                                       443,
+                                       22,
+                                       3389,
+                                       8080
+                                   ],
+                  "open_ports":  [
+                                     53
+                                 ],
+                  "target":  "8.8.8.8",
+                  "issues":  [
+
+                             ]
+              },
+    "version":  "4.1",
+    "engine":  "NETDIAG",
+    "ticket_no":  "",
+    "timestamp":  "2026-09-11T21:35:20.820Z",
+    "mobile":  null,
+    "bandwidth":  {
+                      "tool":  "iperf3 / speedtest-cli concept",
+                      "note":  "For accurate bandwidth, install iperf3 (https://iperf.fr/) or speedtest-cli (https://github.com/sivel/speedtest-cli)",
+                      "link_speed":  "150 Mbps",
+                      "interface":  "Wi-Fi",
+                      "download_mbps":  0,
+                      "status":  "ESTIMATED",
+                      "upload_mbps":  0,
+                      "issues":  [
+
+                                 ]
+                  },
+    "latency":  {
+                    "tool":  "ping + mtr/WinMTR",
+                    "jitter_ms":  0,
+                    "min_ms":  396,
+                    "max_ms":  3645,
+                    "avg_ms":  1947,
+                    "count":  20,
+                    "target":  "8.8.8.8",
+                    "packet_loss_percent":  0,
+                    "status":  "UNKNOWN",
+                    "issues":  [
+                                   "A parameter cannot be found that matches parameter name \u0027StandardDeviation\u0027."
+                               ]
+                },
+    "dns":  {
+                "tool":  "dnsbench / namebench concept",
+                "servers":  [
+                                {
+                                    "status":  "OK",
+                                    "server":  "1.1.1.1",
+                                    "ms":  5968
+                                },
+                                {
+                                    "status":  "OK",
+                                    "server":  "8.8.8.8",
+                                    "ms":  4147.2
+                                },
+                                {
+                                    "status":  "OK",
+                                    "server":  "9.9.9.9",
+                                    "ms":  2469.8
+                                },
+                                {
+                                    "status":  "OK",
+                                    "server":  "208.67.222.222",
+                                    "ms":  729.3
+                                }
+                            ],
+                "fastest":  "9.9.9.9",
+                "avg_ms":  3328.6,
+                "issues":  [
+                               "DNS 1.1.1.1 slow: 5968ms",
+                               "DNS 8.8.8.8 slow: 4147.2ms",
+                               "DNS 9.9.9.9 slow: 2469.8ms",
+                               "DNS 208.67.222.222 slow: 729.3ms"
+                           ]
+            }
+}

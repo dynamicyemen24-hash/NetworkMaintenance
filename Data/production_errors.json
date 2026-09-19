@@ -1,0 +1,32 @@
+{
+    "message":  "Test error before users",
+    "breadcrumbs":  null,
+    "environment":  "production",
+    "release":  "elias-pro@4.2.0",
+    "user":  null,
+    "tags":  {
+                 "device_type":  "Server",
+                 "endpoint":  "/api/v1/health",
+                 "user_impact":  "HIGH - Users will see errors within minutes"
+             },
+    "level":  "error",
+    "timestamp":  "2026-09-10T22:08:46.5119285+03:00",
+    "event_id":  "9bcb9a8a-c76e-4546-826b-fc8854e5e763",
+    "extra":  {
+                  "active_users":  1,
+                  "memory":  72.9,
+                  "cpu":  66,
+                  "telemetry":  {
+                                    "timestamp":  "2026-09-10T22:08:45.1895252+03:00",
+                                    "active_users":  1,
+                                    "cpu":  66,
+                                    "error_rate":  100,
+                                    "latency":  0,
+                                    "memory":  72.9,
+                                    "endpoint":  "/api/v1/health",
+                                    "device_type":  "Server"
+                                },
+                  "latency":  0
+              },
+    "stacktrace":  null
+}

@@ -1,0 +1,418 @@
+{
+    "deep_scan":  false,
+    "summary":  {
+                    "total_deleted":  1,
+                    "duration_sec":  10.1,
+                    "errors":  0,
+                    "total_freed_gb":  0,
+                    "mode":  "DRY_RUN - No files were deleted",
+                    "duration_ms":  10097,
+                    "total_skipped":  0,
+                    "power_plan":  "ALREADY_OPTIMAL",
+                    "total_freed_mb":  0,
+                    "startup_recommendations":  [
+                                                    "Google Drive appears 3 times at startup - deduplicate (saves boot time)",
+                                                    "Too many startup items (17) - consider disabling: Docker, Figma Agent, Perplexity, MiniMax, Edge AutoLaunch"
+                                                ]
+                },
+    "transactions":  [
+
+                     ],
+    "version":  "3.0.0",
+    "phases":  {
+                   "analysis":  {
+                                    "disk":  {
+                                                 "used_gb":  220.34,
+                                                 "total_gb":  269.13,
+                                                 "free_percent":  18.1,
+                                                 "free_gb":  48.8
+                                             },
+                                    "timestamp":  "2026-09-10T20:34:51Z",
+                                    "power_is_balanced":  false,
+                                    "power_plan":  "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)",
+                                    "power_is_highperf":  true,
+                                    "vscode":  {
+                                                   "top_extensions":  [
+                                                                          {
+                                                                              "size_mb":  3.37,
+                                                                              "name":  "mtxr.sqltools-0.28.6"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  539.96,
+                                                                              "name":  "openai.chatgpt-26.903.61454-win32-x64"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  4.47,
+                                                                              "name":  "ms-vscode.remote-server-1.5.3"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  1.6,
+                                                                              "name":  "ms-vscode.vscode-chat-customizations-evaluations-1.0.8"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  69.52,
+                                                                              "name":  "redhat.vscode-xml-0.29.3-win32-x64"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  3.54,
+                                                                              "name":  "redhat.vscode-yaml-1.24.0"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  982.79,
+                                                                              "name":  "openai.chatgpt-26.903.71938-win32-x64"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  1.81,
+                                                                              "name":  "pkief.material-icon-theme-5.38.1"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  0.47,
+                                                                              "name":  "ms-vscode.cpp-devtools-0.6.18"
+                                                                          },
+                                                                          {
+                                                                              "size_mb":  269.19,
+                                                                              "name":  "ms-vscode.cpptools-1.34.4-win32-x64"
+                                                                          }
+                                                                      ],
+                                                   "total_gb":  4.32,
+                                                   "duplicate_waste_mb":  0,
+                                                   "extension_count":  66,
+                                                   "duplicate_groups":  [
+                                                                            {
+                                                                                "key":  "ms.azuretools.vscode",
+                                                                                "count":  2,
+                                                                                "names":  [
+                                                                                              "ms-azuretools.vscode-containers-2.5.0",
+                                                                                              "ms-azuretools.vscode-docker-2.0.0"
+                                                                                          ]
+                                                                            },
+                                                                            {
+                                                                                "key":  "ms.python.vscode",
+                                                                                "count":  2,
+                                                                                "names":  [
+                                                                                              "ms-python.vscode-pylance-2026.3.1",
+                                                                                              "ms-python.vscode-python-envs-1.36.0-win32-x64"
+                                                                                          ]
+                                                                            },
+                                                                            {
+                                                                                "key":  "ms.vscode.cpptools",
+                                                                                "count":  3,
+                                                                                "names":  [
+                                                                                              "ms-vscode.cpptools-1.34.4-win32-x64",
+                                                                                              "ms-vscode.cpptools-extension-pack-1.5.1",
+                                                                                              "ms-vscode.cpptools-themes-2.0.0"
+                                                                                          ]
+                                                                            },
+                                                                            {
+                                                                                "key":  "ms.vscode.remote",
+                                                                                "count":  2,
+                                                                                "names":  [
+                                                                                              "ms-vscode.remote-explorer-0.5.0",
+                                                                                              "ms-vscode.remote-server-1.5.3"
+                                                                                          ]
+                                                                            }
+                                                                        ]
+                                               },
+                                    "startup":  {
+                                                    "heavy_hitters":  [
+                                                                          "Docker Desktop",
+                                                                          "GoogleDriveFS",
+                                                                          "Figma Agent",
+                                                                          "OneDrive",
+                                                                          "MicrosoftEdgeAutoLaunch"
+                                                                      ],
+                                                    "items":  [
+                                                                  {
+                                                                      "Name":  "GoogleDriveFS",
+                                                                      "Command":  "\"C:\\Program Files\\Google\\Drive File Stream\\131.0.1.0\\GoogleDriveFS.exe\" --startup_mode"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "DynamicPlatform - ?????? ???????? ????????",
+                                                                      "Command":  "DynamicPlatform - ?????? ???????? ????????.lnk"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "????? ????? ????? ???????",
+                                                                      "Command":  "????? ????? ????? ???????.lnk"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "OneDrive",
+                                                                      "Command":  "\"C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe\" /background"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "GoogleDriveFS",
+                                                                      "Command":  "\"C:\\Program Files\\Google\\Drive File Stream\\131.0.1.0\\GoogleDriveFS.exe\" --startup_mode"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "GsERP25",
+                                                                      "Command":  "D:\\26 ?????\\backup\\GsERP25\\bin\\Release\\GsERP25.exe"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "Figma Agent",
+                                                                      "Command":  "\"C:\\Users\\GSERPSYS24\\AppData\\Local\\FigmaAgent\\figma_agent.exe\""
+                                                                  },
+                                                                  {
+                                                                      "Name":  "Imo Messenger",
+                                                                      "Command":  "\"C:\\Users\\GSERPSYS24\\AppData\\Roaming\\imo\\1.5.3.3\\ImoDesktopApp.exe\" -minimized -autorun"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "com.todesktop.25020447d4kq915",
+                                                                      "Command":  "C:\\Users\\GSERPSYS24\\AppData\\Local\\Programs\\Perplexity\\Perplexity.exe"
+                                                                  },
+                                                                  {
+                                                                      "Name":  "Docker Desktop",
+                                                                      "Command":  "C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe"
+                                                                  }
+                                                              ],
+                                                    "count":  17
+                                                },
+                                    "memory":  {
+                                                   "total_gb":  31.71,
+                                                   "free_gb":  9.47,
+                                                   "used_gb":  22.24,
+                                                   "top_consumers":  [
+                                                                         {
+                                                                             "ram_mb":  3618,
+                                                                             "name":  "Memory Compression"
+                                                                         },
+                                                                         {
+                                                                             "ram_mb":  1103,
+                                                                             "name":  "Code"
+                                                                         },
+                                                                         {
+                                                                             "ram_mb":  951,
+                                                                             "name":  "Code"
+                                                                         },
+                                                                         {
+                                                                             "ram_mb":  903,
+                                                                             "name":  "node"
+                                                                         },
+                                                                         {
+                                                                             "ram_mb":  885,
+                                                                             "name":  "OpenCode"
+                                                                         }
+                                                                     ],
+                                                   "free_mb":  9695.37,
+                                                   "used_percent":  70.1
+                                               },
+                                    "temp":  {
+                                                 "by_extension":  [
+                                                                      {
+                                                                          "size_mb":  0,
+                                                                          "ext":  ".tmp194",
+                                                                          "count":  1
+                                                                      },
+                                                                      {
+                                                                          "size_mb":  0,
+                                                                          "ext":  ".tmp189",
+                                                                          "count":  1
+                                                                      },
+                                                                      {
+                                                                          "size_mb":  0,
+                                                                          "ext":  ".tmp240",
+                                                                          "count":  1
+                                                                      },
+                                                                      {
+                                                                          "size_mb":  0,
+                                                                          "ext":  ".tmp209",
+                                                                          "count":  1
+                                                                      },
+                                                                      {
+                                                                          "size_mb":  2.28,
+                                                                          "ext":  ".BLOB",
+                                                                          "count":  1
+                                                                      }
+                                                                  ],
+                                                 "file_count":  5270,
+                                                 "total_mb":  128.4
+                                             }
+                                },
+                   "cleaning_plan":  {
+                                         "VSCodeDup":  {
+                                                           "scanned":  1,
+                                                           "freed_mb":  0,
+                                                           "deleted":  [
+                                                                           {
+                                                                               "status":  "DRYRUN",
+                                                                               "dir":  "openai.chatgpt-26.903.61454-win32-x64",
+                                                                               "size_mb":  539.96
+                                                                           }
+                                                                       ],
+                                                           "skipped":  [
+
+                                                                       ],
+                                                           "category":  "VSCodeDup",
+                                                           "candidates":  [
+                                                                              {
+                                                                                  "dir":  "openai.chatgpt-26.903.61454-win32-x64",
+                                                                                  "size_mb":  539.96,
+                                                                                  "keep":  "openai.chatgpt-26.903.71938-win32-x64"
+                                                                              }
+                                                                          ]
+                                                       },
+                                         "Startup":  {
+                                                         "recommendations":  [
+                                                                                 "Google Drive appears 3 times at startup - deduplicate (saves boot time)",
+                                                                                 "Too many startup items (17) - consider disabling: Docker, Figma Agent, Perplexity, MiniMax, Edge AutoLaunch"
+                                                                             ],
+                                                         "category":  "Startup",
+                                                         "items":  [
+                                                                       {
+                                                                           "command":  "\"C:\\Program Files\\Google\\Drive File Stream\\131.0.1.0\\GoogleDriveFS.exe\" --startup_mode",
+                                                                           "name":  "GoogleDriveFS",
+                                                                           "impact":  "MEDIUM"
+                                                                       },
+                                                                       {
+                                                                           "command":  "DynamicPlatform - ?????? ???????? ????????.lnk",
+                                                                           "name":  "DynamicPlatform - ?????? ???????? ????????",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "????? ????? ????? ???????.lnk",
+                                                                           "name":  "????? ????? ????? ???????",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "\"C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe\" /background",
+                                                                           "name":  "OneDrive",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "\"C:\\Program Files\\Google\\Drive File Stream\\131.0.1.0\\GoogleDriveFS.exe\" --startup_mode",
+                                                                           "name":  "GoogleDriveFS",
+                                                                           "impact":  "MEDIUM"
+                                                                       },
+                                                                       {
+                                                                           "command":  "D:\\26 ?????\\backup\\GsERP25\\bin\\Release\\GsERP25.exe",
+                                                                           "name":  "GsERP25",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "\"C:\\Users\\GSERPSYS24\\AppData\\Local\\FigmaAgent\\figma_agent.exe\"",
+                                                                           "name":  "Figma Agent",
+                                                                           "impact":  "MEDIUM"
+                                                                       },
+                                                                       {
+                                                                           "command":  "\"C:\\Users\\GSERPSYS24\\AppData\\Roaming\\imo\\1.5.3.3\\ImoDesktopApp.exe\" -minimized -autorun",
+                                                                           "name":  "Imo Messenger",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "C:\\Users\\GSERPSYS24\\AppData\\Local\\Programs\\Perplexity\\Perplexity.exe",
+                                                                           "name":  "com.todesktop.25020447d4kq915",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe",
+                                                                           "name":  "Docker Desktop",
+                                                                           "impact":  "HIGH"
+                                                                       },
+                                                                       {
+                                                                           "command":  "C:\\Users\\GSERPSYS24\\AppData\\Local\\Programs\\MiniMax Code\\MiniMax Code.exe",
+                                                                           "name":  "com.minimax.agent",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --win-session-start",
+                                                                           "name":  "MicrosoftEdgeAutoLaunch_300842D0A8B7E884E86334A99011CBB1",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "\"C:\\Users\\GSERPSYS24\\AppData\\Local\\Grammarly\\DesktopIntegrations\\Grammarly.Desktop.exe\" --autostart",
+                                                                           "name":  "Grammarly",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "\"C:\\Program Files\\Google\\Drive File Stream\\131.0.1.0\\GoogleDriveFS.exe\" --startup_mode",
+                                                                           "name":  "GoogleDriveFS",
+                                                                           "impact":  "MEDIUM"
+                                                                       },
+                                                                       {
+                                                                           "command":  "C:\\PROGRA~2\\AnyDesk\\AnyDesk.exe  --control",
+                                                                           "name":  "AnyDesk",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "%windir%\\system32\\SecurityHealthSystray.exe",
+                                                                           "name":  "SecurityHealth",
+                                                                           "impact":  "LOW"
+                                                                       },
+                                                                       {
+                                                                           "command":  "C:\\Program Files\\Cloudflare\\Cloudflare WARP\\Cloudflare WARP.exe",
+                                                                           "name":  "CloudflareWARP",
+                                                                           "impact":  "LOW"
+                                                                       }
+                                                                   ],
+                                                         "mode":  "REPORT_ONLY"
+                                                     },
+                                         "DiagLogs":  {
+                                                          "scanned":  0,
+                                                          "freed_mb":  0,
+                                                          "deleted":  [
+
+                                                                      ],
+                                                          "skipped":  [
+
+                                                                      ],
+                                                          "category":  "DiagLogs",
+                                                          "candidates":  [
+
+                                                                         ]
+                                                      },
+                                         "TempSafe":  {
+                                                          "deleted":  [
+
+                                                                      ],
+                                                          "deleted_count":  0,
+                                                          "candidates":  [
+
+                                                                         ],
+                                                          "category":  "TempSafe",
+                                                          "skipped":  [
+
+                                                                      ],
+                                                          "freed_mb":  0,
+                                                          "scanned":  0,
+                                                          "candidates_count":  0
+                                                      },
+                                         "PowerPlan":  {
+                                                           "detail":  "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)",
+                                                           "status":  "ALREADY_OPTIMAL",
+                                                           "category":  "PowerPlan",
+                                                           "action":  "Check \u0026 Optimize"
+                                                       }
+                                     }
+               },
+    "engine":  "SCE",
+    "timestamp":  "2026-09-10T20:34:51.834Z",
+    "health":  {
+                   "recommendations":  [
+                                           "Use VS Code Profiles per workspace",
+                                           "Remove old duplicate versions",
+                                           "Disable non-essential startup apps"
+                                       ],
+                   "deductions":  [
+                                      "Disk low (\u003c20% free)",
+                                      "RAM high (\u003e70%)",
+                                      "Too many VS Code extensions (66)",
+                                      "Duplicate extensions found",
+                                      "Too many startup programs (17)"
+                                  ],
+                   "score":  55,
+                   "classification":  "FAIR",
+                   "max_score":  100
+               },
+    "dry_run":  true,
+    "safety_validation":  {
+                              "total_deletions":  1,
+                              "limits":  {
+                                             "max_gb":  2,
+                                             "max_deletions":  100
+                                         },
+                              "total_freed_gb":  0,
+                              "size_ok":  true,
+                              "reason":  "All safety checks passed",
+                              "deletions_ok":  true,
+                              "can_proceed":  true
+                          },
+    "safety_level":  "Balanced"
+}

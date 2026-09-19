@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetworkMaintenance-Pro v3.0 - Enterprise Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@2.0.0/dist/chartjs-plugin-streaming.min.js"></script>
+    <style>
+        :root {
+            --primary: #0066ff;
+            --success: #00cc66;
+            --warning: #ff9900;
+            --danger: #ff0044;
+            --dark: #1a1a2e;
+            --dark-card: #16213e;
+            --dark-surface: #0f3460;
+            --text: #e0e0e0;
+            --text-dim: #888;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--dark-card), var(--dark-surface));
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header h1 { font-size: 1.5rem; color: var(--primary); }
+        .header .status-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .status-operational { background: var(--success); color: #000; }
+        .status-warning { background: var(--warning); color: #000; }
+        .status-critical { background: var(--danger); color: #fff; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        .card {
+            background: var(--dark-card);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,102,255,0.15);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .card-subvalue {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        .health-score-ring {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px auto;
+            position: relative;
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+        .metric-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .metric-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .bar-excellent { background: var(--success); }
+        .bar-good { background: #44cc66; }
+        .bar-fair { background: var(--warning); }
+        .bar-poor { background: #ff6600; }
+        .bar-critical { background: var(--danger); }
+        .alert-list { list-style: none; }
+        .alert-item {
+            padding: 10px 15px;
+            border-left: 4px solid;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        .alert-critical { border-color: var(--danger); }
+        .alert-warning { border-color: var(--warning); }
+        .alert-info { border-color: var(--primary); }
+        .alert-success { border-color: var(--success); }
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px solid rgba(255,255,255,0.1);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 10px 0;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 14px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        .sla-bar {
+            display: flex;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .sla-met { background: var(--success); }
+        .sla-warning { background: var(--warning); }
+        .sla-critical { background: var(--danger); }
+        .sla-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .tag-info { background: rgba(0,102,255,0.2); color: var(--primary); }
+        .tag-success { background: rgba(0,204,102,0.2); color: var(--success); }
+        .tag-danger { background: rgba(255,0,68,0.2); color: var(--danger); }
+        .full-width { grid-column: 1 / -1; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+    <div class="header" style="position:relative"><div style="position:absolute;top:8px;right:50%;transform:translateX(50%);background:#ffb800;color:#000;padding:4px 12px;border-radius:6px;font-size:0.75rem;font-weight:700;z-index:10">جديد: <a href="index-pro.html" style="color:#000;text-decoration:underline">النسخة الاحترافية Pro (Tabler + AG Grid + ECharts)</a></div><div class="header">
+        <h1>⚡ NetworkMaintenance-Pro v4.0</h1>
+        <div style="display:flex;align-items:center;gap:15px">
+            <a href="shop.html" style="background:var(--primary);color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:700">🔧 Shop POS</a>
+            <span class="status-badge status-operational" id="statusBadge">OPERATIONAL</span>
+            <span style="color:var(--text-dim)" id="lastUpdate">Last: --</span>
+        </div>
+    </div>
+    <div class="grid" id="dashboard">
+        <!-- Health Score -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Health Score</span>
+                <span class="tag tag-info">ITIL SLA</span>
+            </div>
+            <div class="health-score-ring" id="healthRing" style="border:4px solid var(--primary)">
+                <span id="healthScore">--</span>
+            </div>
+            <div class="card-subvalue" id="healthTrend">Calculating...</div>
+        </div>
+        <!-- Latency -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Latency</span>
+                <span class="tag" id="latencyTag">--</span>
+            </div>
+            <div class="card-value" id="latencyValue">--</div>
+            <div class="card-subvalue">Average to 8.8.8.8</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="latencyBar" style="width:0%"></div></div>
+        </div>
+        <!-- DNS -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">DNS Resolution</span>
+                <span class="tag" id="dnsTag">--</span>
+            </div>
+            <div class="card-value" id="dnsValue">--</div>
+            <div class="card-subvalue">ms via 1.1.1.1</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="dnsBar" style="width:0%"></div></div>
+        </div>
+        <!-- Packet Loss -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Packet Loss</span>
+                <span class="tag" id="plTag">--</span>
+            </div>
+            <div class="card-value" id="plValue">--</div>
+            <div class="card-subvalue">Over last 20 packets</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="plBar" style="width:0%"></div></div>
+        </div>
+        <!-- SLA -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">SLA Compliance</span>
+                <span class="tag tag-success">Active</span>
+            </div>
+            <div class="sla-label">
+                <span>Error Budget</span>
+                <span id="slaBudget">--</span>
+            </div>
+            <div class="sla-bar">
+                <div class="sla-met" id="slaBar" style="width:0%"></div>
+            </div>
+            <div class="sla-label" style="margin-top:5px">
+                <span>Breaches</span>
+                <span id="slaBreaches">0</span>
+            </div>
+        </div>
+        <!-- Anomalies -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Anomalies (ML)</span>
+                <span class="tag" id="anomalyTag">--</span>
+            </div>
+            <div class="card-value" id="anomalyCount">--</div>
+            <div class="card-subvalue">Detected in last 24h</div>
+        </div>
+        <!-- Latency Chart -->
+        <div class="card full-width">
+            <div class="card-header">
+                <span class="card-title">Latency Trend (Real-Time)</span>
+                <span class="tag tag-info">WebSocket</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="latencyChart"></canvas>
+            </div>
+        </div>
+        <!-- Throughput Chart -->
+        <div class="card full-width">
+            <div class="card-header">
+                <span class="card-title">Throughput</span>
+                <span class="tag tag-info">MB/s</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="throughputChart"></canvas>
+            </div>
+        </div>
+        <!-- Alerts -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Active Alerts</span>
+                <span class="tag tag-danger" id="alertCount">0</span>
+            </div>
+            <ul class="alert-list" id="alertList">
+                <li class="alert-item alert-info">Initializing...</li>
+            </ul>
+        </div>
+        <!-- Events Timeline -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Event Timeline</span>
+                <span class="tag tag-success">Live</span>
+            </div>
+            <div class="timeline" id="eventTimeline">
+                <div class="timeline-item">
+                    <strong>System Initialized</strong>
+                    <div style="color:var(--text-dim);font-size:0.8rem">Loading...</div>
+                </div>
+            </div>
+        </div>
+        <!-- Optimization -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Optimization Status</span>
+                <span class="tag tag-success">Active</span>
+            </div>
+            <div id="optimizationStatus">
+                <div style="margin:10px 0">
+                    <div class="flex-between"><span>TCP Auto-Tuning</span><span id="optAutoTune">--</span></div>
+                    <div class="flex-between" style="margin-top:5px"><span>ECN</span><span id="optECN">--</span></div>
+                    <div class="flex-between" style="margin-top:5px"><span>Pacing</span><span id="optPacing">--</span></div>
+                    <div class="flex-between" style="margin-top:5px"><span>Congestion</span><span id="optCongestion">--</span></div>
+                    <div class="flex-between" style="margin-top:5px"><span>MTU</span><span id="optMTU">--</span></div>
+                </div>
+            </div>
+        </div>
+        <!-- Baselines -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Performance Baseline</span>
+                <span class="tag tag-info">Adaptive</span>
+            </div>
+            <div id="baselineStatus">
+                <div style="margin:8px 0">
+                    <div class="flex-between"><span>Learned Latency</span><span id="baselineLatency">--</span></div>
+                    <div class="flex-between" style="margin-top:5px"><span>Deviation</span><span id="baselineDeviation">--</span></div>
+                    <div class="flex-between" style="margin-top:5px"><span>Trend</span><span id="baselineTrend">--</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const ctx = document.getElementById('latencyChart').getContext('2d');
+        const latencyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Latency (ms)',
+                    data: [],
+                    borderColor: '#0066ff',
+                    backgroundColor: 'rgba(0,102,255,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }, {
+                    label: 'Baseline',
+                    data: [],
+                    borderColor: '#ff9900',
+                    borderDash: [5,5],
+                    fill: false,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 300 },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } },
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } }
+                },
+                plugins: { legend: { labels: { color: '#e0e0e0' } } }
+            }
+        });
+
+        const ctx2 = document.getElementById('throughputChart').getContext('2d');
+        const throughputChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['In', 'Out'],
+                datasets: [{
+                    label: 'Throughput (MB/s)',
+                    data: [0, 0],
+                    backgroundColor: ['rgba(0,102,255,0.5)', 'rgba(0,204,102,0.5)'],
+                    borderColor: ['#0066ff', '#00cc66'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 300 },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } },
+                    x: { grid: { display: false }, ticks: { color: '#888' } }
+                }
+            }
+        });
+
+        function updateDashboard(data) {
+            if (!data) return;
+            const m = data.metrics || {};
+            const lat = m.latency?.avg || 0;
+            const health = data.health_score || 0;
+            
+            document.getElementById('healthScore').textContent = health;
+            document.getElementById('latencyValue').textContent = lat.toFixed(1) + 'ms';
+            document.getElementById('latencyBar').style.width = Math.min(100, (lat/2000)*100) + '%';
+            
+            const dns = m.dns?.resolution_ms || 0;
+            document.getElementById('dnsValue').textContent = dns + 'ms';
+            document.getElementById('dnsBar').style.width = Math.min(100, (dns/500)*100) + '%';
+            
+            const pl = m.packet_loss || 0;
+            document.getElementById('plValue').textContent = pl.toFixed(2) + '%';
+            document.getElementById('plBar').style.width = Math.min(100, pl*20) + '%';
+            
+            latencyChart.data.labels.push(new Date().toLocaleTimeString());
+            latencyChart.data.datasets[0].data.push(lat);
+            latencyChart.data.labels.shift();
+            latencyChart.data.datasets[0].data.shift();
+            latencyChart.update('none');
+            
+            throughputChart.data.datasets[0].data = [m.throughput?.in || 0, m.throughput?.out || 0];
+            throughputChart.update('none');
+            
+            document.getElementById('lastUpdate').textContent = 'Last: ' + new Date().toLocaleTimeString();
+        }
+        
+        setInterval(() => {
+            fetch('/api/v1/health').then(r => r.json()).then(updateDashboard).catch(() => {});
+        }, 30000);
+    </script>
+</body>
+</html>
+

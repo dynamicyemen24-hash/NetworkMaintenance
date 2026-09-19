@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema",
+  "name": "NetworkMaintenance-Pro Universal",
+  "version": "3.1.0",
+  "build": "20260910",
+  "enterprise": {
+    "architecture": "Microservices-Orchestration",
+    "compliance": ["ITIL-v4", "ISO-27001", "NIST-CSF", "COBIT-2019", "PCI-DSS", "SOC2-TypeII"],
+    "security_framework": "Zero-Trust",
+    "data_layer": "SQLite-Encrypted (light, no cluster)",
+    "api_layer": "REST-Gateway only (GraphQL/gRPC/WS disabled for perf)",
+    "monitoring": "Prometheus-Metrics + OpenTelemetry",
+    "logging": "ELK-Stack-Compatible + Loki",
+    "deployment": "CI-CD-Pipeline + GitOps + ArgoCD",
+    "platforms": ["Windows", "Linux", "macOS", "Android", "iOS", "NetworkOS", "IoT-OS"],
+    "device_categories": ["Workstation", "Laptop", "Mobile", "Server", "Network", "IoT", "Embedded", "Peripheral"]
+  },
+  "engines": {
+    "dax": {
+      "name": "DAX-DiagnosticAnalysisEngine",
+      "version": "3.1",
+      "algorithms": ["Statistical", "Bayesian", "ML-Anomaly", "Root-Cause-Analysis", "Causal-Inference"],
+      "device_types": ["All"]
+    },
+    "oce": {
+      "name": "OCE-OptimizationConvergenceEngine",
+      "version": "3.1",
+      "strategies": ["Pareto", "Gradient-Descent", "Simulated-Annealing", "Genetic-Algorithm", "Multi-Objective"],
+      "device_types": ["All"]
+    },
+    "predict": {
+      "name": "PREDICT-PredictiveEngine",
+      "version": "3.1",
+      "models": ["ARIMA", "Exponential-Smoothing", "LSTM-Proxy", "Prophet", "Transformer"],
+      "device_types": ["All"]
+    },
+    "heal": {
+      "name": "HEAL-AutoRemediationEngine",
+      "version": "3.1",
+      "approach": "Decision-Tree + Reinforcement-Learning",
+      "device_types": ["All"]
+    },
+    "inventory": {
+      "name": "IVT-InventoryEngine",
+      "version": "3.0",
+      "capabilities": ["Discovery", "Classification", "Relationship-Mapping", "Lifecycle-Tracking", "Compliance-Check"],
+      "protocols": ["SNMP", "WMI", "SSH", "REST", "ADB", "MDM", "NetConf", "gNMI"]
+    },
+    "mdm": {
+      "name": "MDM-MobileDeviceEngine",
+      "version": "3.0",
+      "platforms": ["Android", "iOS", "iPadOS", "Windows-Mobile", "ChromeOS"],
+      "protocols": ["MDM-API", "EAS", "OMA-DM", "Samsung-Knox", "Apple-DEP", "Google-ZeroTouch"]
+    },
+    "network": {
+      "name": "NET-NetworkEquipmentEngine",
+      "version": "3.0",
+      "vendors": ["Cisco", "Juniper", "Arista", "Ubiquiti", "MikroTik", "Fortinet", "PaloAlto", "HPE-Aruba", "Dell-EMC"],
+      "protocols": ["SNMPv3", "NetConf", "gNMI", "RESTCONF", "CLI-SSH", "Telemetry"]
+    },
+    "iot": {
+      "name": "IOT-IoTDeviceEngine",
+      "version": "3.0",
+      "protocols": ["MQTT", "CoAP", "LoRaWAN", "Zigbee", "Thread", "Matter", "Modbus", "OPC-UA"],
+      "device_types": ["Sensors", "Actuators", "Gateways", "Edge-Compute", "Smart-Building", "Industrial"]
+    },
+    "hardware": {
+      "name": "HWD-HardwareDiagnosticsEngine",
+      "version": "3.0",
+      "components": ["CPU", "Memory", "Storage", "GPU", "Network", "Battery", "Thermal", "Firmware"],
+      "benchmarks": ["Stress-Test", "Burn-In", "SMART", "Memory-Test", "CPU-Benchmark"]
+    },
+    "firmware": {
+      "name": "FW-FirmwareManagementEngine",
+      "version": "3.0",
+      "capabilities": ["Inventory", "Vulnerability-Scan", "Staged-Deployment", "Rollback", "Compliance"],
+      "sources": ["Vendor-API", "Dell-OM", "HP-SUM", "Lenovo-XClarity", "Supermicro-SUM", "Cisco-SMU"]
+    }
+  },
+  "network": {
+    "primary_interface": "Wi-Fi",
+    "interfaces": ["Wi-Fi", "Ethernet"],
+    "dns_servers": ["1.1.1.1", "8.8.8.8"],
+    "latency_thresholds": {
+      "excellent": 10, "good": 30, "fair": 60, "poor": 150, "critical": 300, "blackout": 1000
+    },
+    "packet_loss_thresholds": {
+      "excellent": 0, "good": 0.1, "fair": 0.5, "poor": 1, "critical": 2
+    },
+    "jitter_thresholds": {
+      "excellent": 5, "good": 15, "fair": 30, "poor": 60, "critical": 150
+    }
+  },
+  "security": {
+    "authentication": "Bearer-Token + mTLS + FIDO2",
+    "encryption": "AES-256-GCM + ChaCha20-Poly1305",
+    "certificate_validation": true,
+    "audit_logging": true,
+    "role_based_access": ["SuperAdmin", "Admin", "NetworkAdmin", "SecurityAdmin", "DeviceAdmin", "Operator", "Viewer", "ReadOnly", "API-Service"],
+    "tls_version": "1.3",
+    "data_retention_days": 2555,
+    "zero_trust": {
+      "verify_identity": true,
+      "verify_device": true,
+      "least_privilege": true,
+      "micro_segmentation": true,
+      "continuous_auth": true
+    }
+  },
+  "scheduling": {
+    "health_check_interval": 300,
+    "full_diagnostic_interval": 86400,
+    "optimization_interval": 86400,
+    "report_generation_interval": 604800,
+    "baseline_update_interval": 604800,
+    "firmware_check_interval": 604800,
+    "inventory_sync_interval": 86400,
+    "backup_interval": 604800
+  },
+  "database": {
+    "local": {
+      "engine": "SQLite",
+      "path": "C:\\NetworkMaintenance\\Data\\maintenance.db",
+      "encryption_key_file": "C:\\NetworkMaintenance\\Config\\encryption.key",
+      "wal_mode": true
+    }
+  },
+  "api": {
+    "rest": {
+      "enabled": true,
+      "port": 8080,
+      "host": "127.0.0.1",
+      "cors_origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
+      "rate_limiting": { "requests_per_minute": 60, "burst_size": 10 }
+    },
+    "graphql": {
+      "enabled": false,
+      "port": 8081,
+      "path": "/graphql"
+    },
+    "grpc": {
+      "enabled": false,
+      "port": 50051,
+      "reflection": false
+    },
+    "websocket": {
+      "enabled": false,
+      "port": 8082,
+      "path": "/ws"
+    },
+    "endpoints": [
+      "/api/v1/health", "/api/v1/diagnostics", "/api/v1/metrics", "/api/v1/health",
+      "/api/v1/optimization", "/api/v1/logs", "/api/v1/config",
+      "/api/v1/inventory", "/api/v1/devices", "/api/v1/mobile",
+      "/api/v1/network", "/api/v1/iot", "/api/v1/hardware", "/api/v1/firmware",
+      "/api/v1/alerts", "/api/v1/reports", "/api/v1/sla", "/api/v1/compliance"
+    ]
+  },
+  "integrations": {
+    "itsm": ["ServiceNow", "Jira", "Freshservice", "Zendesk"],
+    "monitoring": ["Datadog", "NewRelic", "Prometheus", "Grafana", "Zabbix", "Nagios"],
+    "cloud": ["AWS", "Azure", "GCP", "Oracle"],
+    "mdm": ["Intune", "Jamf", "Workspace-ONE", "Kandji", "Mosyle"],
+    "network": ["Cisco-DNA", "Arista-CVP", "Juniper-Mist", "Ubiquiti-UNMS", "MikroTik-Dude"],
+    "backup": ["Veeam", "Commvault", "Rubrik", "Cohesity"],
+    "vuln_scanners": ["Qualys", "Tenable", "Rapid7", "OpenVAS"],
+    "chatops": ["Slack", "Teams", "Discord", "Mattermost", "Telegram"]
+  }
+}

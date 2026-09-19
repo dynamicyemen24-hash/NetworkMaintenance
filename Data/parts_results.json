@@ -1,0 +1,17 @@
+{
+    "timestamp":  "2026-09-10T20:58:40.358Z",
+    "engine":  "PARTS",
+    "version":  "4.0",
+    "action":  "Stats",
+    "result":  {
+                   "total_retail_value":  7500,
+                   "low_stock":  0,
+                   "total_cost_value":  4000,
+                   "total_parts":  1,
+                   "by_category":  {
+                                       "count":  1,
+                                       "category":  "Battery"
+                                   },
+                   "expected_profit":  3500
+               }
+}

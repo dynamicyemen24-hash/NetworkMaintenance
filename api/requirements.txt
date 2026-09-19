@@ -1,0 +1,3 @@
+# Elias Pro — Vercel Python requirements
+# Minimal — no heavy deps for serverless cold start
+# For full features, add: fastapi, pydantic, sqlalchemy

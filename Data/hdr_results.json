@@ -1,0 +1,77 @@
+{
+    "device_type":  "Computer",
+    "timestamp":  "2026-09-10T21:57:17.844Z",
+    "engine":  "HDR",
+    "version":  "4.0",
+    "result":  {
+                   "thermal":  {
+                                   "gpu_temp":  50,
+                                   "status":  "GOOD",
+                                   "issues":  [
+
+                                              ],
+                                   "cpu_temp":  45
+                               },
+                   "overall_score":  70,
+                   "device_type":  "Computer",
+                   "sensors":  {
+                                   "speaker":  "PASS",
+                                   "camera":  "PASS",
+                                   "display":  "PASS",
+                                   "sensors":  "PASS",
+                                   "mic":  "PASS",
+                                   "issues":  [
+
+                                              ],
+                                   "touch":  "PASS"
+                               },
+                   "issues_found":  [
+                                        "Battery health low (42%)"
+                                    ],
+                   "battery":  {
+                                   "issues":  [
+                                                  "Battery health low (42%)"
+                                              ],
+                                   "temp_c":  30,
+                                   "design_capacity":  5000,
+                                   "current_capacity":  5000,
+                                   "status":  "POOR",
+                                   "health_percent":  42,
+                                   "cycles":  0
+                               },
+                   "memory":  {
+                                  "total_gb":  31.71,
+                                  "used_percent":  75.8,
+                                  "status":  "FAIR",
+                                  "issues":  [
+
+                                             ],
+                                  "available_gb":  7.67
+                              },
+                   "scan_time":  "2026-09-10T21:57:22.2509850+03:00",
+                   "storage":  {
+                                   "issues":  [
+
+                                              ],
+                                   "used_percent":  78.4,
+                                   "smart_status":  "OK",
+                                   "free_gb":  99.38,
+                                   "status":  "GOOD",
+                                   "used_gb":  360.91,
+                                   "total_gb":  460.29,
+                                   "health_percent":  100
+                               },
+                   "overall_status":  "FAIR",
+                   "network":  {
+                                   "latency_ms":  130.7,
+                                   "sim_status":  "UNKNOWN",
+                                   "issues":  [
+
+                                              ],
+                                   "wifi_status":  "UNKNOWN",
+                                   "internet":  true,
+                                   "signal_dbm":  -1
+                               },
+                   "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste"
+               }
+}

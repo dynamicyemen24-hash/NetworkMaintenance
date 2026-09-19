@@ -1,0 +1,71 @@
+{
+  "standard": {
+    "id": "NM-NET-STD-001",
+    "name": "Network Reliability & Performance Standard",
+    "version": "1.0",
+    "owner": "NMS",
+    "lastReviewed": "2026-09-18"
+  },
+  "interfaces": {
+    "Wi-Fi": {
+      "ssidManaged": "DyGs",
+      "mode": "static-when-managed",
+      "static": { "ip": "192.168.0.150", "prefix": 24, "gateway": "192.168.0.1" },
+      "dhcpFallback": true,
+      "dns": ["1.1.1.1", "8.8.8.8"],
+      "doh": {
+        "1.1.1.1": "https://cloudflare-dns.com/dns-query",
+        "8.8.8.8": "https://dns.google/dns-query"
+      }
+    }
+  },
+  "slas": {
+    "gatewayLossPctMax": 5,
+    "wanLossPctMax": 15,
+    "wanLatencyMsMax": 1000,
+    "dnsMsMax": 500,
+    "conflicts24hMax": 0,
+    "wlanBounce24hMax": 2
+  },
+  "tcp": {
+    "autotuning": "normal",
+    "ecn": "enabled",
+    "timestamps": "enabled",
+    "nonsackrttresiliency": "disabled",
+    "initialrto": 1500
+  },
+  "ncsi": {
+    "enableActiveProbing": false
+  },
+  "wifi": {
+    "disableDirectVirtualAdapters": true,
+    "powerSavingDisabled": true,
+    "roamingAggressiveness": "Highest"
+  },
+  "services": {
+    "disabled": [
+      "DiagTrack", "dmwappushservice", "WSearch", "DoSvc", "whesvc",
+      "InventorySvc", "CDPSvc", "WpnService", "lfsvc", "RetailDemo",
+      "MapsBroker", "SQLPBENGINE", "SQLPBDMS"
+    ],
+    "disabledWildcard": [ "CDPUserSvc_*", "WpnUserService_*" ],
+    "manual": [ "MSSQLSERVER" ],
+    "stopRun": [ "wuauserv" ]
+  },
+  "tasksDisabled": [
+    { "path": "\\", "name": "OneDrive Per-Machine Standalone Update Task" },
+    { "path": "\\", "name": "OneDrive Reporting Task-*" },
+    { "path": "\\", "name": "OneDrive Startup Task-*" },
+    { "path": "\\Microsoft\\Office\\", "name": "Office Automatic Updates 2.0" },
+    { "path": "\\Microsoft\\Office\\", "name": "Office Feature Updates" },
+    { "path": "\\Microsoft\\Office\\", "name": "Office Feature Updates Logon" },
+    { "path": "\\Microsoft\\Office\\", "name": "Office Background Push Maintenance" },
+    { "path": "\\Microsoft\\Office\\", "name": "Office ClickToRun Service Monitor" },
+    { "path": "\\Microsoft\\Office\\", "name": "Office Performance Monitor" }
+  ],
+  "deliveryOptimization": {
+    "backgroundPct": 10,
+    "uploadPct": 5,
+    "maxCacheMB": 1024
+  }
+}

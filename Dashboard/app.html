@@ -1,0 +1,827 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0066ff">
+<title>غرفة تحكم الصيانة — الياس برو</title>
+<meta name="description" content="غرفة التحكم الموحّدة لنظام الصيانة: صحة الشبكة، المطابقة للمعيار NM-NET-STD-001، التنبيهات، والسجل.">
+<link rel="icon" href="../Branding/icon-32.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/css/elias-core.css">
+<style>
+  /* تخصيص محدود للغرفة فقط — يعتمد الباقي على نظام التصميم الموحّد */
+  .page-hero{background:linear-gradient(135deg,var(--brand) 0%,var(--accent) 100%)}
+  .ring-holder .ring-arc{transition:stroke var(--tr),stroke-dashoffset .6s ease}
+  .kpi .chip-ic{font-size:19px}
+  .mini-list{font-size:13px;display:grid;gap:8px}
+  .mini-list .li{display:flex;gap:9px;align-items:flex-start}
+  .mini-list .li .k{color:var(--text-3);min-width:110px;font-size:12px}
+  .qr-note{font-size:11.5px;color:var(--text-3);line-height:1.7}
+  .task-card{border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;background:var(--surface-2)}
+  .task-card .tt{font-weight:800;font-size:13px}
+  .task-card .td{font-size:12px;color:var(--text-2);margin-top:3px}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ===== الشريط الجانبي ===== -->
+  <aside class="sidebar" id="sidebar" aria-label="القائمة الرئيسية">
+    <div class="brand-card">
+      <img src="../Branding/icon-64.png" alt="" onerror="this.style.display='none'">
+      <div>
+        <div class="brand-name">الياس برو</div>
+        <div class="brand-tag">غرفة تحكم الصيانة</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-section">لوحة التحكم</div>
+      <a class="nav-item active" data-view="overview" href="#overview" aria-current="true">
+        <span class="nav-icon">🏠</span> نظرة عامة
+        <span class="nav-pill hidden" id="badgeAlerts">0</span>
+      </a>
+      <a class="nav-item" data-view="network" href="#network"><span class="nav-icon">📡</span> صحة الشبكة</a>
+      <a class="nav-item" data-view="compliance" href="#compliance"><span class="nav-icon">🛡️</span> مطابقة المعيار</a>
+      <a class="nav-item" data-view="activity" href="#activity"><span class="nav-icon">🧾</span> سجل الحارس</a>
+      <a class="nav-item" data-view="actions" href="#actions"><span class="nav-icon">⚙️</span> إجراءات الصيانة</a>
+
+      <div class="nav-section">الواجهات</div>
+      <a class="nav-item" href="deep.html"><span class="nav-icon">🩺</span> التشخيص العميق</a>
+      <a class="nav-item" href="index.html"><span class="nav-icon">🏪</span> صفحة العميل</a>
+      <a class="nav-item" href="tech/shop.html"><span class="nav-icon">🔧</span> ورشة الصيانة</a>
+      <a class="nav-item" href="tech/index-pro.html"><span class="nav-icon">📊</span> لوحة Tabler</a>
+      <a class="nav-item" href="tech/elias-platform.html"><span class="nav-icon">🛰️</span> منصة NEXUS</a>
+      <a class="nav-item" href="login.html"><span class="nav-icon">🔐</span> دخول الفني</a>
+    </nav>
+    <div class="sidebar-foot">
+      <span class="dot" id="guardDot"></span> حارس الموثوقية <span id="guardStatus">غير معروف</span><br>
+      <span id="footVersion" class="small">المعيار NM-NET-STD-001</span>
+    </div>
+  </aside>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <!-- ===== المحتوى ===== -->
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="فتح القائمة">☰</button>
+      <div class="page-crumb" id="crumb">نظرة عامة</div>
+      <div class="top-actions">
+        <span class="badge info soft nowrap" id="connectPill"><span class="dot"></span> متصل</span>
+        <span class="badge info soft mono nowrap" id="liveClock">--:--:--</span>
+        <button class="icon-btn" id="themeBtn" title="تبديل الوضع الليلي/النهاري" aria-label="تبديل الوضع">🌙</button>
+        <button class="btn btn-ghost btn-sm hidden" id="installBtn" title="تثبيت غرفة التحكم كتطبيق">📲 تثبيت التطبيق</button>
+        <button class="btn btn-accent btn-sm" id="refreshAll">↻ تحديث</button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ================== نظرة عامة ================== -->
+      <section class="view active" id="view-overview" aria-label="نظرة عامة">
+        <div class="card">
+          <div class="ring-wrap">
+            <div class="ring-holder" id="ovRing" style="--arc:var(--accent)">
+              <div class="ring-svg" id="ovRingSvg"></div>
+              <div class="ring-center">
+                <div class="ring-score" id="ovRingScore">—</div>
+                <div class="ring-status ok" id="ovRingStatus">انتظار</div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:240px">
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <h1 id="ovTitle" style="font-size:20px;font-weight:800">غرفة تحكم الصيانة</h1>
+                <span class="badge info soft" id="ovBadge">—</span>
+              </div>
+              <p class="muted small" id="ovSub">جاري تحميل آخر تقرير…</p>
+              <div class="ring-legend">
+                <div class="li"><span class="sq" style="background:var(--success)"></span> زمن DNS جيد (أقل من 60ms)</div>
+                <div class="li"><span class="sq" style="background:#e5a400"></span> فوائد انتباه (فقدان رابط أو الإقلاع)</div>
+                <div class="li"><span class="sq" style="background:var(--danger)"></span> حالة حرجة تتطلب تدخلاً</div>
+              </div>
+              <div class="alert info" style="margin-top:12px">
+                <span class="ic">💡</span>
+                <div class="body"><div class="title" id="ovHintTitle">قراءة البيانات</div>
+                  <div class="detail" id="ovHintText">تقرأ الواجهة آخر تقارير الحارس والامتثال مباشرةً من مجلد Reports دون أي استعلام عن الخادم، مع تدهور تدريجي أنيق عند عدم توفرها.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi" id="kpiDns"><span class="kpi-icon">⚡</span>
+            <div class="kpi-label">زمن DNS</div><div class="kpi-value">—</div>
+            <div class="kpi-extra">الاستعلام الاسمي</div></div>
+          <div class="kpi" id="kpiGw"><span class="kpi-icon">🏠</span>
+            <div class="kpi-label">فقدان البوابة</div><div class="kpi-value">—</div>
+            <div class="kpi-extra">أحدث دورة</div></div>
+          <div class="kpi" id="kpiWan"><span class="kpi-icon">🌐</span>
+            <div class="kpi-label">فقدان الواجهة WAN</div><div class="kpi-value">—</div>
+            <div class="kpi-extra">8.8.8.8 ICMP</div></div>
+          <div class="kpi" id="kpiConf"><span class="kpi-icon">🚧</span>
+            <div class="kpi-label">تعارضات IP</div><div class="kpi-value">—</div>
+            <div class="kpi-extra">خلال 24 ساعة</div></div>
+          <div class="kpi" id="kpiBounce"><span class="kpi-icon">🔄</span>
+            <div class="kpi-label">ارتداد WLAN</div><div class="kpi-value">—</div>
+            <div class="kpi-extra">خلال 24 ساعة</div></div>
+          <div class="kpi" id="kpiComp"><span class="kpi-icon">🛡️</span>
+            <div class="kpi-label">مطابقة المعيار</div><div class="kpi-value">—</div>
+            <div class="kpi-extra">التحقق من التطبيق</div></div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">تطور زمن DNS</div>
+              <span class="card-sub small" id="sparkDnsMeta">آخر قياسات الدورات</span>
+            </div>
+            <div id="sparkDns"></div>
+            <div class="card-sub small" style="margin-top:8px" id="sparkDnsNote">يسجَّل كل قياس جديد محلياً لعرض المنحنى، ويعمل دون خادم.</div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">المعيار الوطني NM-NET-STD-001</div>
+              <a href="#compliance" class="btn btn-ghost btn-sm" data-goto="compliance">تفاصيل ←</a>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <span class="badge info soft" id="compMiniBadge">—</span>
+              <span class="badge soft small mono" id="compMiniLine">v—</span>
+            </div>
+            <div class="mini-list" style="margin-top:12px">
+              <div class="li"><span class="k">تغييرات مطبقة</span><b id="compMiniApplied" class="mono">—</b></div>
+              <div class="li"><span class="k">مخالفات</span><b id="compMiniViol" class="mono">—</b></div>
+              <div class="li"><span class="k">آخر تحقق</span><span id="compMiniTs">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">التنبيهات النشطة</div>
+            <span class="card-sub small">ملفات تقارير الحارس</span>
+          </div>
+          <div id="alertsBox"></div>
+        </div>
+      </section>
+
+      <!-- ================== صحة الشبكة ================== -->
+      <section class="view" id="view-network" aria-label="صحة الشبكة">
+        <div class="page-hero">
+          <div style="flex:1">
+            <h1>صحة الشبكة</h1>
+            <p>آخر دورة فحص من حارس الموثوقية NMS-NetHealth-Watchdog</p>
+          </div>
+          <span class="badge solid" id="netStatus" style="background:var(--text-3)">—</span>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><span class="kpi-icon">📶</span><div class="kpi-label">SSID</div><div class="kpi-value small" id="netSsid" style="font-size:20px">—</div></div>
+          <div class="kpi"><span class="kpi-icon">🖧</span><div class="kpi-label">عنوان IP</div><div class="kpi-value mono" id="netIp" style="font-size:20px">—</div></div>
+          <div class="kpi"><span class="kpi-icon">🕐</span><div class="kpi-label">آخر فحص</div><div class="kpi-value" id="netLast" style="font-size:20px">—</div></div>
+          <div class="kpi"><span class="kpi-icon">🚧</span><div class="kpi-label">تعارضات</div><div class="kpi-value" id="netConf">—</div></div>
+          <div class="kpi"><span class="kpi-icon">🔄</span><div class="kpi-label">ارتداد WLAN</div><div class="kpi-value" id="netBounce">—</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">المسابر</div>
+            <span class="card-sub small">مسبارات الرابط المحلي والواجهة العامة</span></div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>المسبر</th><th>الهدف</th><th>القيمة</th><th>الحالة</th></tr></thead>
+              <tbody id="probesTbl">
+                <tr><td colspan="4" class="muted small">جاري تحميل البيانات…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <div class="card-head"><div class="card-title">فقدان الرابط (بوابة / WAN)</div>
+              <span class="card-sub small" id="sparkLossMeta">آخر الدورات</span></div>
+            <div id="sparkNetLoss"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title">زمن DNS ms</div>
+              <span class="card-sub small">آخر الدورات</span></div>
+            <div id="sparkNetDns"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">إخفاقات اتفاقية مستوى الخدمة SLA</div>
+            <span class="card-sub small">عند وجودها</span></div>
+          <div id="slaBox"></div>
+        </div>
+      </section>
+
+      <!-- ================== مطابقة المعيار ================== -->
+      <section class="view" id="view-compliance" aria-label="مطابقة المعيار">
+        <div class="page-hero">
+          <div style="flex:1">
+            <h1>مطابقة المعيار</h1>
+            <p>تقرير الامتثال من Applied-NetworkStandard لأحدث تطبيق</p>
+          </div>
+          <span class="badge solid" id="compStatus" style="background:var(--text-3)">—</span>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">ملخص التقرير</div>
+            <div class="link-row">
+              <button class="btn btn-ghost btn-sm" id="copyCompBtn">نسخ الملخص</button>
+              <button class="btn btn-ghost btn-sm" id="exportCompBtn">تحميل JSON</button>
+            </div></div>
+          <div class="mini-list">
+            <div class="li"><span class="k">المعيار</span><b id="compStandard" class="mono">—</b>
+              <span class="badge soft small mono" id="compVersion">v—</span></div>
+            <div class="li"><span class="k">الواجهة</span><span id="compIface">—</span></div>
+            <div class="li"><span class="k">نقطة الاتصال</span><span id="compMeta" class="mono">—</span></div>
+            <div class="li"><span class="k">الوصول للبوابة</span><span id="compGw">—</span></div>
+            <div class="li"><span class="k">زمن DNS</span><span id="compDns" class="mono">—</span></div>
+            <div class="li"><span class="k">زمن التقرير</span><span id="compTs">—</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">التغييرات المُطبّقة</div>
+            <span class="card-sub small" id="compChangesCount">0 بند</span></div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>#</th><th>البند</th><th>الحالة</th></tr></thead>
+              <tbody id="compChangesTbl">
+                <tr><td colspan="3" class="muted small">جاري تحميل البيانات…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">المخالفات المتبقية</div>
+            <span class="card-sub small">بند يلزم إصلاحه</span></div>
+          <div id="compViolBox"></div>
+        </div>
+      </section>
+
+      <!-- ================== سجل الحارس ================== -->
+      <section class="view" id="view-activity" aria-label="سجل الحارس">
+        <div class="page-hero">
+          <div style="flex:1">
+            <h1>سجل حارس الموثوقية</h1>
+            <p>دورات الفحص الدورية من NetworkHealth.log</p>
+          </div>
+          <button class="btn" style="background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);color:#fff" id="dlLogBtn">⬇ تحميل السجل</button>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi ok"><div class="kpi-label">إجمالي الدورات</div><div class="kpi-value" id="actTotal">—</div></div>
+          <div class="kpi ok"><div class="kpi-label">سليمة PASS</div><div class="kpi-value" id="actPass">—</div></div>
+          <div class="kpi warn"><div class="kpi-label">تدهور الرابط</div><div class="kpi-value" id="actDeg">—</div></div>
+          <div class="kpi bad"><div class="kpi-label">عطل FAIL</div><div class="kpi-value" id="actFail">—</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">الدورات</div>
+            <div class="link-row" id="actFilters">
+              <button class="tab active" data-filter="all">الكل</button>
+              <button class="tab" data-filter="PASS">سليم</button>
+              <button class="tab" data-filter="LINK_DEGRADED">تدهور</button>
+              <button class="tab" data-filter="FAIL">عطل</button>
+            </div>
+          </div>
+          <div class="log-wrap" id="actList">
+            <div class="empty">لا توجد بيانات بعد.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================== إجراءات الصيانة ================== -->
+      <section class="view" id="view-actions" aria-label="إجراءات الصيانة">
+        <div class="page-hero">
+          <div style="flex:1">
+            <h1>إجراءات الصيانة</h1>
+            <p>أوامر تحليلية وتصدير تقارير — بعضها يتطلب صلاحيات إدارية (UAC)</p>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><div class="kpi-label">تقرير الحالة</div><div class="kpi-value small" id="actHealthBtnWrap"><button class="btn btn-accent btn-sm" id="actHealthBtn">↻ فحص الآن</button></div>
+            <div class="kpi-extra">يعيد قراءة تقارير الحارس فورًا</div></div>
+          <div class="kpi"><div class="kpi-label">تبديل تصدير الحالة</div><div class="kpi-value small"><button class="btn btn-ghost btn-sm" id="dlHealthBtn">تقرير JSON ⬇</button></div>
+            <div class="kpi-extra">لقطة الحالة الحالية مجمّعة</div></div>
+          <div class="kpi"><div class="kpi-label">تصدير الامتثال</div><div class="kpi-value small"><button class="btn btn-ghost btn-sm" id="dlCompBtn2">تقرير JSON ⬇</button></div>
+            <div class="kpi-extra">التقرير الأصلي من المجلد Reports</div></div>
+          <div class="kpi"><div class="kpi-label">ملخص الجهاز</div><div class="kpi-value small"><button class="btn btn-ghost btn-sm" id="copySumBtn">نسخ للحافظة</button></div>
+            <div class="kpi-extra">معلومات مختصرة للدعم الفني</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">المهمّات المجدولة (حارس الموثوقية)</div>
+            <span class="card-sub small">تُسجَّل بصلاحيات SYSTEM وتعمل ذاتيًا</span></div>
+          <div class="grid2" id="tasksInfo">
+            <div class="task-card"><div class="tt">NMS-NetHealth-Watchdog</div>
+              <div class="td">فحص خفيف كل 30 دقيقة وعند تسجيل الدخول؛ يكتب Reports/NetworkHealth.log ويصلح الانحرافات ذاتيًا.</div></div>
+            <div class="task-card"><div class="tt">NMS-NetConflict-Response</div>
+              <div class="td">استجابة فورية لأحداث تعارض IP (Tcpip 4199) قبل أن تؤثر على الوكيل.</div></div>
+            <div class="task-card"><div class="tt">NMS-NetLinkRecovery-Response</div>
+              <div class="td">استجابة لأحداث WLAN 4003؛ إعادة تأكيد الرابط بعد الاستئناف.</div></div>
+            <div class="task-card"><div class="tt">تلقائي وذاتي الشفاء</div>
+              <div class="td">إعادة تشغيل البطاقة فقط عند كسر الرابط المحلي (كوول-داون 10 دقايق) وبدون لمس رابط WAN الخارجي.</div></div>
+          </div>
+          <div class="card-sub small" style="margin-top:12px">
+            الاستعلام اليدوي عن المهمّات يتطلب صلاحيات إدارية؛ ظهور «Access is denied» للمستخدم العادي متوقَّع وآمن.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">المراجع والبرمجيات</div></div>
+          <div class="link-row">
+            <a class="btn btn-ghost btn-sm" href="../Docs/Network-Standard.md">📘 مواصفة المعيار (SOP)</a>
+            <a class="btn btn-ghost btn-sm" href="../Config/network-standard.json">📄 تعريف المعيار JSON</a>
+            <a class="btn btn-ghost btn-sm" href="../Scripts/Network-Reliability-Watchdog.ps1">⛏️ سكربت الحارس</a>
+            <a class="btn btn-ghost btn-sm" href="../Scripts/Apply-NetworkStandard.ps1">🛠️ مطبّق المعيار</a>
+            <a class="btn btn-ghost btn-sm" href="../Scripts/Bootstrap-NetworkStandard.ps1">🚀 الإقلاع الكامل</a>
+            <a class="btn btn-ghost btn-sm" href="../API/Server-Pode.ps1">🧩 خادم Pode</a>
+          </div>
+          <div class="qr-note" style="margin-top:12px">
+            ملاحظة: فتح ملفات PowerShell من المتصفح يعرض النص فقط؛ التنفيذ يتم عبر المسار التشغيلي المرفوع من صلاحية (أو من «مستكشف الملفات» بيمين الفأرة → منفّذ PowerShell بصلاحية إدارية).
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="foot">
+      الياس برو v5.0 — غرفة تحكم الصيانة • المعيار <span class="mono">NM-NET-STD-001</span> • واجهة عربية RTL محلية بدون اعتماد على شبكات خارجية
+    </footer>
+  </main>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<noscript><div style="padding:20px;text-align:center;font-weight:700">يتطلب هذا النظام تفعيل JavaScript.</div></noscript>
+
+<script src="assets/js/elias-core.js"></script>
+<script>
+(function () {
+  'use strict';
+  const E = window.Elias;
+  const $ = (s) => E.$(s);
+
+  /* ---------- الحالة ---------- */
+  const S = { net: null, comp: null, wan: null, hard: null, api: null, logLines: [], filter: 'all' };
+
+  const hist = {
+    load(k) { try { return JSON.parse(localStorage.getItem(k) || '[]').map(Number).filter(Number.isFinite); } catch (e) { return []; } },
+    push(k, v) { const a = this.load(k); a.push(+v); if (a.length > 40) a.shift(); try { localStorage.setItem(k, JSON.stringify(a)); } catch (e) { } },
+    clear(k) { try { localStorage.removeItem(k); } catch (e) { } }
+  };
+
+  /* ---------- التنقل ---------- */
+  const VIEWS = { overview: 'نظرة عامة', network: 'صحة الشبكة', compliance: 'مطابقة المعيار', activity: 'سجل الحارس', actions: 'إجراءات الصيانة' };
+  let currentView = 'overview';
+
+  function activate(view) {
+    if (!VIEWS[view]) view = 'overview';
+    currentView = view;
+    const activeView = $('.view.active');
+    if (activeView) activeView.classList.remove('active');
+    $('#view-' + view).classList.add('active');
+    E.$$('.nav-item[data-view]').forEach(n => {
+      const on = n.getAttribute('data-view') === view;
+      n.classList.toggle('active', on);
+      if (on) n.setAttribute('aria-current', 'true'); else n.removeAttribute('aria-current');
+    });
+    $('#crumb').textContent = VIEWS[view] + ' — غرفة تحكم الصيانة';
+    closeDrawer();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function closeDrawer() {
+    $('#sidebar').classList.remove('open');
+    $('#drawerBackdrop').classList.remove('open');
+  }
+
+  /* ---------- تحميل البيانات ---------- */
+  async function loadAll(silent) {
+    if (!silent) setRefreshBusy(true);
+    try {
+      const [nh, comp] = await Promise.all([
+        E.loadReport('net-health-last.json'),
+        E.loadReport('NetworkStandard-Compliance.json')
+      ]);
+      S.net = E.netHealthModel(nh);
+      S.comp = E.complianceModel(comp);
+
+      const [wan, hard] = await Promise.all([
+        E.loadAlert('NETWORK_WAN_ALERT.txt'),
+        E.loadAlert('NETWORK_ALERT.txt')
+      ]);
+      S.wan = wan; S.hard = hard;
+
+      E.fetchJson('/api/v1/health', { timeout: 2500, retries: 0 })
+        .then(j => { S.api = j; renderApi(); }).catch(() => { S.api = null; renderApi(); });
+
+      try {
+        const txt = await E.fetchText('../Reports/NetworkHealth.log', { timeout: 4000, retries: 0 });
+        S.logLines = E.parseLog(txt);
+      } catch (e) { S.logLines = []; }
+
+      renderAll();
+      if (!silent) E.toast('تم تحديث البيانات بنجاح', 'ok');
+    } catch (e) {
+      renderAll();
+      if (!silent) E.toast('تعذّر التحديث — تحقق من الخادم أو صلاحية المجلدات', 'warn');
+    } finally {
+      setRefreshBusy(false);
+    }
+  }
+
+  function setRefreshBusy(b) {
+    const btn = $('#refreshAll');
+    if (!btn) return;
+    btn.disabled = b;
+    btn.innerHTML = b ? '<span class="spin"></span> جارٍ التحديث' : '↻ تحديث';
+  }
+
+  /* ---------- العرض ---------- */
+  function renderAll() {
+    renderOverview();
+    renderNetwork();
+    renderCompliance();
+    renderActivity();
+    renderGuard();
+    renderBadges();
+  }
+
+  function kpiCls(el, tone) { el.classList.remove('ok', 'warn', 'bad'); if (tone) el.classList.add(tone); }
+
+  function renderOverview() {
+    const net = S.net;
+    const score = E.healthScore(net, S.comp);
+    const tone = E.toneOf(score);
+    $('#ovRing').style.setProperty('--arc', tone === 'ok' ? 'var(--success)' : tone === 'warn' ? '#e5a400' : 'var(--danger)');
+    E.ring($('#ovRingSvg'), score, { stroke: 16 });
+    $('#ovRingScore').textContent = E.integer(score);
+    $('#ovRingStatus').textContent = tone === 'ok' ? 'ممتاز' : tone === 'warn' ? 'انتباه' : 'حرج';
+    $('#ovRingStatus').className = 'ring-status ' + tone;
+
+    // ملخص في بُطاقة الحلقة
+    $('#ovBadge').textContent = net ? E.statusAr(net.status) : 'لا توجد بيانات';
+    $('#ovBadge').className = 'badge solid';
+    $('#ovBadge').style.background = net
+      ? (net.status === 'PASS' ? 'var(--success)' : net.status === 'LINK_DEGRADED' ? '#e5a400' : 'var(--danger)')
+      : 'var(--text-3)';
+
+    $('#ovTitle').textContent = 'مؤشر الصحة: ' + (tone === 'ok' ? 'ممتاز' : tone === 'warn' ? 'بحاجة لانتباه' : 'حرج');
+    $('#ovSub').innerHTML = net
+      ? 'آخر فحص: ' + E.ts(net.ts) + ' • <span class="mono">' + E.esc(net.ssid || '') + '</span> (' + E.esc(net.ipv4 || '—') + ') • ' + E.timeAgo(net.ts)
+      : 'لا تتوفر بيانات حالية — حدّث أو وفِّق بيانات الحارس من المسار التشغيلي.';
+
+    // المؤشرات
+    const kpi = (net && net.dnsMs >= 0) ? { v: net.dnsMs + ' ms', t: net.dnsMs < 60 ? 'ok' : 'warn' } : { v: '—', t: null };
+    $('#kpiDns').querySelector('.kpi-value').textContent = kpi.v;
+    kpiCls($('#kpiDns'), kpi.t);
+
+    const gw = net ? net.gwLoss : null;
+    const gwTone = gw === null ? null : gw === 0 ? 'ok' : gw <= 15 ? 'warn' : 'bad';
+    $('#kpiGw').querySelector('.kpi-value').textContent = gw === null ? '—' : E.pct(gw);
+    kpiCls($('#kpiGw'), gwTone);
+
+    const wan = net ? net.wanLoss : null;
+    const wanTone = wan === null ? null : wan <= 15 ? 'ok' : wan <= 50 ? 'warn' : 'bad';
+    $('#kpiWan').querySelector('.kpi-value').textContent = wan === null ? '—' : E.pct(wan);
+    kpiCls($('#kpiWan'), wanTone);
+
+    const cf = net ? net.conflicts : null;
+    $('#kpiConf').querySelector('.kpi-value').textContent = cf === null ? '—' : E.integer(cf);
+    kpiCls($('#kpiConf'), cf > 0 ? 'bad' : 'ok');
+
+    const bn = net ? net.bounces : null;
+    $('#kpiBounce').querySelector('.kpi-value').textContent = bn === null ? '—' : E.integer(bn);
+    kpiCls($('#kpiBounce'), bn > 5 ? 'warn' : 'ok');
+
+    const cok = S.comp ? S.comp.status === 'COMPLIANT' : null;
+    $('#kpiComp').querySelector('.kpi-value').textContent = !S.comp ? '—'
+      : cok ? 'متوافق' : String(S.comp.status || '—').replace(/_/g, ' ');
+    kpiCls($('#kpiComp'), S.comp ? (cok ? 'ok' : 'bad') : null);
+
+    // منحنى DNS
+    if (net && net.dnsMs > 0) hist.push('elias_dns_hist', net.dnsMs);
+    const dh = hist.load('elias_dns_hist');
+    E.spark($('#sparkDns'), dh);
+    $('#sparkDnsMeta').textContent = dh.length ? E.integer(dh.length) + ' قياس • الأحدث ' + E.num(dh[dh.length - 1]) + 'ms' : 'لا يوجد تاريخ بعد';
+    hist.push('elias_loss_hist', net ? net.gwLoss : 0);
+
+    // بطاقة الامتثال المصغرة
+    const c = S.comp;
+    $('#compMiniBadge').textContent = c ? E.statusAr(c.status) : '—';
+    $('#compMiniBadge').className = 'badge soft ' + (c && c.status === 'COMPLIANT' ? 'ok' : c ? 'bad' : 'info');
+    $('#compMiniLine').textContent = c ? (c.standard || '…') + ' v' + (c.version || '1.0') : 'غير متوفر';
+    $('#compMiniApplied').textContent = c ? E.integer(c.applied.length) : '—';
+    $('#compMiniViol').textContent = c ? E.integer(c.violations.length) : '—';
+    $('#compMiniTs').textContent = c ? (E.ts(c.ts) + ' • ' + E.timeAgo(c.ts)) : '—';
+
+    // التنبيهات
+    const alertsBox = $('#alertsBox');
+    const items = [];
+    if (S.wan && S.wan.alerts.length) S.wan.alerts.forEach(a => items.push({ kind: 'warn', title: 'تنبيه الواجهة العامة WAN', detail: a }));
+    if (S.hard && S.hard.alerts.length) S.hard.alerts.forEach(a => items.push({ kind: 'danger', title: 'تنبيه النظام', detail: a }));
+    if (S.net && S.net.sla && S.net.sla.length) S.net.sla.forEach(a => items.push({ kind: 'warn', title: 'إخفاق SLA', detail: a }));
+    if (!items.length) {
+      alertsBox.innerHTML = '<div class="alert ok"><span class="ic">✅</span><div class="body"><div class="title">لا توجد تنبيهات نشطة</div><div class="detail">ربط الجهاز سليم حسب آخر تقرير للحارس.</div></div></div>';
+    } else {
+      alertsBox.innerHTML = items.slice(0, 6).map(it =>
+        '<div class="alert ' + it.kind + '"><span class="ic">' + (it.kind === 'danger' ? '⛔' : '⚠️') + '</span>' +
+        '<div class="body"><div class="title">' + E.esc(it.title) + '</div><div class="detail">' + E.esc(it.detail) + '</div></div></div>'
+      ).join('');
+      if (items.length > 6) alertsBox.innerHTML += '<div class="muted small" style="text-align:center">… و' + E.integer(items.length - 6) + ' تنبيهات أخرى (تُعرض في سجل الحارس)</div>';
+    }
+  }
+
+  function renderApi() {
+    const p = $('#connectPill');
+    if (!p) return;
+    if (S.api && S.api.status) {
+      p.className = 'badge ok soft nowrap';
+      p.innerHTML = '<span class="dot"></span> الخادم يعمل';
+    } else {
+      p.className = 'badge info soft nowrap';
+      p.innerHTML = '<span class="dot"></span> الخادم غير متصل — بيانات محلية';
+    }
+  }
+
+  function renderNetwork() {
+    const n = S.net;
+    if (!n) {
+      $('#netStatus').textContent = '—';
+      $('#probesTbl').innerHTML = '<tr><td colspan="4" class="muted small">لا توجد بيانات حالية — حدّث.</td></tr>';
+      return;
+    }
+    $('#netSsid').textContent = n.ssid || '—';
+    $('#netIp').textContent = n.ipv4 || '—';
+    $('#netLast').textContent = E.ts(n.ts) + ' • ' + E.timeAgo(n.ts);
+    $('#netConf').textContent = E.integer(n.conflicts);
+    $('#netBounce').textContent = E.integer(n.bounces);
+    $('#netStatus').textContent = E.statusAr(n.status);
+    $('#netStatus').style.background = n.status === 'PASS' ? 'var(--success)' : n.status === 'LINK_DEGRADED' ? '#e5a400' : 'var(--danger)';
+
+    const probes = [
+      { name: 'البوابة المحلية', target: '192.168.0.1', val: E.pct(n.gwLoss), tone: n.gwLoss === 0 ? 'ok' : n.gwLoss <= 15 ? 'warn' : 'bad' },
+      { name: 'زمن الاستعلام DNS', target: '1.1.1.1 / 8.8.8.8', val: n.dnsMs + ' ms', tone: n.dnsMs < 60 ? 'ok' : 'warn' },
+      { name: 'الواجهة العامة ICMP', target: '8.8.8.8', val: E.pct(n.wanLoss), tone: n.wanLoss <= 15 ? 'ok' : n.wanLoss <= 50 ? 'warn' : 'bad' },
+      { name: 'الواجهة العامة TCP:443', target: '1.1.1.1', val: n.wanLoss >= 100 ? 'غير قابلة للوصول' : 'متاحة', tone: n.wanLoss >= 100 ? 'bad' : 'ok' }
+    ];
+    $('#probesTbl').innerHTML = probes.map(p =>
+      '<tr><td>' + E.esc(p.name) + '</td><td class="mono">' + E.esc(p.target) + '</td>' +
+      '<td class="mono">' + E.esc(p.val) + '</td><td><span class="badge soft ' + p.tone + '"><span class="dot"></span>' +
+      (p.tone === 'ok' ? 'جيد' : p.tone === 'warn' ? 'انتباه' : 'حرج') + '</span></td></tr>'
+    ).join('');
+
+    // منحنيات
+    const lossHist = hist.load('elias_loss_hist');
+    E.spark($('#sparkNetLoss'), lossHist, { h: 64, max: 100 });
+    const dnsHist = hist.load('elias_dns_hist');
+    E.spark($('#sparkNetDns'), dnsHist, { h: 64 });
+    $('#sparkLossMeta').textContent = lossHist.length ? 'منذ ' + E.integer(lossHist.length) + ' دورة' : '—';
+
+    // إخفاقات SLA
+    const sla = $('#slaBox');
+    if (n.sla && n.sla.length) {
+      sla.innerHTML = n.sla.map(t => '<div class="alert danger"><span class="ic">⚠️</span><div class="body"><div class="title">إخفاق اتفاقية مستوى الخدمة</div><div class="detail">' + E.esc(t) + '</div></div></div>').join('');
+    } else {
+      sla.innerHTML = '<div class="alert ok"><span class="ic">✅</span><div class="body"><div class="title">لا إخفاقات SLA</div><div class="detail">كل المسابر ضمن الحدود المسموحة في آخر دورة.</div></div></div>';
+    }
+  }
+
+  function renderCompliance() {
+    const c = S.comp;
+    if (!c) {
+      $('#compStatus').textContent = '—';
+      $('#compChangesTbl').innerHTML = '<tr><td colspan="3" class="muted small">لا توجد بيانات امتثال بعد.</td></tr>';
+      $('#compViolBox').innerHTML = '<div class="empty">لا توجد بيانات.</div>';
+      return;
+    }
+    $('#compStatus').textContent = c.status.replace(/_/g, ' ');
+    $('#compStatus').style.background = c.status === 'COMPLIANT' ? 'var(--success)' : 'var(--danger)';
+    $('#compStandard').textContent = c.standard || '—';
+    $('#compVersion').textContent = 'v' + (c.version || '1.0');
+    $('#compIface').textContent = (c.iface || '—') + (c.ssid ? ' • ' + c.ssid : '');
+    $('#compMeta').textContent = c.ipv4 || '—';
+    $('#compGw').innerHTML = c.gwOk
+      ? '<span class="badge soft ok"><span class="dot"></span> قابل للوصول</span>'
+      : '<span class="badge soft bad"><span class="dot"></span> غير قابل للوصول</span>';
+    $('#compDns').textContent = c.dnsMs ? c.dnsMs + ' ms' : '—';
+    $('#compTs').textContent = E.ts(c.ts) + ' • ' + E.timeAgo(c.ts);
+    $('#compChangesCount').textContent = E.integer(c.applied.length) + ' بند';
+
+    $('#compChangesTbl').innerHTML = c.applied.length
+      ? c.applied.map((t, i) => '<tr><td class="mono muted">' + (i + 1) + '</td><td>' + E.esc(t) + '</td><td><span class="badge soft ok"><span class="dot"></span>مطبق</span></td></tr>').join('')
+      : '<tr><td colspan="3" class="muted small">لا توجد تغييرات مسجّلة.</td></tr>';
+
+    $('#compViolBox').innerHTML = c.violations.length
+      ? c.violations.map(v => '<div class="alert danger"><span class="ic">⛔</span><div class="body"><div class="title">مخالفة</div><div class="detail">' + E.esc(v) + '</div></div></div>').join('')
+      : '<div class="alert ok"><span class="ic">✅</span><div class="body"><div class="title">لا توجد مخالفات</div><div class="detail">الجهاز مطابق تماماً للمعيار.</div></div></div>';
+  }
+
+  function renderActivity() {
+    const lines = S.logLines;
+    const stat = { total: lines.length, PASS: 0, LINK_DEGRADED: 0, FAIL: 0 };
+    lines.forEach(l => { if (stat[l.status] !== undefined) stat[l.status]++; });
+    $('#actTotal').textContent = E.integer(stat.total);
+    $('#actPass').textContent = E.integer(stat.PASS);
+    $('#actDeg').textContent = E.integer(stat.LINK_DEGRADED);
+    $('#actFail').textContent = E.integer(stat.FAIL);
+
+    const list = $('#actList');
+    const shown = lines.filter(l => S.filter === 'all' || l.status === S.filter).slice(-60).reverse();
+    if (!shown.length) {
+      list.innerHTML = '<div class="empty">لا توجد دورات مطابقة للتصفية الحالية.</div>';
+      return;
+    }
+    list.innerHTML = shown.map(l =>
+      '<div class="log-row">' +
+      '<span class="ts mono">' + E.esc(l.ts) + '</span>' +
+      '<span class="mono small">' + E.esc(l.ssid) + '</span>' +
+      '<span class="status ' + l.status + '"><span class="status-dot ' + (l.status === 'PASS' ? 'ok' : l.status === 'LINK_DEGRADED' ? 'warn' : 'bad') + '"></span>' + E.statusAr(l.status) + '</span>' +
+      '<span class="mono small">فقد ' + E.pct(l.loss) + ' • DNS ' + E.integer(l.dnsMs) + 'ms</span>' +
+      '<span class="reason">' + (l.reason ? E.esc(l.reason) : '<span class="muted">—</span>') + '</span>' +
+      '</div>'
+    ).join('');
+  }
+
+  function renderGuard() {
+    const dot = $('#guardDot');
+    const st = $('#guardStatus');
+    if (!S.net) { st.textContent = 'غير متوفر'; dot.style.background = 'var(--text-3)'; return; }
+    const ok = S.net.status === 'PASS';
+    st.textContent = E.statusAr(S.net.status);
+    dot.style.background = ok ? 'var(--success)' : S.net.status === 'LINK_DEGRADED' ? '#e5a400' : 'var(--danger)';
+  }
+
+  function renderBadges() {
+    const n = (S.wan && S.wan.count ? S.wan.count : 0) + (S.hard && S.hard.count ? S.hard.count : 0)
+      + (S.net && S.net.sla ? S.net.sla.length : 0);
+    const b = $('#badgeAlerts');
+    if (n > 0) { b.textContent = E.integer(n); b.classList.remove('hidden'); }
+    else b.classList.add('hidden');
+  }
+
+  /* ---------- تصدير ونسخ ---------- */
+  function summaryText() {
+    const n = S.net, c = S.comp;
+    const lines = [];
+    lines.push('تقارير الياس برو — غرفة تحكم الصيانة');
+    lines.push('التاريخ: ' + E.ts(new Date().toISOString()));
+    lines.push('المعيار: ' + (c ? c.standard + ' v' + c.version : 'NM-NET-STD-001'));
+    lines.push('مطابقة المعيار: ' + (c ? c.status : 'غير متوفر'));
+    if (n) {
+      lines.push('الشبكة: ' + (n.ssid || '—') + ' (' + (n.ipv4 || '—') + ')');
+      lines.push('الحالة: ' + n.status);
+      lines.push('زمن DNS: ' + n.dnsMs + ' ms • فقدان البوابة: ' + n.gwLoss + '% • فقدان WAN: ' + n.wanLoss + '%');
+      lines.push('تعارضات 24س: ' + n.conflicts + ' • ارتداد WLAN: ' + n.bounces);
+      lines.push('آخر فحص: ' + n.ts);
+      (n.sla || []).forEach(t => lines.push('SLA: ' + t));
+    } else {
+      lines.push('الشبكة: لا توجد بيانات حالية');
+    }
+    lines.push('');
+    lines.push('يولَّد هذا الملخص محليًا في المتصفح.');
+    return lines.join('\n');
+  }
+
+  function buildHealthReport() {
+    return JSON.stringify({
+      generator: 'Elias Pro Command Center v5.0',
+      generated_at: new Date().toISOString(),
+      gold_standard: S.comp ? { standard: S.comp.standard, version: S.comp.version, status: S.comp.status } : null,
+      network_health: S.net,
+      compliance: S.comp,
+      source_files: [
+        'Reports/net-health-last.json',
+        'Reports/NetworkStandard-Compliance.json',
+        'Reports/NetworkHealth.log',
+        'Reports/NETWORK_WAN_ALERT.txt',
+        'Reports/NETWORK_ALERT.txt'
+      ]
+    }, null, 2);
+  }
+
+  /* ---------- أزرار ---------- */
+  function bindActions() {
+    $('#menuBtn').addEventListener('click', () => {
+      $('#sidebar').classList.toggle('open');
+      $('#drawerBackdrop').classList.toggle('open');
+    });
+    $('#drawerBackdrop').addEventListener('click', closeDrawer);
+    E.$$('.nav-item[data-view]').forEach(n => n.addEventListener('click', (e) => {
+      e.preventDefault(); activate(n.getAttribute('data-view'));
+    }));
+    E.$$('[data-goto]').forEach(b => b.addEventListener('click', (e) => {
+      e.preventDefault(); activate(b.getAttribute('data-goto'));
+    }));
+
+    $('#refreshAll').addEventListener('click', () => loadAll(false));
+
+    $('#themeBtn').addEventListener('click', () => {
+      const t = E.theme.toggle();
+      $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+      E.toast('تم التبديل إلى الوضع ' + (t === 'dark' ? 'الليلي' : 'النهاري'), 'info');
+    });
+    const paintTheme = () => $('#themeBtn').textContent = E.theme.get() === 'dark' ? '☀️' : '🌙';
+    window.addEventListener('DOMContentLoaded', paintTheme);
+
+    // الساعة
+    const tick = () => { $('#liveClock').textContent = E.nowTime(); };
+    tick(); setInterval(tick, 1000);
+
+    // الاتصال
+    const paintConn = () => $('#connectPill').style.opacity = navigator.onLine ? '1' : '.55';
+    window.addEventListener('online', paintConn);
+    window.addEventListener('offline', paintConn);
+    paintConn();
+
+    // تصفية السجل
+    $('#actFilters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.tab'); if (!btn) return;
+      S.filter = btn.getAttribute('data-filter');
+      E.$$('#actFilters .tab').forEach(b => b.classList.toggle('active', b === btn));
+      renderActivity();
+    });
+
+    // إجراءات
+    $('#actHealthBtn').addEventListener('click', async () => {
+      const b = $('#actHealthBtn');
+      b.disabled = true; b.textContent = 'جارٍ الفحص…';
+      await loadAll(true);
+      b.disabled = false; b.textContent = '↻ فحص الآن';
+      E.toast('تمت إعادة قراءة التقارير والفجوة الآن محدّثة', 'ok');
+    });
+    $('#dlHealthBtn').addEventListener('click', () => E.download('Elias-Health-Report.json', buildHealthReport(), 'application/json'));
+    $('#dlCompBtn2').addEventListener('click', () => {
+      if (S.comp) E.download('NetworkStandard-Compliance.json', JSON.stringify(S.comp, null, 2), 'application/json');
+      else E.toast('لا توجد بيانات امتثال لتصديرها', 'warn');
+    });
+    $('#exportCompBtn').addEventListener('click', () => {
+      if (S.comp) E.download('NetworkStandard-Compliance.json', JSON.stringify(S.comp, null, 2), 'application/json');
+      else E.toast('لا توجد بيانات امتثال لتصديرها', 'warn');
+    });
+    $('#dlLogBtn').addEventListener('click', () => {
+      const t = S.logLines.length ? S.logLines.map(l => [l.ts, l.ssid, l.status, l.loss, l.dnsMs, l.conflicts, l.reason || ''].join('\t')).join('\n') : '';
+      E.download('NetworkHealth.log', t, 'text/plain');
+    });
+    $('#copyCompBtn').addEventListener('click', async () => {
+      const t = summaryText();
+      const ok = await E.copyText(t);
+      E.toast(ok ? 'تم نسخ الملخص — ألصقه في التذكرة أو الدعم' : 'تعذر النسخ — حاول مجددًا', ok ? 'ok' : 'bad');
+    });
+    $('#copySumBtn').addEventListener('click', async () => {
+      const ok = await E.copyText(summaryText());
+      E.toast(ok ? 'تم نسخ ملخص الجهاز' : 'تعذر النسخ', ok ? 'ok' : 'bad');
+    });
+  }
+
+  /* ---------- PWA ---------- */
+  function setupPwa() {
+    let deferred = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferred = e;
+      $('#installBtn').classList.remove('hidden');
+    });
+    $('#installBtn').addEventListener('click', async () => {
+      if (!deferred) return;
+      deferred.prompt();
+      const { outcome } = await deferred.userChoice;
+      if (outcome === 'accepted') E.toast('جارٍ تثبيت التطبيق…', 'ok');
+      deferred = null;
+      $('#installBtn').classList.add('hidden');
+    });
+    window.addEventListener('appinstalled', () => {
+      $('#installBtn').classList.add('hidden');
+      E.toast('تم تثبيت غرفة التحكم بنجاح', 'ok');
+    });
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js', { scope: './' })
+          .catch((e) => { /* البيئة المحلية file:// لن تدعم التسجيل — غير حرج */ });
+      });
+    }
+  }
+
+  /* ---------- بدء التشغيل ---------- */
+  window.addEventListener('hashchange', () => activate((location.hash || '').replace('#', '')));
+  E.theme.init();
+  bindActions();
+  setupPwa();
+  const initial = (location.hash || '').replace('#', '');
+  activate(VIEWS[initial] ? initial : 'overview');
+  loadAll(true);
+  setInterval(() => { if (!document.hidden) loadAll(true); }, 180000);
+})();
+</script>
+</body>
+</html>
+

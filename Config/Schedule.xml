@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ScheduledTasks>
+  <Task>
+    <Name>NetworkMaintenance-Daily</Name>
+    <Description>Daily light diagnostics only (low CPU/internet)</Description>
+    <Schedule>
+      <Frequency>Daily</Frequency>
+      <Time>06:00</Time>
+      <Command>powershell.exe -ExecutionPolicy Bypass -File "C:\NetworkMaintenance\Scripts\05_Maintenance.ps1" -Mode diagnostics</Command>
+    </Schedule>
+    <LogFile>C:\NetworkMaintenance\Logs\Scheduled_Daily.log</LogFile>
+  </Task>
+  <Task>
+    <Name>NetworkMaintenance-Weekly-Optimization</Name>
+    <Description>Weekly deep optimization and TCP tuning</Description>
+    <Schedule>
+      <Frequency>Weekly</Frequency>
+      <Day>Sunday</Day>
+      <Time>02:00</Time>
+      <Command>powershell.exe -ExecutionPolicy Bypass -File "C:\NetworkMaintenance\Scripts\05_Maintenance.ps1" -Mode Optimize -ForceApply</Command>
+    </Schedule>
+    <LogFile>C:\NetworkMaintenance\Logs\Scheduled_Weekly.log</LogFile>
+  </Task>
+  <Task>
+    <Name>NetworkMaintenance-Monthly-Reset</Name>
+    <Description>Monthly complete network reset and report</Description>
+    <Schedule>
+      <Frequency>Monthly</Frequency>
+      <Day>1</Day>
+      <Time>03:00</Time>
+      <Command>powershell.exe -ExecutionPolicy Bypass -File "C:\NetworkMaintenance\Scripts\05_Maintenance.ps1" -Mode Full -AutoHeal -ForceApply</Command>
+    </Schedule>
+    <LogFile>C:\NetworkMaintenance\Logs\Scheduled_Monthly.log</LogFile>
+  </Task>
+</ScheduledTasks>
+

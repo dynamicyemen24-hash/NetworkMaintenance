@@ -1,0 +1,43 @@
+﻿{
+    "timestamp":  "2026-09-19T14:15:47",
+    "standard":  "NM-NET-STD-001",
+    "version":  "1.0",
+    "interface":  "Wi-Fi",
+    "ssid":  "DyGs",
+    "ipv4":  "192.168.0.150",
+    "gatewayReachable":  null,
+    "dnsLatencyMs":  134,
+    "changesApplied":  [
+                           "DNS -\u003e 1.1.1.1,8.8.8.8",
+                           "Disabled unused adapter: Local Area Connection* 2",
+                           "Disabled unused adapter: Local Area Connection* 1",
+                           "service disabled: DiagTrack",
+                           "service disabled: dmwappushservice",
+                           "service disabled: WSearch",
+                           "service disabled: DoSvc",
+                           "service disabled: whesvc",
+                           "service disabled: InventorySvc",
+                           "service disabled: CDPSvc",
+                           "service disabled: WpnService",
+                           "service disabled: lfsvc",
+                           "service disabled: RetailDemo",
+                           "service disabled: MapsBroker",
+                           "service disabled: SQLPBENGINE",
+                           "service disabled: SQLPBDMS",
+                           "task disabled: OneDrive Reporting Task-S-1-5-21-2607308527-2797325485-3496030197-1001",
+                           "task disabled: OneDrive Reporting Task-S-1-5-21-2607308527-2797325485-3496030197-1005",
+                           "task disabled: OneDrive Reporting Task-S-1-5-21-2607308527-2797325485-3496030197-1007",
+                           "task disabled: OneDrive Reporting Task-S-1-5-21-2607308527-2797325485-3496030197-500",
+                           "task disabled: OneDrive Startup Task-S-1-5-21-2607308527-2797325485-3496030197-1001",
+                           "task disabled: OneDrive Startup Task-S-1-5-21-2607308527-2797325485-3496030197-1005",
+                           "task disabled: OneDrive Startup Task-S-1-5-21-2607308527-2797325485-3496030197-1007",
+                           "task disabled: OneDrive Startup Task-S-1-5-21-2607308527-2797325485-3496030197-500",
+                           "task disabled: Office Background Push Maintenance",
+                           "task disabled: Office ClickToRun Service Monitor",
+                           "task disabled: Office Performance Monitor"
+                       ],
+    "violations":  [
+
+                   ],
+    "status":  "COMPLIANT"
+}

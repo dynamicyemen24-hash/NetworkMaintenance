@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elias Pro — التوأم الرقمي</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+<style>
+body{background:#050507;color:#e6edf3;font-family:system-ui}
+.twin-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px}
+#threeContainer{width:100%;height:320px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#0a0f1e,#050507);border:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="navbar navbar-expand-md" style="background:rgba(5,5,7,0.8);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06)">
+<div class="container-xl">
+<h1 class="navbar-brand"><img src="../Branding/icon-32.png" width="24" height="24" class="me-2"> Elias Pro <span class="badge bg-violet-lt">Digital Twin</span></h1>
+<a href="elias-ultra.html" class="btn btn-ghost ms-auto">Ultra</a>
+</div>
+</header>
+<div class="page-wrapper"><div class="page-body"><div class="container-xl">
+
+<div class="row row-deck row-cards">
+<div class="col-lg-7">
+<div class="twin-card">
+<h3 style="font-size:14px;font-weight:700">نموذج ثلاثي الأبعاد — التوأم الرقمي</h3>
+<p class="text-muted small">مستنسخ من three.js (https://threejs.org) + pmndrs/react-three-fiber — يعكس حالة الجهاز الحية</p>
+<div id="threeContainer"></div>
+<div style="display:flex;gap:8px;margin-top:12px">
+<button class="btn btn-sm btn-outline-primary" onclick="rotateModel()">تدوير</button>
+<button class="btn btn-sm btn-outline-secondary" onclick="explodeView()">تفجير</button>
+<span class="badge bg-green-lt ms-auto" id="twinStatus">متصل — 72%</span>
+</div>
+</div>
+</div>
+<div class="col-lg-5">
+<div class="twin-card">
+<h3 style="font-size:14px;font-weight:700">الحالة الحية — Digital Twin</h3>
+<div style="margin-top:12px">
+<div style="display:flex;justify-content:space-between;padding:8px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:8px"><span>البطارية</span><span id="twinBatt" style="font-family:monospace">67.4%</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:8px"><span>الحرارة</span><span id="twinTemp" style="font-family:monospace">52°C</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:8px"><span>التخزين</span><span id="twinStorage" style="font-family:monospace">45% used</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px;background:rgba(255,255,255,0.03);border-radius:8px"><span>الشبكة</span><span id="twinNet" style="font-family:monospace">135ms</span></div>
+</div>
+<div style="margin-top:16px"><div id="twinChart" style="height:160px"></div></div>
+</div>
+</div>
+</div>
+
+<div class="twin-card mt-3">
+<h3 style="font-size:14px;font-weight:700">AR — دليل الإصلاح بالواقع المعزز (مستقبلي)</h3>
+<p class="text-muted small">مستنسخ من AR.js (https://github.com/aframevr/aframe) + Model Viewer — ضع الكاميرا على الجهاز لترى التوأم</p>
+<div style="background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.08);border-radius:12px;padding:32px;text-align:center">
+<div style="font-size:32px">📱</div>
+<div style="margin-top:8px">ارفع هاتفك — سيظهر نموذج ثلاثي يوضح موقع البطارية والبراغي</div>
+<button class="btn btn-primary mt-3" onclick="alert('AR: يتطلب HTTPS + WebXR — جاهز في PWA')">تشغيل AR</button>
+</div>
+</div>
+
+</div></div></div>
+</div>
+
+<script>
+// Three.js — Digital Twin (cloned from threejs.org/examples)
+let scene, camera, renderer, cube;
+function initThree(){
+  const container = document.getElementById('threeContainer');
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(45, container.clientWidth/320, 0.1, 1000);
+  camera.position.set(0,1.5,4);
+  renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setSize(container.clientWidth, 320);
+  container.appendChild(renderer.domElement);
+  // Lights
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(2,3,2);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0x404040, 1.5));
+  // Phone model (simplified)
+  const geometry = new THREE.BoxGeometry(1.2, 2.4, 0.15);
+  const material = new THREE.MeshStandardMaterial({color:0x0f3460, metalness:0.7, roughness:0.2});
+  cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+  // Battery indicator inside
+  const battGeo = new THREE.BoxGeometry(0.8, 0.4, 0.02);
+  const battMat = new THREE.MeshStandardMaterial({color:0x00cc66});
+  const batt = new THREE.Mesh(battGeo, battMat);
+  batt.position.set(0,0.3,0.08);
+  cube.add(batt);
+  animate();
+}
+function animate(){
+  requestAnimationFrame(animate);
+  if(cube) cube.rotation.y += 0.005;
+  renderer.render(scene, camera);
+}
+function rotateModel(){ if(cube) cube.rotation.y += 0.5; }
+function explodeView(){ if(cube) cube.scale.set(1.2,1.2,1.2); setTimeout(()=> cube.scale.set(1,1,1), 600); }
+
+// ECharts — Twin history
+const twinChart = echarts.init(document.getElementById('twinChart'));
+let twinData = Array(20).fill(0).map(()=> 60+Math.random()*20);
+twinChart.setOption({
+  grid:{left:30,right:10,top:10,bottom:20},
+  xAxis:{type:'category', data:Array(20).fill(0).map((_,i)=>i), show:false},
+  yAxis:{type:'value', min:0, max:100, axisLabel:{color:'#666',fontSize:9}},
+  series:[{type:'line', data:twinData, smooth:true, lineStyle:{color:'#22d3ee',width:2}, areaStyle:{color:'rgba(34,211,238,0.1)'}, showSymbol:false}]
+});
+setInterval(()=>{
+  twinData.shift(); twinData.push(60+Math.random()*20);
+  twinChart.setOption({series:[{data:twinData}]});
+  // Update twin status
+  document.getElementById('twinBatt').textContent = (65+Math.random()*5).toFixed(1)+'%';
+  document.getElementById('twinTemp').textContent = Math.floor(50+Math.random()*8)+'°C';
+}, 1200);
+
+initThree();
+window.addEventListener('resize', ()=> {
+  const c=document.getElementById('threeContainer');
+  if(c && renderer){ renderer.setSize(c.clientWidth, 320); camera.aspect=c.clientWidth/320; camera.updateProjectionMatrix(); }
+});
+</script>
+</body>
+</html>

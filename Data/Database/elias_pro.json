@@ -1,0 +1,149 @@
+﻿{
+    "metadata":  {
+                     "record_count":  2,
+                     "created":  "2026-09-19T15:42:50",
+                     "name":  "elias_pro",
+                     "version":  "1.0.0",
+                     "last_modified":  "2026-09-19T15:43:54"
+                 },
+    "collections":  {
+                        "diagnostics":  [
+                                            {
+                                                "gaps":  {
+                                                             "gap_count":  0,
+                                                             "gaps":  [
+
+                                                                      ]
+                                                         },
+                                                "_modified":  "2026-09-19T15:43:54",
+                                                "username":  "GSERPSYS24",
+                                                "battery":  {
+                                                                "status":  "AC Connected",
+                                                                "score":  100,
+                                                                "detected":  true,
+                                                                "issues":  [
+
+                                                                           ],
+                                                                "health":  97
+                                                            },
+                                                "_created":  "2026-09-19T15:43:54",
+                                                "disks":  [
+                                                              {
+                                                                  "score":  100,
+                                                                  "issues":  [
+
+                                                                             ],
+                                                                  "free_gb":  62.3,
+                                                                  "used_pct":  76.9,
+                                                                  "total_gb":  269.1,
+                                                                  "letter":  "C:"
+                                                              },
+                                                              {
+                                                                  "score":  100,
+                                                                  "issues":  [
+
+                                                                             ],
+                                                                  "free_gb":  31.8,
+                                                                  "used_pct":  68.2,
+                                                                  "total_gb":  100,
+                                                                  "letter":  "D:"
+                                                              },
+                                                              {
+                                                                  "score":  100,
+                                                                  "issues":  [
+
+                                                                             ],
+                                                                  "free_gb":  0,
+                                                                  "used_pct":  0,
+                                                                  "total_gb":  0,
+                                                                  "letter":  "E:"
+                                                              },
+                                                              {
+                                                                  "score":  100,
+                                                                  "issues":  [
+
+                                                                             ],
+                                                                  "free_gb":  0,
+                                                                  "used_pct":  0,
+                                                                  "total_gb":  0,
+                                                                  "letter":  "F:"
+                                                              },
+                                                              {
+                                                                  "score":  100,
+                                                                  "issues":  [
+
+                                                                             ],
+                                                                  "free_gb":  13,
+                                                                  "used_pct":  85.7,
+                                                                  "total_gb":  91.2,
+                                                                  "letter":  "G:"
+                                                              }
+                                                          ],
+                                                "hostname":  "DESKTOP-VU55LB7",
+                                                "security":  {
+                                                                 "vuln_count":  0,
+                                                                 "vulns":  [
+
+                                                                           ]
+                                                             },
+                                                "overall":  {
+                                                                "penalty":  0,
+                                                                "rating":  "EXCELLENT",
+                                                                "score":  100,
+                                                                "grade":  "A"
+                                                            },
+                                                "system_info":  {
+                                                                    "gpu":  "Intel(R) UHD Graphics 630",
+                                                                    "os":  "Microsoft Windows 11 Pro Build 26200",
+                                                                    "uptime_h":  0.3,
+                                                                    "model":  "Precision 5540",
+                                                                    "total_ram_gb":  31.7,
+                                                                    "cpu":  "Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz",
+                                                                    "cpu_cores":  "8C/16L"
+                                                                },
+                                                "cpu":  {
+                                                            "load":  3,
+                                                            "rating":  "EXCELLENT",
+                                                            "score":  100,
+                                                            "temp":  "N/A",
+                                                            "issues":  [
+
+                                                                       ]
+                                                        },
+                                                "ram":  {
+                                                            "rating":  "EXCELLENT",
+                                                            "score":  100,
+                                                            "issues":  [
+
+                                                                       ],
+                                                            "used_pct":  22.7,
+                                                            "total_gb":  31.7
+                                                        },
+                                                "network":  {
+                                                                "rating":  "EXCELLENT",
+                                                                "score":  100,
+                                                                "issues":  [
+
+                                                                           ]
+                                                            },
+                                                "_id":  "37a5fc0b-ba1b-409a-97b7-acbfd4a73a09"
+                                            }
+                                        ],
+                        "daily_logs":  [
+                                           {
+                                               "vulns":  0,
+                                               "overall_score":  100,
+                                               "ram_score":  100,
+                                               "cpu_score":  100,
+                                               "hostname":  "DESKTOP-VU55LB7",
+                                               "rating":  "EXCELLENT",
+                                               "gaps":  0,
+                                               "time":  "15:43:54",
+                                               "date":  "2026-09-19",
+                                               "_created":  "2026-09-19T15:43:54",
+                                               "_id":  "72530c97-399f-4ceb-a28a-932b95e4d955",
+                                               "_modified":  "2026-09-19T15:43:54"
+                                           }
+                                       ]
+                    }
+}

@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  # ── Elias Pro — PowerShell Backend (Pode) ──
+  elias-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: elias-pro-api
+    ports:
+      - "8080:8080"  # REST API only (8081 GraphQL / 8082 WS disabled to save server)
+    volumes:
+      - ./Data:/app/Data
+      - ./Logs:/app/Logs
+      - ./Config:/app/Config
+    environment:
+      - ELIAS_VERSION=4.2.0
+      - ELIAS_EDITION=Professional
+      - POWERSHELL_DISTRIBUTION_CHANNEL=Docker
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pwsh", "-Command", "Invoke-RestMethod http://127.0.0.1:8080/api/v1/health -TimeoutSec 5"]
+      interval: 120s
+      timeout: 5s
+      retries: 2
+      start_period: 60s
+    networks:
+      - elias-net
+
+  # ── Frontend (Nginx) — Serves Dashboard + PWA ──
+  elias-frontend:
+    image: nginx:alpine
+    container_name: elias-pro-frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./Dashboard:/usr/share/nginx/html:ro
+      - ./Branding:/usr/share/nginx/html/Branding:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - elias-api
+    networks:
+      - elias-net
+
+  # ── SQLite (optional, if you prefer external DB) ──
+  # elias-db:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: elias_production
+  #     POSTGRES_USER: elias
+  #     POSTGRES_PASSWORD: elias_secure_2026
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   networks:
+  #     - elias-net
+
+networks:
+  elias-net:
+    driver: bridge
+
+# volumes:
+#   pgdata:

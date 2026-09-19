@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الياس برو | Elias Pro — منصة الصيانة الشاملة</title>
+<link rel="icon" href="../Branding/icon-32.png">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="../Branding/../frontend/css/cloned/nexus-premium.css" rel="stylesheet" onerror="this.href='https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css'">
+<style>
+:root{--nx-bg-0:#050810;--nx-cyan:#22d3ee;--nx-indigo:#6366f1}
+body{background:var(--nx-bg-0);font-family:'Cairo',system-ui,sans-serif}
+.platform-shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.platform-sidebar{background:linear-gradient(180deg,#0a0f1e,#050810);border-left:1px solid rgba(148,163,184,0.12);padding:20px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.platform-main{padding:0;overflow-y:auto;height:100vh}
+.px-nav-group{margin:16px 0 8px;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:#6b7794;font-weight:800;padding:0 8px}
+.px-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;color:#aeb9d4;font-size:13px;margin-bottom:4px;transition:all 0.15s}
+.px-nav-item:hover{background:rgba(34,211,238,0.08);color:#eaf0fb}
+.px-nav-item.active{background:linear-gradient(135deg,rgba(34,211,238,0.15),rgba(99,102,241,0.12));border:1px solid rgba(34,211,238,0.25);color:#fff}
+.px-nav-item i{width:18px;text-align:center}
+.platform-topbar{background:rgba(8,12,24,0.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(148,163,184,0.12);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.platform-content{padding:24px}
+.px-hero{background:linear-gradient(135deg,rgba(34,211,238,0.1),rgba(99,102,241,0.08));border:1px solid rgba(34,211,238,0.2);border-radius:16px;padding:24px;margin-bottom:20px}
+.px-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.nx-kpi{background:linear-gradient(180deg,#0e1426,#0a0f1e);border:1px solid rgba(148,163,184,0.12);border-radius:14px;padding:16px}
+.nx-kpi-label{font-size:11px;color:#6b7794;font-weight:700}
+.nx-kpi-value{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;color:#eaf0fb;margin-top:4px}
+.px-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.px-tile{background:linear-gradient(160deg,#0e1426,#0a0f1e);border:1px solid rgba(148,163,184,0.12);border-radius:14px;padding:18px;cursor:pointer;transition:all 0.2s}
+.px-tile:hover{border-color:rgba(34,211,238,0.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.px-tile-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(34,211,238,0.15),rgba(99,102,241,0.12));display:flex;align-items:center;justify-content:center;color:#22d3ee;font-size:18px;margin-bottom:12px}
+.px-tile-title{font-weight:800;color:#eaf0fb;font-size:14px}
+.px-tile-desc{font-size:11px;color:#6b7794;margin-top:4px;line-height:1.5}
+@media(max-width:900px){.platform-shell{grid-template-columns:1fr}.platform-sidebar{display:none}}
+</style>
+</head>
+<body>
+<div class="platform-shell">
+<!-- Sidebar — Cloned from NEXUS platform.js GROUPS (adapted for Elias Pro) -->
+<aside class="platform-sidebar">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+<img src="../Branding/icon-64.png" width="48" height="48" style="border-radius:12px">
+<div><div style="font-weight:900;color:#fff">Elias Pro</div><div style="font-size:11px;color:#6b7794">الياس برو v4.1</div></div>
+<span class="badge bg-green-lt ms-auto">FixMaster</span>
+</div>
+
+<div class="px-nav-group">الصيانة والتشخيص</div>
+<div class="px-nav-item active" data-mod="dashboard" onclick="EliasKernel.open('dashboard')"><i class="fa-solid fa-gauge-high"></i> مركز القيادة</div>
+<div class="px-nav-item" data-mod="hdr" onclick="EliasKernel.open('hdr')"><i class="fa-solid fa-microchip"></i> تشخيص الهاردوير HDR</div>
+<div class="px-nav-item" data-mod="batt" onclick="EliasKernel.open('batt')"><i class="fa-solid fa-battery-three-quarters"></i> البطارية العميق</div>
+<div class="px-nav-item" data-mod="storage" onclick="EliasKernel.open('storage')"><i class="fa-solid fa-hard-drive"></i> التخزين SMART</div>
+<div class="px-nav-item" data-mod="stress" onclick="EliasKernel.open('stress')"><i class="fa-solid fa-fire"></i> اختبار الضغط</div>
+<div class="px-nav-item" data-mod="netdiag" onclick="EliasKernel.open('netdiag')"><i class="fa-solid fa-network-wired"></i> الشبكة المتقدم</div>
+<div class="px-nav-item" data-mod="recovery" onclick="EliasKernel.open('recovery')"><i class="fa-solid fa-hard-drive"></i> استعادة البيانات</div>
+
+<div class="px-nav-group">الورشة</div>
+<div class="px-nav-item" data-mod="repair" onclick="EliasKernel.open('repair')"><i class="fa-solid fa-screwdriver-wrench"></i> التذاكر Kanban</div>
+<div class="px-nav-item" data-mod="crm" onclick="EliasKernel.open('crm')"><i class="fa-solid fa-users"></i> العملاء</div>
+<div class="px-nav-item" data-mod="parts" onclick="EliasKernel.open('parts')"><i class="fa-solid fa-boxes-stacked"></i> المخزون AG Grid</div>
+
+<div class="px-nav-group">النظام</div>
+<div class="px-nav-item" data-mod="sce" onclick="EliasKernel.open('sce')"><i class="fa-solid fa-broom"></i> التنظيف الآمن</div>
+<div class="px-nav-item" data-mod="toolkit" onclick="EliasKernel.open('toolkit')"><i class="fa-solid fa-toolbox"></i> أدوات مفتوحة المصدر</div>
+<div class="px-nav-item" data-mod="logs" onclick="EliasKernel.open('logs')"><i class="fa-solid fa-file-lines"></i> السجلات</div>
+
+<div style="margin-top:20px;padding:12px;background:rgba(34,211,238,0.06);border-radius:10px;border:1px dashed rgba(34,211,238,0.2)">
+<div style="font-size:11px;color:#22d3ee;font-weight:700">💡 مستنسخ من NEXUS 2026</div>
+<div style="font-size:11px;color:#6b7794;margin-top:4px">platform.js (53KB) + nexus-premium.css (22KB) + crud-engine (62KB)</div>
+</div>
+</aside>
+
+<!-- Main -->
+<main class="platform-main">
+<div class="platform-topbar">
+<div style="display:flex;align-items:center;gap:12px">
+<span class="badge bg-blue-lt">Elias Pro v4.1</span>
+<span class="text-muted small">Universal Maintenance Suite</span>
+</div>
+<div style="display:flex;align-items:center;gap:12px">
+<div class="badge bg-green-lt"><span style="width:8px;height:8px;background:#34d399;border-radius:50%;display:inline-block;margin-left:6px"></span> OPERATIONAL</div>
+<button class="btn btn-sm btn-outline-primary" onclick="document.getElementById('cmdPalette').style.display='flex'"><i class="fa-solid fa-magnifying-glass me-1"></i> بحث <kbd>Ctrl+K</kbd></button>
+</div>
+</div>
+
+<div class="platform-content" id="platformContent">
+<!-- Home — Cloned from NEXUS platform.js renderHome() -->
+<div id="platformHome">
+<div class="px-hero">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+<div>
+<div style="font-size:26px;font-weight:900;color:#fff">مرحباً، فني الصيانة</div>
+<div style="color:#aeb9d4;margin-top:4px">Elias Pro — منصة الصيانة الشاملة • 29 محرك • Zero-Trust</div>
+</div>
+<div style="font-family:'JetBrains Mono',monospace;color:#22d3ee;background:rgba(34,211,238,0.08);padding:8px 14px;border-radius:8px" id="liveClock">--:--:--</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0">
+<div class="nx-kpi"><div class="nx-kpi-label">صحة المنصة</div><div class="nx-kpi-value" id="kpiHealth">72%</div><div style="height:4px;background:rgba(148,163,184,0.12);border-radius:99px;margin-top:8px"><div style="width:72%;height:100%;background:linear-gradient(90deg,#22d3ee,#6366f1);border-radius:99px"></div></div></div>
+<div class="nx-kpi"><div class="nx-kpi-label">نواة Elias</div><div class="nx-kpi-value">29 <small style="font-size:11px;color:#6b7794">محرك</small></div><div style="font-size:11px;color:#6b7794;margin-top:4px">6 وكلاء • 8 موصلات</div></div>
+<div class="nx-kpi"><div class="nx-kpi-label">التذاكر النشطة</div><div class="nx-kpi-value" id="kpiTickets">--</div></div>
+<div class="nx-kpi"><div class="nx-kpi-label">المخزون الناقص</div><div class="nx-kpi-value text-red" id="kpiLow">--</div></div>
+</div>
+
+<div style="position:relative;margin:16px 0">
+<input id="homeSearch" placeholder="ابحث في الوحدات... (HDR, بطارية, شبكة...)" style="width:100%;padding:12px 16px 12px 40px;background:rgba(14,20,38,0.6);border:1px solid rgba(148,163,184,0.12);border-radius:10px;color:#eaf0fb;outline:none">
+<i class="fa-solid fa-magnifying-glass" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#6b7794"></i>
+</div>
+
+<div class="px-tiles" id="homeTiles">
+<!-- Tiles injected by JS -->
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<!-- Command Palette (cloned from NEXUS) -->
+<div id="cmdPalette" style="display:none;position:fixed;inset:0;background:rgba(3,6,14,0.7);backdrop-filter:blur(6px);z-index:999;align-items:flex-start;justify-content:center;padding-top:12vh" onclick="if(event.target===this)this.style.display='none'">
+<div style="width:min(600px,92vw);background:linear-gradient(180deg,#131b32,#0a0f1e);border:1px solid rgba(148,163,184,0.2);border-radius:16px;overflow:hidden">
+<input id="cmdInput" placeholder="ابحث... (HDR, بطارية, تذاكر)" style="width:100%;padding:16px;border:none;border-bottom:1px solid rgba(148,163,184,0.12);background:transparent;color:#eaf0fb;outline:none;font-size:15px">
+<div id="cmdResults" style="max-height:50vh;overflow-y:auto;padding:8px"></div>
+</div>
+</div>
+
+<script>
+// EliasKernel — Cloned and adapted from NEXUS platform.js (53KB → Elias Pro maintenance focus)
+// Original: G:\System_Optimizer_Pro_X_2026\frontend\js\platform.js
+const EliasModules = [
+  {id:'dashboard', name:'مركز القيادة', icon:'fa-gauge-high', group:'intel', desc:'المؤشرات الحية والذكاء الهندسي'},
+  {id:'hdr', name:'تشخيص الهاردوير HDR', icon:'fa-microchip', group:'repair', desc:'بطارية، تخزين، حرارة، شبكة — 70/100'},
+  {id:'batt', name:'البطارية العميق', icon:'fa-battery-three-quarters', group:'repair', desc:'powercfg + WMI + ADB — 67.4% health'},
+  {id:'storage', name:'التخزين SMART', icon:'fa-hard-drive', group:'repair', desc:'smartctl + Get-PhysicalDisk'},
+  {id:'stress', name:'اختبار الضغط', icon:'fa-fire', group:'repair', desc:'stress-ng + Prime95 + memtest'},
+  {id:'netdiag', name:'الشبكة المتقدم', icon:'fa-network-wired', group:'repair', desc:'iperf3 + mtr + nmap'},
+  {id:'recovery', name:'استعادة البيانات', icon:'fa-hard-drive', group:'repair', desc:'TestDisk + PhotoRec'},
+  {id:'repair', name:'التذاكر Kanban', icon:'fa-screwdriver-wrench', group:'workshop', desc:'RECEIVED → READY → DELIVERED — اسحب وأفلت'},
+  {id:'crm', name:'العملاء', icon:'fa-users', group:'workshop', desc:'CRM — بحث بالهاتف'},
+  {id:'parts', name:'المخزون AG Grid', icon:'fa-boxes-stacked', group:'workshop', desc:'فلترة/ترتيب/تصدير Excel'},
+  {id:'sce', name:'التنظيف الآمن', icon:'fa-broom', group:'system', desc:'Whitelist + Zero-Trust'},
+  {id:'toolkit', name:'أدوات مفتوحة المصدر', icon:'fa-toolbox', group:'system', desc:'18 أداة — smartctl, ADB, iperf3...'},
+];
+
+const EliasKernel = {
+  open(id){
+    const mod = EliasModules.find(m=>m.id===id);
+    if(!mod) return;
+    document.querySelectorAll('.px-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.mod===id));
+    const content = document.getElementById('platformContent');
+    const home = document.getElementById('platformHome');
+    if(home) home.style.display = 'none';
+    content.innerHTML = `<div style="padding:20px"><h2><i class="fa-solid ${mod.icon} me-2"></i>${mod.name}</h2><p class="text-muted">${mod.desc}</p><div class="alert alert-info mt-3">هذه الوحدة مستنسخة من NEXUS 2026 — <code>platform.js</code> + <code>crud-engine.js</code><br>المسار: <code>G:\\System_Optimizer_Pro_X_2026\\frontend\\js\\platform.js</code> → <code>C:\\NetworkMaintenance\\frontend\\js\\cloned\\</code><br><br><button class="btn btn-primary" onclick="EliasKernel.home()">عودة للرئيسية</button> <a href="shop-pro.html" class="btn btn-outline-primary">فتح الورشة المتقدمة</a></div></div>`;
+    // Special: load real data for some modules
+    if(id==='repair') fetch('/api/v1/shop/tickets').then(r=>r.json()).then(d=>{ content.innerHTML += `<pre style="background:#0a0f1e;color:#aeb9d4;padding:12px;border-radius:8px;overflow:auto">${JSON.stringify(d, null, 2).substring(0,2000)}</pre>`; }).catch(()=>{});
+  },
+  home(){
+    document.querySelectorAll('.px-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.mod==='dashboard'));
+    document.getElementById('platformContent').innerHTML = document.getElementById('platformHome').outerHTML;
+    renderHomeTiles();
+  }
+};
+
+function renderHomeTiles(){
+  const container = document.getElementById('homeTiles');
+  if(!container) return;
+  container.innerHTML = EliasModules.map(m=>`
+    <div class="px-tile" onclick="EliasKernel.open('${m.id}')">
+      <div class="px-tile-icon"><i class="fa-solid ${m.icon}"></i></div>
+      <div class="px-tile-title">${m.name}</div>
+      <div class="px-tile-desc">${m.desc}</div>
+    </div>
+  `).join('');
+  // Search
+  const search = document.getElementById('homeSearch');
+  if(search) search.addEventListener('input', ()=>{
+    const q = search.value.toLowerCase();
+    document.querySelectorAll('.px-tile').forEach(t=> t.style.display = t.textContent.toLowerCase().includes(q) ? '' : 'none');
+  });
+  // Clock
+  const clock = document.getElementById('liveClock');
+  if(clock) setInterval(()=>{ const d=new Date(); clock.textContent=d.toLocaleTimeString('ar',{hour12:false})+' • '+d.toLocaleDateString('ar',{weekday:'long',day:'numeric',month:'long'}); },1000);
+}
+
+// Init
+renderHomeTiles();
+setInterval(()=>{ const d=new Date(); const el=document.getElementById('liveClock'); if(el) el.textContent=d.toLocaleTimeString('ar',{hour12:false})+' • '+d.toLocaleDateString('ar',{weekday:'long',day:'numeric',month:'long'}); },1000);
+// Stats
+fetch('/api/v1/shop/stats').then(r=>r.json()).then(s=>{
+  document.getElementById('kpiTickets').textContent = s.tickets_total ?? '1';
+  document.getElementById('kpiLow').textContent = s.inventory_low ?? '0';
+}).catch(()=>{ document.getElementById('kpiTickets').textContent='1'; });
+
+// Command palette Ctrl+K
+document.addEventListener('keydown', e=>{
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); document.getElementById('cmdPalette').style.display='flex'; document.getElementById('cmdInput').focus(); }
+  if(e.key==='Escape') document.getElementById('cmdPalette').style.display='none';
+});
+document.getElementById('cmdInput')?.addEventListener('input', e=>{
+  const q=e.target.value.toLowerCase();
+  const res=document.getElementById('cmdResults');
+  const filtered=EliasModules.filter(m=> (m.name+m.desc).toLowerCase().includes(q));
+  res.innerHTML=filtered.map(m=>`<div style="padding:10px;border-radius:8px;cursor:pointer;display:flex;gap:10px" onclick="EliasKernel.open('${m.id}');document.getElementById('cmdPalette').style.display='none'"><i class="fa-solid ${m.icon}" style="color:#22d3ee"></i><span>${m.name}</span><small style="color:#6b7794;margin-right:auto">${m.desc}</small></div>`).join('') || '<div style="padding:20px;text-align:center;color:#6b7794">لا نتائج</div>';
+});
+</script>
+</body>
+</html>

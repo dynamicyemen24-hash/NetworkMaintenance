@@ -1,0 +1,478 @@
+[
+    {
+        "ram_total_gb":  null,
+        "issues_found":  null,
+        "battery_health":  null,
+        "raw_data":  null,
+        "battery_cycles":  null,
+        "diag_id":  "b50574a1-8077-4e91-ad18-35642eefbde7",
+        "ticket_no":  "",
+        "device_type":  "Computer",
+        "overall_score":  null,
+        "overall_status":  null,
+        "mode":  "Quick",
+        "created_at":  "2026-09-10T20:57:45.762Z",
+        "storage_used_gb":  null,
+        "ai_recommendation":  null,
+        "storage_health":  null
+    },
+    {
+        "ram_total_gb":  31.71,
+        "issues_found":  [
+                             "Battery health low (43%)"
+                         ],
+        "battery_health":  43,
+        "raw_data":  {
+                         "thermal":  {
+                                         "gpu_temp":  50,
+                                         "status":  "GOOD",
+                                         "issues":  [
+
+                                                    ],
+                                         "cpu_temp":  45
+                                     },
+                         "overall_score":  70,
+                         "device_type":  "Computer",
+                         "sensors":  {
+                                         "speaker":  "PASS",
+                                         "camera":  "PASS",
+                                         "display":  "PASS",
+                                         "sensors":  "PASS",
+                                         "mic":  "PASS",
+                                         "issues":  [
+
+                                                    ],
+                                         "touch":  "PASS"
+                                     },
+                         "issues_found":  [
+                                              "Battery health low (43%)"
+                                          ],
+                         "battery":  {
+                                         "issues":  [
+                                                        "Battery health low (43%)"
+                                                    ],
+                                         "temp_c":  30,
+                                         "design_capacity":  5000,
+                                         "current_capacity":  5000,
+                                         "status":  "POOR",
+                                         "health_percent":  43,
+                                         "cycles":  0
+                                     },
+                         "memory":  {
+                                        "total_gb":  31.71,
+                                        "used_percent":  69.8,
+                                        "status":  "GOOD",
+                                        "issues":  [
+
+                                                   ],
+                                        "available_gb":  9.58
+                                    },
+                         "scan_time":  "2026-09-10T20:58:10.0443620+03:00",
+                         "storage":  {
+                                         "issues":  [
+
+                                                    ],
+                                         "used_percent":  78.4,
+                                         "smart_status":  "OK",
+                                         "free_gb":  99.61,
+                                         "status":  "GOOD",
+                                         "used_gb":  360.68,
+                                         "total_gb":  460.29,
+                                         "health_percent":  100
+                                     },
+                         "overall_status":  "FAIR",
+                         "network":  {
+                                         "latency_ms":  151.7,
+                                         "sim_status":  "UNKNOWN",
+                                         "issues":  [
+
+                                                    ],
+                                         "wifi_status":  "UNKNOWN",
+                                         "internet":  true,
+                                         "signal_dbm":  -1
+                                     },
+                         "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste"
+                     },
+        "battery_cycles":  0,
+        "diag_id":  "a1ccc65b-542c-4f4c-a1f7-b6827114b500",
+        "ticket_no":  "",
+        "device_type":  "Computer",
+        "overall_score":  70,
+        "overall_status":  "FAIR",
+        "mode":  "Quick",
+        "created_at":  "2026-09-10T20:58:06.091Z",
+        "storage_used_gb":  360.68,
+        "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste",
+        "storage_health":  100
+    },
+    {
+        "ram_total_gb":  31.71,
+        "issues_found":  [
+                             "Battery health low (43%)"
+                         ],
+        "battery_health":  43,
+        "raw_data":  {
+                         "thermal":  {
+                                         "gpu_temp":  50,
+                                         "status":  "GOOD",
+                                         "issues":  [
+
+                                                    ],
+                                         "cpu_temp":  45
+                                     },
+                         "overall_score":  70,
+                         "device_type":  "Mobile",
+                         "sensors":  {
+                                         "speaker":  "PASS",
+                                         "camera":  "PASS",
+                                         "display":  "PASS",
+                                         "sensors":  "PASS",
+                                         "mic":  "PASS",
+                                         "issues":  [
+
+                                                    ],
+                                         "touch":  "PASS"
+                                     },
+                         "issues_found":  [
+                                              "Battery health low (43%)"
+                                          ],
+                         "battery":  {
+                                         "issues":  [
+                                                        "Battery health low (43%)"
+                                                    ],
+                                         "temp_c":  30,
+                                         "design_capacity":  5000,
+                                         "current_capacity":  5000,
+                                         "status":  "POOR",
+                                         "health_percent":  43,
+                                         "cycles":  0
+                                     },
+                         "memory":  {
+                                        "total_gb":  31.71,
+                                        "used_percent":  68,
+                                        "status":  "GOOD",
+                                        "issues":  [
+
+                                                   ],
+                                        "available_gb":  10.14
+                                    },
+                         "scan_time":  "2026-09-10T20:58:39.7798286+03:00",
+                         "storage":  {
+                                         "issues":  [
+
+                                                    ],
+                                         "used_percent":  78.4,
+                                         "smart_status":  "OK",
+                                         "free_gb":  99.61,
+                                         "status":  "GOOD",
+                                         "used_gb":  360.68,
+                                         "total_gb":  460.29,
+                                         "health_percent":  100
+                                     },
+                         "overall_status":  "FAIR",
+                         "network":  {
+                                         "latency_ms":  1949.7,
+                                         "sim_status":  "UNKNOWN",
+                                         "issues":  [
+
+                                                    ],
+                                         "wifi_status":  "UNKNOWN",
+                                         "internet":  true,
+                                         "signal_dbm":  -1
+                                     },
+                         "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste"
+                     },
+        "battery_cycles":  0,
+        "diag_id":  "43ca06f8-e9fe-4f3c-9300-9c2b7ac2171b",
+        "ticket_no":  "TKT-2026-09-1236",
+        "device_type":  "Mobile",
+        "overall_score":  70,
+        "overall_status":  "FAIR",
+        "mode":  "Quick",
+        "created_at":  "2026-09-10T20:58:30.532Z",
+        "storage_used_gb":  360.68,
+        "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste",
+        "storage_health":  100
+    },
+    {
+        "ram_total_gb":  31.71,
+        "issues_found":  [
+                             "Battery health low (43%)"
+                         ],
+        "battery_health":  43,
+        "raw_data":  {
+                         "thermal":  {
+                                         "gpu_temp":  50,
+                                         "status":  "GOOD",
+                                         "issues":  [
+
+                                                    ],
+                                         "cpu_temp":  45
+                                     },
+                         "overall_score":  70,
+                         "device_type":  "Computer",
+                         "sensors":  {
+                                         "speaker":  "PASS",
+                                         "camera":  "PASS",
+                                         "display":  "PASS",
+                                         "sensors":  "PASS",
+                                         "mic":  "PASS",
+                                         "issues":  [
+
+                                                    ],
+                                         "touch":  "PASS"
+                                     },
+                         "issues_found":  [
+                                              "Battery health low (43%)"
+                                          ],
+                         "battery":  {
+                                         "issues":  [
+                                                        "Battery health low (43%)"
+                                                    ],
+                                         "temp_c":  30,
+                                         "design_capacity":  5000,
+                                         "current_capacity":  5000,
+                                         "status":  "POOR",
+                                         "health_percent":  43,
+                                         "cycles":  0
+                                     },
+                         "memory":  {
+                                        "total_gb":  31.71,
+                                        "used_percent":  70.5,
+                                        "status":  "FAIR",
+                                        "issues":  [
+
+                                                   ],
+                                        "available_gb":  9.34
+                                    },
+                         "scan_time":  "2026-09-10T20:58:54.0137049+03:00",
+                         "storage":  {
+                                         "issues":  [
+
+                                                    ],
+                                         "used_percent":  78.4,
+                                         "smart_status":  "OK",
+                                         "free_gb":  99.61,
+                                         "status":  "GOOD",
+                                         "used_gb":  360.68,
+                                         "total_gb":  460.29,
+                                         "health_percent":  100
+                                     },
+                         "overall_status":  "FAIR",
+                         "network":  {
+                                         "latency_ms":  3434.3,
+                                         "sim_status":  "UNKNOWN",
+                                         "issues":  [
+
+                                                    ],
+                                         "wifi_status":  "UNKNOWN",
+                                         "internet":  true,
+                                         "signal_dbm":  -1
+                                     },
+                         "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste"
+                     },
+        "battery_cycles":  0,
+        "diag_id":  "668ee365-d168-489d-aa26-38b1f261d96b",
+        "ticket_no":  "",
+        "device_type":  "Computer",
+        "overall_score":  70,
+        "overall_status":  "FAIR",
+        "mode":  "Quick",
+        "created_at":  "2026-09-10T20:58:40.532Z",
+        "storage_used_gb":  360.68,
+        "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste",
+        "storage_health":  100
+    },
+    {
+        "health":  89.1,
+        "at":  "2026-09-10T21:12:31.084Z",
+        "type":  "BATT",
+        "diag_id":  "61ce1f91-fe4e-4015-85de-6ebddfaa2d88",
+        "ticket_no":  ""
+    },
+    {
+        "ram_total_gb":  31.71,
+        "issues_found":  [
+                             "Battery health low (42%)"
+                         ],
+        "battery_health":  42,
+        "raw_data":  {
+                         "thermal":  {
+                                         "gpu_temp":  50,
+                                         "status":  "GOOD",
+                                         "issues":  [
+
+                                                    ],
+                                         "cpu_temp":  45
+                                     },
+                         "overall_score":  70,
+                         "device_type":  "Computer",
+                         "sensors":  {
+                                         "speaker":  "PASS",
+                                         "camera":  "PASS",
+                                         "display":  "PASS",
+                                         "sensors":  "PASS",
+                                         "mic":  "PASS",
+                                         "issues":  [
+
+                                                    ],
+                                         "touch":  "PASS"
+                                     },
+                         "issues_found":  [
+                                              "Battery health low (42%)"
+                                          ],
+                         "battery":  {
+                                         "issues":  [
+                                                        "Battery health low (42%)"
+                                                    ],
+                                         "temp_c":  30,
+                                         "design_capacity":  5000,
+                                         "current_capacity":  5000,
+                                         "status":  "POOR",
+                                         "health_percent":  42,
+                                         "cycles":  0
+                                     },
+                         "memory":  {
+                                        "total_gb":  31.71,
+                                        "used_percent":  63.7,
+                                        "status":  "GOOD",
+                                        "issues":  [
+
+                                                   ],
+                                        "available_gb":  11.52
+                                    },
+                         "scan_time":  "2026-09-10T21:15:51.2951034+03:00",
+                         "storage":  {
+                                         "issues":  [
+
+                                                    ],
+                                         "used_percent":  78.4,
+                                         "smart_status":  "OK",
+                                         "free_gb":  99.55,
+                                         "status":  "GOOD",
+                                         "used_gb":  360.74,
+                                         "total_gb":  460.29,
+                                         "health_percent":  100
+                                     },
+                         "overall_status":  "FAIR",
+                         "network":  {
+                                         "latency_ms":  123.7,
+                                         "sim_status":  "UNKNOWN",
+                                         "issues":  [
+
+                                                    ],
+                                         "wifi_status":  "UNKNOWN",
+                                         "internet":  true,
+                                         "signal_dbm":  -1
+                                     },
+                         "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste"
+                     },
+        "battery_cycles":  0,
+        "diag_id":  "e85b307c-1727-44ff-9592-35caf6bd9974",
+        "ticket_no":  "",
+        "device_type":  "Computer",
+        "overall_score":  70,
+        "overall_status":  "FAIR",
+        "mode":  "Quick",
+        "created_at":  "2026-09-10T21:15:48.060Z",
+        "storage_used_gb":  360.74,
+        "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste",
+        "storage_health":  100
+    },
+    {
+        "ram_total_gb":  31.71,
+        "issues_found":  [
+                             "Battery health low (42%)"
+                         ],
+        "battery_health":  42,
+        "raw_data":  {
+                         "thermal":  {
+                                         "gpu_temp":  50,
+                                         "status":  "GOOD",
+                                         "issues":  [
+
+                                                    ],
+                                         "cpu_temp":  45
+                                     },
+                         "overall_score":  70,
+                         "device_type":  "Computer",
+                         "sensors":  {
+                                         "speaker":  "PASS",
+                                         "camera":  "PASS",
+                                         "display":  "PASS",
+                                         "sensors":  "PASS",
+                                         "mic":  "PASS",
+                                         "issues":  [
+
+                                                    ],
+                                         "touch":  "PASS"
+                                     },
+                         "issues_found":  [
+                                              "Battery health low (42%)"
+                                          ],
+                         "battery":  {
+                                         "issues":  [
+                                                        "Battery health low (42%)"
+                                                    ],
+                                         "temp_c":  30,
+                                         "design_capacity":  5000,
+                                         "current_capacity":  5000,
+                                         "status":  "POOR",
+                                         "health_percent":  42,
+                                         "cycles":  0
+                                     },
+                         "memory":  {
+                                        "total_gb":  31.71,
+                                        "used_percent":  75.8,
+                                        "status":  "FAIR",
+                                        "issues":  [
+
+                                                   ],
+                                        "available_gb":  7.67
+                                    },
+                         "scan_time":  "2026-09-10T21:57:22.2509850+03:00",
+                         "storage":  {
+                                         "issues":  [
+
+                                                    ],
+                                         "used_percent":  78.4,
+                                         "smart_status":  "OK",
+                                         "free_gb":  99.38,
+                                         "status":  "GOOD",
+                                         "used_gb":  360.91,
+                                         "total_gb":  460.29,
+                                         "health_percent":  100
+                                     },
+                         "overall_status":  "FAIR",
+                         "network":  {
+                                         "latency_ms":  130.7,
+                                         "sim_status":  "UNKNOWN",
+                                         "issues":  [
+
+                                                    ],
+                                         "wifi_status":  "UNKNOWN",
+                                         "internet":  true,
+                                         "signal_dbm":  -1
+                                     },
+                         "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste"
+                     },
+        "battery_cycles":  0,
+        "diag_id":  "8da75a24-412c-412c-a7f1-1f7ff7710bfd",
+        "ticket_no":  "",
+        "device_type":  "Computer",
+        "overall_score":  70,
+        "overall_status":  "FAIR",
+        "mode":  "Quick",
+        "created_at":  "2026-09-10T21:57:17.844Z",
+        "storage_used_gb":  360.91,
+        "ai_recommendation":  "Multiple issues - recommend battery/storage check and thermal paste",
+        "storage_health":  100
+    },
+    {
+        "health":  89.1,
+        "at":  "2026-09-10T21:57:22.470Z",
+        "type":  "BATT",
+        "diag_id":  "37bfdd85-23f4-4653-a117-499bd2e969a0",
+        "ticket_no":  ""
+    }
+]

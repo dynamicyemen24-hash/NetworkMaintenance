@@ -1,0 +1,71 @@
+﻿{
+  "name": "Elias Pro",
+  "name_ar": "الياس برو",
+  "full_name": "Elias Pro | الياس برو - Universal Maintenance Suite",
+  "codename": "FixMaster",
+  "version": "5.0.0",
+  "build": "20260919",
+  "edition": "Professional - Maintenance Only",
+  "publisher": "FixMaster Technology",
+  "description": "Universal Maintenance Suite for Network, Mobile, PC and Electronics repair shops - Professional Edition with 29 engines and open source powered diagnostics",
+  "description_ar": "نظام صيانة شامل للشبكات والموبايل والكمبيوتر والإلكترونيات - نسخة احترافية بـ 29 محرك ومدعوم بمشاريع مفتوحة المصدر",
+  "architecture": "Microservices-Orchestration",
+  "compliance": ["ITIL-v4", "ISO-27001", "NIST-CSF", "COBIT-2019", "PCI-DSS"],
+  "security": "Zero-Trust | AES-256-GCM | TLS 1.3",
+  "engines": 32,
+  "engines_list": ["DAX", "OCE", "HEAL", "PREDICT", "SCE", "BATT", "STORAGE", "STRESS", "NETDIAG", "RECOVERY", "REPAIR", "CRM", "PARTS", "POS", "HWD", "HDR", "MDM", "NET", "IOT", "FW", "AST", "CICD", "DR", "IVT", "ML", "RPT", "STR", "XPL", "DEPLOY", "ERROR", "AI-Premium", "Security-Framework"],
+  "open_source": ["smartmontools/smartctl", "Genymobile/scrcpy", "libimobiledevice", "OpenHardwareMonitor", "CrystalDiskInfo", "memtest86+", "stress-ng", "Prime95", "iperf3", "nmap", "Wireshark", "WinMTR", "BleachBit", "TestDisk", "HDDScan", "speedtest-cli"],
+  "platforms": ["Windows 10/11", "Linux", "macOS", "Android", "iOS"],
+  "languages": ["ar", "en"],
+  "requirements": {
+    "os": "Windows 10 1809+ / Windows 11",
+    "powershell": "5.1+",
+    "ram": "4GB minimum, 8GB recommended",
+    "disk": "500MB",
+    "privileges": "Administrator for full hardware diagnostics"
+  },
+  "installation": {
+    "method": "Standard - install.ps1 or manual ZIP",
+    "zip": "Elias-Pro-v5.0.0.zip",
+    "installer": "install.ps1",
+    "winget": "winget install FixMaster.EliasPro (future)",
+    "choco": "choco install Elias-Pro (future)"
+  },
+  "paths": {
+    "default_install": "C:\\EliasPro",
+    "legacy": "C:\\NetworkMaintenance",
+    "data": "Data/",
+    "logs": "Logs/",
+    "config": "Config/",
+    "branding": "Branding/"
+  },
+  "executables": {
+    "launcher": "Start.bat",
+    "enterprise": "Enterprise-Main.ps1",
+    "runner": "Run.ps1",
+    "dashboard": "Dashboard/shop.html",
+    "api": "API/Server.ps1"
+  },
+  "entry_points": {
+    "full": "Run.ps1 full",
+    "shop": "Run.ps1 shop",
+    "diagnostics": "HDR-Engine.ps1, BATT-Engine.ps1, STORAGE-Engine.ps1",
+    "clean": "SCE-Engine.ps1"
+  },
+  "support": {
+    "docs": "README.md",
+    "runbook": "Runbooks/EnterpriseRunbook.md",
+    "github": "https://github.com/anomalyco/opencode",
+    "issues": "https://github.com/anomalyco/opencode/issues"
+  },
+  "checksums": {
+    "note": "Generated at build time - see Dist/SHA256SUMS"
+  }
+}
+
+
+
+
+
+
+

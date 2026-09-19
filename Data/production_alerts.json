@@ -1,0 +1,26 @@
+{
+    "event_id":  "9bcb9a8a-c76e-4546-826b-fc8854e5e763",
+    "timestamp":  "2026-09-10T22:08:45.175Z",
+    "telemetry":  {
+                      "timestamp":  "2026-09-10T22:08:45.1895252+03:00",
+                      "active_users":  1,
+                      "cpu":  66,
+                      "error_rate":  100,
+                      "latency":  0,
+                      "memory":  72.9,
+                      "endpoint":  "/api/v1/health",
+                      "device_type":  "Server"
+                  },
+    "alert":  {
+                  "message":  "Production error spike: 100% -- Users will see errors in ~2 minutes",
+                  "should_alert":  true,
+                  "severity":  "HIGH",
+                  "before_users":  true,
+                  "channels":  [
+                                   "Slack",
+                                   "Teams",
+                                   "Email",
+                                   "Dashboard"
+                               ]
+              }
+}
