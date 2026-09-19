@@ -12,7 +12,7 @@
       "mode": "static-when-managed",
       "static": { "ip": "192.168.0.150", "prefix": 24, "gateway": "192.168.0.1" },
       "dhcpFallback": true,
-      "dns": ["1.1.1.1", "8.8.8.8"],
+      "dns": ["8.8.8.8", "1.1.1.1"],
       "doh": {
         "1.1.1.1": "https://cloudflare-dns.com/dns-query",
         "8.8.8.8": "https://dns.google/dns-query"

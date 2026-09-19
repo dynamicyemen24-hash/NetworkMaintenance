@@ -33,21 +33,41 @@ Write-Host "`n[1/6] Eliminating DHCP address conflicts (Tcpip 4199)..." -Foregro
 
 $iface = Get-NetAdapter -Name 'Wi-Fi' -ErrorAction SilentlyContinue
 if ($iface) {
+    # SELF-HEAL BUGFIX 2026-09-19: Test-Connection -TimeoutSeconds is PS7-only
+    # (fatal on WinPS 5.1); use .NET Ping. Also idempotent: skip when already
+    # correct, and remove the stale 0.0.0.0/0 route or New-NetIPAddress fails
+    # with "DefaultGateway already exists" and kills the whole run.
+    $pinger = New-Object System.Net.NetworkInformation.Ping
+    function Test-IpFree([string]$ip) {
+        try { return ($pinger.Send($ip, 800).Status -ne 'Success') } catch { return $true }
+    }
     $candidates = @('192.168.0.150','192.168.0.151','192.168.0.152','192.168.0.160','192.168.0.170')
     $target = $null
     foreach ($c in $candidates) {
-        $ping = Test-Connection -ComputerName $c -Count 1 -Quiet -TimeoutSeconds 1 -ErrorAction SilentlyContinue
-        if (-not $ping) { $target = $c; break }
+        if (Test-IpFree $c) { $target = $c; break }
     }
     if (-not $target) { $target = '192.168.0.150' }
-    Write-Host "   Assigning static IP: $target (was DHCP 192.168.0.100 - repeatedly conflicted)" -ForegroundColor Gray
 
-    Get-NetIPAddress -InterfaceAlias 'Wi-Fi' -AddressFamily IPv4 -ErrorAction SilentlyContinue |
-        Where-Object { $_.IPAddress -ne '0.0.0.0' } |
-        Remove-NetIPAddress -Confirm:$false -ErrorAction SilentlyContinue
+    $curIP = (Get-NetIPAddress -InterfaceAlias 'Wi-Fi' -AddressFamily IPv4 -ErrorAction SilentlyContinue).IPAddress
+    $curGw = (Get-NetIPConfiguration -InterfaceAlias 'Wi-Fi' -ErrorAction SilentlyContinue).IPv4DefaultGateway.NextHop
+    if ($curIP -eq $target -and $curGw -eq '192.168.0.1') {
+        Write-Host "   IP already correct ($curIP) - skipping reassignment" -ForegroundColor DarkGray
+    } else {
+        Write-Host "   Assigning static IP: $target (was $curIP - repeatedly conflicted)" -ForegroundColor Gray
 
-    New-NetIPAddress -InterfaceAlias 'Wi-Fi' -IPAddress $target -PrefixLength 24 `
-                     -DefaultGateway '192.168.0.1' -ErrorAction Stop | Out-Null
+        Get-NetIPAddress -InterfaceAlias 'Wi-Fi' -AddressFamily IPv4 -ErrorAction SilentlyContinue |
+            Where-Object { $_.IPAddress -ne '0.0.0.0' } |
+            Remove-NetIPAddress -Confirm:$false -ErrorAction SilentlyContinue
+        Remove-NetRoute -DestinationPrefix '0.0.0.0/0' -InterfaceAlias 'Wi-Fi' -Confirm:$false -ErrorAction SilentlyContinue
+
+        try {
+            New-NetIPAddress -InterfaceAlias 'Wi-Fi' -IPAddress $target -PrefixLength 24 `
+                             -DefaultGateway '192.168.0.1' -ErrorAction Stop | Out-Null
+        } catch {
+            Write-Host "   Static IP failed ($($_.Exception.Message)) - DHCP fallback, host stays online" -ForegroundColor Red
+            Set-NetIPInterface -InterfaceAlias 'Wi-Fi' -Dhcp Enabled -ErrorAction SilentlyContinue
+        }
+    }
 
     Set-DnsClientServerAddress -InterfaceAlias 'Wi-Fi' -ServerAddresses '1.1.1.1','8.8.8.8' | Out-Null
 

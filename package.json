@@ -1,7 +1,7 @@
 {
   "name": "elias-pro",
   "version": "5.0.0",
-  "description": "Elias Pro v5.0 — Universal Maintenance Suite — Production Monitoring + E2E + Zero-Downtime",
+  "description": "Elias Pro v5.0 — Universal Maintenance Suite — Enhanced Modules | Zero-Trust | AES-256-GCM | TLS 1.3 | Production Monitoring + E2E + Zero-Downtime",
   "private": true,
   "scripts": {
     "test": "playwright test",
@@ -13,7 +13,13 @@
     "health": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\ERROR-Engine.ps1 -Action health",
     "deploy:check": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action health",
     "deploy:canary": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action deploy -Strategy Canary -DryRun",
-    "deploy:bluegreen": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action deploy -Strategy BlueGreen -NewVersion 5.0.0 -DryRun"
+    "deploy:bluegreen": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action deploy -Strategy BlueGreen -NewVersion 5.0.0 -DryRun",
+    "security": "powershell -ExecutionPolicy Bypass -File .\\Modules\\SecurityEnhancement.ps1 -Action full",
+    "reliability": "powershell -ExecutionPolicy Bypass -File .\\Modules\\ReliabilityModule.ps1 -Action full",
+    "effectiveness": "powershell -ExecutionPolicy Bypass -File .\\Modules\\EffectivenessModule.ps1 -Action full",
+    "standardization": "powershell -ExecutionPolicy Bypass -File .\\Modules\\StandardizationModule.ps1 -Action full",
+    "publish": "powershell -ExecutionPolicy Bypass -File .\\publish.ps1 -Version 5.0.0",
+    "watchdog": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Network-Reliability-Watchdog.ps1"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",

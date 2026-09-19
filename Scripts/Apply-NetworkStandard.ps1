@@ -45,10 +45,22 @@ $managed = $ssid -eq $cfg.ssidManaged
 
 if ($managed) {
     if ($curIP -ne $cfg.static.ip) {
+        # SELF-HEAL BUGFIX 2026-09-19: Remove-NetIPAddress leaves the 0.0.0.0/0
+        # route behind, which makes New-NetIPAddress fail with
+        # "Instance DefaultGateway already exists" and aborts the whole run.
+        # Remove the stale route first; on failure fall back to DHCP (per
+        # standard dhcpFallback) so the host is NEVER left offline.
         Remove-NetIPAddress -InterfaceAlias $ifaceName -AddressFamily IPv4 -Confirm:$false -ErrorAction SilentlyContinue
-        New-NetIPAddress -InterfaceAlias $ifaceName -IPAddress $cfg.static.ip -PrefixLength $cfg.static.prefix -DefaultGateway $cfg.static.gateway -ErrorAction Stop | Out-Null
-        $changes += "IP -> static $($cfg.static.ip)"
-        Log "Static IP applied: $($cfg.static.ip) (was $curIP)" -c Green
+        Remove-NetRoute -DestinationPrefix '0.0.0.0/0' -InterfaceAlias $ifaceName -Confirm:$false -ErrorAction SilentlyContinue
+        try {
+            New-NetIPAddress -InterfaceAlias $ifaceName -IPAddress $cfg.static.ip -PrefixLength $cfg.static.prefix -DefaultGateway $cfg.static.gateway -ErrorAction Stop | Out-Null
+            $changes += "IP -> static $($cfg.static.ip)"
+            Log "Static IP applied: $($cfg.static.ip) (was $curIP)" -c Green
+        } catch {
+            Set-NetIPInterface -InterfaceAlias $ifaceName -Dhcp Enabled -ErrorAction SilentlyContinue
+            $violations += "static IP failed ($($_.Exception.Message)) -> DHCP fallback"
+            Log "Static IP FAILED, DHCP fallback engaged: $($_.Exception.Message)" -c Red
+        }
     } else {
         Log "IP policy OK ($curIP)" -c DarkGray
     }
@@ -203,15 +215,16 @@ $dnsTestServer = if ($wantDns -and $wantDns.Count -gt 0) { $wantDns[0] } else { 
 Resolve-DnsName -Name 'one.one.one.one' -Server $dnsTestServer -QuickTimeout -ErrorAction SilentlyContinue | Out-Null
 $sw.Stop()
 $gw = (Get-NetIPConfiguration -InterfaceAlias $ifaceName -ErrorAction SilentlyContinue).IPv4DefaultGateway.NextHop
-$gwOK = Test-Connection -ComputerName $gw -Count 2 -Quiet -ErrorAction SilentlyContinue -TimeoutSeconds 2
+$gwOK = Test-Connection -ComputerName $gw -Count 2 -Quiet -ErrorAction SilentlyContinue
 
+$finalIP = (Get-NetIPAddress -InterfaceAlias $ifaceName -AddressFamily IPv4 -ErrorAction SilentlyContinue).IPAddress
 $compliance = [ordered]@{
     timestamp       = (Get-Date).ToString('s')
     standard        = $S.standard.id
     version         = $S.standard.version
     interface       = $ifaceName
     ssid            = $ssid
-    ipv4            = $curIP
+    ipv4            = $finalIP
     gatewayReachable= $gwOK
     dnsLatencyMs    = $sw.ElapsedMilliseconds
     changesApplied  = $changes
