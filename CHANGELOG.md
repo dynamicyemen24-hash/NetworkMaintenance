@@ -19,7 +19,7 @@
 - **Watchdog honesty**: LIVE failures vs HISTORY counters split — history alone no longer sustains DEGRADED/escalation; stale NETWORK_ALERT cleared; merged `system-health-last.json` for agents.
 - Fixed package.json `watchdog` script (removed invalid flag); publish.ps1 now ships the self-heal scripts.
 - **Module repair**: fixed blocking class errors in 4/5 enhanced modules (Reliability: script-scope vars + interpolation; Security: AesGcm→AES-256-CBC for WinPS 5.1 + missing return; Standardization: stray bracket + property/local collision + script-scope var) — all parse 0 errors, crypto round-trip verified live.
-- **Deferred**: MaintenanceModule (36 class errors, needs rewrite — excluded from package/manifest/scripts until repaired); crypto labels corrected GCM→CBC; VERSION branding line restored.
+- **Module repair complete (5/5)**: MaintenanceModule repaired too (36→0: script-scope constants inlined as literals, $Global state routing, switch-return, `${var}:` fix) — reinstated in package/manifest/publish; crypto labels corrected GCM→CBC; VERSION branding line restored.
 
 ## v5.0.0 (2026-09-19) — Final Release
 - Unified version 5.0.0 across VERSION/manifest/package/API/installer/SW/Docker.

@@ -14,6 +14,7 @@
     "deploy:check": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action health",
     "deploy:canary": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action deploy -Strategy Canary -DryRun",
     "deploy:bluegreen": "powershell -ExecutionPolicy Bypass -File .\\Scripts\\Engines\\DEPLOY-Engine.ps1 -Action deploy -Strategy BlueGreen -NewVersion 5.0.0 -DryRun",
+    "maintenance": "powershell -ExecutionPolicy Bypass -File .\\Modules\\MaintenanceModule.ps1 -Mode full",
     "security": "powershell -ExecutionPolicy Bypass -File .\\Modules\\SecurityEnhancement.ps1 -Action full",
     "reliability": "powershell -ExecutionPolicy Bypass -File .\\Modules\\ReliabilityModule.ps1 -Action full",
     "effectiveness": "powershell -ExecutionPolicy Bypass -File .\\Modules\\EffectivenessModule.ps1 -Action full",

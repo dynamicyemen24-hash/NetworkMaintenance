@@ -87,6 +87,7 @@ if (-not $DryRun) {
 }
 
 Write-PublishLog "─── Publishing Core Modules ───" "ACTION"
+Publish-Module "Modules\MaintenanceModule.ps1" "MaintenanceModule v5.0.0"
 Publish-Module "Modules\SecurityEnhancement.ps1" "SecurityEnhancement v5.0.0"
 Publish-Module "Modules\ReliabilityModule.ps1" "ReliabilityModule v5.0.0"
 Publish-Module "Modules\EffectivenessModule.ps1" "EffectivenessModule v5.0.0"
@@ -182,7 +183,7 @@ if (-not $DryRun) {
         build = $BuildDate
         publisher = $Publisher
         timestamp = $Timestamp
-        modules = @("SecurityEnhancement", "ReliabilityModule", "EffectivenessModule", "StandardizationModule")
+        modules = @("MaintenanceModule", "SecurityEnhancement", "ReliabilityModule", "EffectivenessModule", "StandardizationModule")
         engines = 32
         engines_list = @("DAX", "OCE", "HEAL", "PREDICT", "SCE", "HDR", "BATT", "STORAGE", "STRESS", "NETDIAG", "NET", "HWD", "RECOVERY", "REPAIR", "CRM", "PARTS", "POS", "MDM", "IOT", "FW", "AST", "DR", "CICD", "ML", "RPT", "STR", "XPL", "DEPLOY", "ERROR", "AI-Premium", "IVT", "Security-Framework")
         standards = @("ITIL-v4", "ISO-27001", "NIST-CSF", "COBIT-2019", "PCI-DSS", "SOC2-TypeII", "ELIAS-P-2026")
